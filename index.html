@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta name="google-site-verification" content="9gQf361l2yU4D4za9HCJU9nUfTDEqPuYcIUJE2a8V6w" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google-site-verification" content="9gQf36l12yURd4zs8HCuJbUHsHTbE6Pyffc1UDEZs0V8r">
 <title>AgriSoil AI Global Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -30,10 +30,10 @@ h1{font-size:clamp(1.7rem,5vw,3rem);margin:6px 0;font-weight:900;line-height:1.1
 h3{margin:0 0 12px;font-size:1rem;color:var(--ac)}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 label{display:block;font-size:.72rem;color:var(--mut);margin-bottom:3px}
-input,select{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--bd);border-radius:10px;padding:9px;font-size:.88rem}
-input:focus,select:focus{outline:2px solid var(--ac)}
+input,select{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--bd);border-radius:10px;padding:9px;font-size:.88rem;min-height:40px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ac)}
 .sep{grid-column:1/-1;font-size:.7rem;color:var(--gold);margin-top:6px;letter-spacing:1px}
-button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--ac),#10b981);color:#032;transition:transform .15s}
+button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--ac),#10b981);color:#032;transition:transform .15s;min-height:40px}
 button:hover{transform:translateY(-2px)}
 button.sec{background:var(--card);color:var(--ac);border:1px solid var(--bd)}
 .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
@@ -53,7 +53,8 @@ button.sec{background:var(--card);color:var(--ac);border:1px solid var(--bd)}
 th,td{padding:9px 7px;border-bottom:1px solid var(--bd);text-align:start;white-space:nowrap}th{color:var(--gold);font-weight:600}
 .stack{display:grid;gap:14px}
 ul{margin:0;padding-inline-start:18px;font-size:.84rem;line-height:1.9}
-footer{text-align:center;color:var(--mut);font-size:.72rem;margin:20px 0 6px}
+ul a{color:var(--ac);cursor:pointer}
+footer{text-align:center;color:var(--mut);font-size:.72rem;margin:20px 0 70px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}.modal.on{display:flex}
 body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(45,212,191,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(45,212,191,.07) 1px,transparent 1px);background-size:36px 36px;-webkit-mask-image:radial-gradient(ellipse at 50% 0,#000 30%,transparent 78%);mask-image:radial-gradient(ellipse at 50% 0,#000 30%,transparent 78%)}
 [id^=s-]{scroll-margin-top:84px}
@@ -69,6 +70,14 @@ body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 .qr{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px}.qr button{font-size:.72rem;padding:6px 10px}
 .sh-f{display:flex;gap:8px;padding:10px;border-top:1px solid var(--bd)}
 textarea{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--bd);border-radius:10px;padding:9px;font-size:.88rem}
+.acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}.acts button{padding:10px 4px;font-size:.78rem}
+#toast{position:fixed;inset-inline:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));margin:auto;max-width:320px;text-align:center;background:var(--bg2);color:var(--fg);border:1px solid var(--ac);border-radius:12px;padding:10px;font-size:.85rem;z-index:20;opacity:0;pointer-events:none;transition:opacity .25s}#toast.on{opacity:1}
+@media(max-width:899px){
+  input,select,textarea{font-size:16px}
+  #runb{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+  .fab{width:48px;height:48px;font-size:1.3rem}
+  .hero{padding:22px 16px}
+}
 @media print{body{background:#fff;color:#000}.noprint{display:none!important}.card,.hero{background:#fff;border:1px solid #999}h1{color:#0d9488}.main{grid-template-columns:1fr}}
 </style>
 </head>
@@ -88,7 +97,7 @@ textarea{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--
   <p class="who"><b data-i="by"></b><br><span data-i="uni"></span></p>
 </section>
 
-<nav class="nav noprint"><a href="#s-sum"><span>🧪</span><i data-i="n1" style="font-style:normal"></i></a><a href="#s-ch"><span>📊</span><i data-i="n2" style="font-style:normal"></i></a><a href="#s-fe"><span>🌱</span><i data-i="n3" style="font-style:normal"></i></a><a href="#s-or"><span>🌿</span><i data-i="n4" style="font-style:normal"></i></a><a href="#s-me"><span>📐</span><i data-i="n5" style="font-style:normal"></i></a></nav>
+<nav class="nav noprint"><a href="#s-sum"><span>🧪</span><i data-i="n1" style="font-style:normal"></i></a><a href="#s-ch"><span>📊</span><i data-i="n2" style="font-style:normal"></i></a><a href="#s-fe"><span>🌱</span><i data-i="n3" style="font-style:normal"></i></a><a href="#s-or"><span>🌿</span><i data-i="n4" style="font-style:normal"></i></a><a href="#s-hi"><span>🗂️</span><i data-i="n6" style="font-style:normal"></i></a><a href="#s-me"><span>📐</span><i data-i="n5" style="font-style:normal"></i></a></nav>
 <div class="main">
   <aside class="card noprint">
     <h3 data-i="inp"></h3>
@@ -99,30 +108,41 @@ textarea{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--
     </div>
     <div class="g2">
       <div style="grid-column:1/-1"><label data-i="crop"></label><select id="crop"></select></div>
-      <div><label data-i="area"></label><input id="area" type="number" value="1" step="0.5" min="0.1"></div>
+      <div><label data-i="area"></label><input id="area" type="number" inputmode="decimal" value="1" step="0.5" min="0.1"></div>
       <div><label data-i="unit"></label><select id="unit"><option value="4200.83" data-ar="فدان" data-en="Feddan"></option><option value="10000" data-ar="هكتار" data-en="Hectare"></option><option value="4046.86" data-ar="أكر" data-en="Acre"></option></select></div>
       <div style="grid-column:1/-1"><label data-i="tex"></label><select id="tex"><option value="0.7" data-ar="رملية" data-en="Sandy"></option><option value="1" selected data-ar="متوسطة" data-en="Loam"></option><option value="1.3" data-ar="طينية" data-en="Clay"></option><option value="0.85" data-ar="جيرية" data-en="Calcareous"></option></select></div>
+      
       <div class="sep">SOIL</div>
-      <div><label>pH</label><input id="ph" type="number" value="7.4" step="0.1"></div>
-      <div><label>EC (dS/m)</label><input id="ec" type="number" value="2.5" step="0.1"></div>
-      <div><label>OM (%)</label><input id="om" type="number" value="1.5" step="0.1"></div>
-      <div><label>CEC</label><input id="cec" type="number" value="15" step="0.5"></div>
+      <div><label>pH</label><input id="ph" type="number" inputmode="decimal" value="7.4" step="0.1"></div>
+      <div><label>EC (dS/m)</label><input id="ec" type="number" inputmode="decimal" value="2.5" step="0.1"></div>
+      <div><label>OM (%)</label><input id="om" type="number" inputmode="decimal" value="1.5" step="0.1"></div>
+      <div><label>CEC</label><input id="cec" type="number" inputmode="decimal" value="15" step="0.5"></div>
+      
       <div class="sep">NPK (ppm)</div>
-      <div><label>N</label><input id="n" type="number" value="20"></div>
-      <div><label>P</label><input id="p" type="number" value="12"></div>
-      <div style="grid-column:1/-1"><label>K</label><input id="k" type="number" value="130"></div>
+      <div><label>N</label><input id="n" type="number" inputmode="decimal" value="20"></div>
+      <div><label>P</label><input id="p" type="number" inputmode="decimal" value="12"></div>
+      <div style="grid-column:1/-1"><label>K</label><input id="k" type="number" inputmode="decimal" value="130"></div>
+      
       <div class="sep">MICRO (ppm)</div>
-      <div><label>Fe</label><input id="fe" type="number" value="4.5" step="0.1"></div>
-      <div><label>Zn</label><input id="zn" type="number" value="1.2" step="0.1"></div>
-      <div style="grid-column:1/-1"><label>Mn</label><input id="mn" type="number" value="2" step="0.1"></div>
-      <div class="sep">WATER</div>
-      <div><label data-i="sm"></label><input id="sm" type="number" value="18" step="0.5"></div>
-      <div><label>FC (%)</label><input id="fc" type="number" value="28" step="0.5"></div>
-      <div><label data-i="lecw"></label><input id="ecw" type="number" value="0.8" step="0.1"></div>
-      <div><label data-i="let0"></label><input id="et0" type="number" value="5" step="0.5"></div>
+      <div><label>Fe</label><input id="fe" type="number" inputmode="decimal" value="4.5" step="0.1"></div>
+      <div><label>Zn</label><input id="zn" type="number" inputmode="decimal" value="1.2" step="0.1"></div>
+      <div style="grid-column:1/-1"><label>Mn</label><input id="mn" type="number" inputmode="decimal" value="2" step="0.1"></div>
+      
+      <div class="sep">WATER & FERTILIZER OPTIONS</div>
+      <div><label data-i="sm"></label><input id="sm" type="number" inputmode="decimal" value="18" step="0.5"></div>
+      <div><label>FC (%)</label><input id="fc" type="number" inputmode="decimal" value="28" step="0.5"></div>
+      <div><label data-i="lecw"></label><input id="ecw" type="number" inputmode="decimal" value="0.8" step="0.1"></div>
+      <div><label data-i="let0"></label><input id="et0" type="number" inputmode="decimal" value="5" step="0.5"></div>
+      
+      <div><label>Na⁺ (meq/L)</label><input id="na_ion" type="number" inputmode="decimal" value="5" step="0.1"></div>
+      <div><label>Ca+Mg (meq/L)</label><input id="cama_ion" type="number" inputmode="decimal" value="4" step="0.1"></div>
+
       <div style="grid-column:1/-1"><label data-i="leff"></label><select id="eff"><option value="0.55" data-ar="ري سطحي (55%)" data-en="Surface (55%)"></option><option value="0.75" selected data-ar="رش (75%)" data-en="Sprinkler (75%)"></option><option value="0.9" data-ar="تنقيط (90%)" data-en="Drip (90%)"></option></select></div>
+      
+      <div style="grid-column:1/-1"><label>نوع السماد النيتروجيني</label><select id="n_fert_type"><option value="0.206">سلفات نشادر (20.6% N)</option><option value="0.335">نترات نشادر (33.5% N)</option><option value="0.46">يوريا (46% N)</option></select></div>
     </div>
-    <button id="runb" style="width:100%;margin-top:14px" data-i="run"></button><button class="sec" id="pdf" style="width:100%;margin-top:8px">📄 PDF</button>
+    <button id="runb" style="width:100%;margin-top:14px" data-i="run"></button>
+    <div class="acts"><button class="sec" id="pdf">📄 PDF</button><button class="sec" id="csvBtn">📥 CSV</button><button class="sec" id="save" data-i="save"></button><button class="sec" id="share" data-i="share"></button></div>
     <div id="err" class="badge er" style="display:none"></div>
   </aside>
 
@@ -136,10 +156,11 @@ textarea{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--
         <div class="kpis" style="flex:1;min-width:240px">
           <div class="kpi"><span data-i="sal"></span><b id="rEC">—</b></div>
           <div class="kpi"><span>pH</span><b id="rPH">—</b></div>
+          <div class="kpi"><span>SAR</span><b id="rSAR">—</b></div>
           <div class="kpi"><span data-i="lr"></span><b id="rLR">—</b></div>
           <div class="kpi"><span data-i="irr"></span><b id="rIR">—</b></div>
           <div class="kpi"><span data-i="vol"></span><b id="rVOL">—</b></div>
-          <div class="kpi"><span data-i="df"></span><b id="rDF">—</b></div>
+          <div class="kpi"><span data-i="int"></span><b id="rINT">—</b></div>
           <div class="kpi"><span data-i="yr"></span><b id="rYR">—</b></div>
         </div>
       </div>
@@ -156,31 +177,41 @@ textarea{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--
       <div class="tw"><table><thead><tr><th data-i="stage"></th><th>N</th><th>P</th><th>K</th></tr></thead><tbody id="sch"></tbody></table></div>
     </div>
     <div class="card" id="s-or"><h3 data-i="org"></h3><ul id="org"></ul></div>
-    <div class="card" id="s-me"><h3 data-i="meth"></h3><ul style="direction:ltr;text-align:start;font-size:.78rem"><li>ET<sub>c</sub> = ET₀ × K<sub>c</sub> — FAO-56</li><li>I<sub>g</sub> = ET<sub>c</sub> / (E<sub>a</sub> · (1 − LR)) — FAO-56</li><li>LR = EC<sub>w</sub> / (5·EC<sub>e</sub> − EC<sub>w</sub>) — FAO-29</li><li>Y<sub>r</sub> = 100 − b · (EC<sub>e</sub> − EC<sub>t</sub>) — Maas–Hoffman / FAO-29</li><li>Deficit (mm) = (FC − θ) × 10 × Z<sub>r</sub></li><li>kg/unit = Δppm × (Area × 0.2 m × BD / 1000) ÷ (nutrient % × efficiency) — soil-test build-up (IPNI)</li><li>Salinity classes: USDA Handbook 60 · Critical DTPA: Fe 4.5, Zn 1.0, Mn 1.0 ppm</li></ul></div>
+    <div class="card noprint" id="s-hi"><h3 data-i="hist"></h3><ul id="hl"></ul></div>
+    <div class="card" id="s-me"><h3 data-i="meth"></h3><ul style="direction:ltr;text-align:start;font-size:.78rem"><li>ET<sub>c</sub> = ET₀ × K<sub>c</sub> — FAO-56</li><li>I<sub>g</sub> = ET<sub>c</sub> / (E<sub>a</sub> · (1 − LR)) — FAO-56</li><li>LR = EC<sub>w</sub> / (5·EC<sub>e</sub> − EC<sub>w</sub>) — FAO-29</li><li>SAR = Na / √((Ca + Mg)/2) — Water Quality Index</li><li>Y<sub>r</sub> = 100 − b · (EC<sub>e</sub> − EC<sub>t</sub>) — Maas–Hoffman / FAO-29</li><li>Deficit (mm) = (FC − θ) × 10 × Z<sub>r</sub></li><li>Interval (d) = MAD 50% × TAW / ET<sub>c</sub>, TAW = (FC − WP) × 10 × Z<sub>r</sub></li><li>kg/unit = Δppm × (Area × 0.2 m × BD / 1000) ÷ (nutrient % × efficiency) — soil-test build-up (IPNI)</li></ul></div>
   </section>
 </div>
-<div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3 data-i="lockT"></h3><p style="font-size:.85rem;color:var(--mut)" data-i="lockD"></p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px">01113276215</p><input id="code" placeholder="••••" style="text-align:center;margin:8px 0"><div style="display:flex;gap:8px;justify-content:center"><button id="unlock" data-i="act"></button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
+<div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3 data-i="lockT"></h3><p style="font-size:.85rem;color:var(--mut)" data-i="lockD"></p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px">01113276215</p><input id="code" type="password" autocomplete="off" placeholder="••••" style="text-align:center;margin:8px 0"><div style="display:flex;gap:8px;justify-content:center"><button id="unlock" data-i="act"></button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
 <div class="fabs noprint"><button class="fab" id="aiFab" title="AI">🤖</button><button class="fab wa" id="ctFab" title="Contact">💬</button></div>
 <div id="mAI" class="modal noprint"><div class="card sheet"><div class="sh-h"><span data-i="aiT"></span><button class="sec" id="aiX">✕</button></div><div id="msgs"></div><div class="qr"><button class="sec" data-i="q1"></button><button class="sec" data-i="q2"></button><button class="sec" data-i="q3"></button><button class="sec" data-i="q4"></button></div><div class="sh-f"><input id="aiIn"><button id="aiSend">➤</button></div></div></div>
 <div id="mCt" class="modal noprint"><div class="card" style="max-width:400px;width:100%"><div class="sh-h" style="padding:0 0 10px"><span data-i="ctT"></span><button class="sec" id="ctX">✕</button></div><p style="font-size:.8rem;color:var(--mut)" data-i="ctNote"></p><div style="display:grid;gap:10px"><select id="ctType"><option data-ar="شكوى" data-en="Complaint"></option><option data-ar="مشكلة فنية" data-en="Technical issue"></option><option data-ar="اقتراح" data-en="Suggestion"></option></select><input id="ctName"><textarea id="ctMsg" rows="4"></textarea><a id="ctMail" class="btn" target="_blank" rel="noopener">📧 <span data-i="sMail"></span></a><a id="ctWa" class="btn wa" target="_blank" rel="noopener">💬 <span data-i="sWa"></span></a></div><p style="font-size:.75rem;color:var(--mut);text-align:center;direction:ltr">📧 ahmed00mohamed20003@gmail.com · 📱 01113276215</p></div></div>
+<div id="toast"></div>
 <footer data-i="foot"></footer>
 </div>
 
 <script>
-const C={wheat:['القمح','Wheat',40,25,180,6],tomato:['الطماطم','Tomato',60,35,220,2.5],citrus:['الموالح','Citrus',50,30,200,1.7],potato:['البطاطس','Potato',55,40,250,1.7],dates:['نخيل البلح','Date palm',40,25,180,4],maize:['الذرة','Maize',55,30,200,1.8],rice:['الأرز','Rice',50,25,150,3],cotton:['القطن','Cotton',50,30,200,7.7],onion:['البصل','Onion',45,30,180,1.2],grapes:['العنب','Grapes',40,25,200,1.5],olive:['الزيتون','Olive',35,20,150,4],strawberry:['الفراولة','Strawberry',50,35,200,1]};
-// [Maas-Hoffman slope %/(dS/m), Kc mid-season (FAO-56), root depth Zr in m]
-const X={wheat:[7.1,1.15,.9],tomato:[9.9,1.15,.7],citrus:[16,.7,1.1],potato:[12,1.15,.6],dates:[3.6,.95,1.5],maize:[12,1.2,1],rice:[12,1.2,.5],cotton:[5.2,1.15,1],onion:[16,1.05,.4],grapes:[9.6,.85,1.2],olive:[6,.7,1.2],strawberry:[33,.85,.3]};
+const C={wheat:['القمح','Wheat',40,25,180,6],barley:['الشعير','Barley',40,25,170,8],tomato:['الطماطم','Tomato',60,35,220,2.5],pepper:['الفلفل','Pepper',55,35,210,1.5],cucumber:['الخيار','Cucumber',55,35,200,2.5],citrus:['الموالح','Citrus',50,30,200,1.7],potato:['البطاطس','Potato',55,40,250,1.7],dates:['نخيل البلح','Date palm',40,25,180,4],maize:['الذرة','Maize',55,30,200,1.8],rice:['الأرز','Rice',50,25,150,3],cotton:['القطن','Cotton',50,30,200,7.7],sugarbeet:['بنجر السكر','Sugar beet',60,30,220,7],faba:['الفول البلدي','Faba bean',20,25,170,1.6],alfalfa:['البرسيم الحجازي','Alfalfa',20,30,200,2],onion:['البصل','Onion',45,30,180,1.2],grapes:['العنب','Grapes',40,25,200,1.5],olive:['الزيتون','Olive',35,20,150,4],strawberry:['الفراولة','Strawberry',50,35,200,1]};
+const X={wheat:[7.1,1.15,.9],barley:[5,1.15,1],tomato:[9.9,1.15,.7],pepper:[14,1.05,.6],cucumber:[13,1,.7],citrus:[16,.7,1.1],potato:[12,1.15,.6],dates:[3.6,.95,1.5],maize:[12,1.2,1],rice:[12,1.2,.5],cotton:[5.2,1.15,1],sugarbeet:[5.9,1.2,.9],faba:[9.6,1.15,.8],alfalfa:[7.3,1.15,1.2],onion:[16,1.05,.4],grapes:[9.6,.85,1.2],olive:[6,.7,1.2],strawberry:[33,.85,.3]};
 const ST=[[.3,1,.3],[.4,0,.35],[.3,0,.35]];
-const PRE={ideal:{ph:7,ec:1,om:3,cec:25,n:45,p:30,k:200,fe:6,zn:2,mn:3,sm:24,fc:28},saline:{ph:8.2,ec:7.5,om:.8,cec:12,n:15,p:8,k:110,fe:2.5,zn:.7,mn:1.5,sm:12,fc:28},calc:{ph:8.6,ec:3,om:.9,cec:9,n:22,p:10,k:140,fe:2,zn:.6,mn:.8,sm:15,fc:26}};
-const T={ar:{dir:'rtl',title:'تحليل التربة والتسميد والري الذكي',sub:'منصة هندسية تحوّل نتائج تحليل التربة إلى توصيات تسميد وري دقيقة لكل محصول في ثوانٍ.',by:'م/ أحمد محمد سعيد عبد العال — مؤسس المنصة',uni:'كلية الزراعة · جامعة المنوفية · الأراضي والمياه',inp:'مدخلات التحليل',p1:'تربة مثالية',p2:'تربة ملحية',p3:'تربة جيرية',crop:'المحصول',area:'المساحة',unit:'وحدة المساحة',trials:'المحاولات:',run:'تشغيل التحليل الشامل',lockT:'انتهت المحاولات المجانية',lockD:'فعّل حسابك عبر InstaPay ثم أرسل الإيصال إلى البريد',act:'تفعيل',wrong:'رمز غير صحيح',okAct:'تم التفعيل ✅',perU:'لكل وحدة مساحة',total:'الإجمالي',lecw:'EC مياه الري (dS/m)',let0:'ET₀ (mm/يوم)',leff:'نظام الري وكفاءته',vol:'حجم الري اليومي',df:'عجز رطوبة التربة',yr:'المحصول النسبي (Maas–Hoffman)',meth:'المنهجية العلمية المعتمدة',n1:'ملخص',n2:'رسوم',n3:'تسميد',n4:'عضوي',n5:'منهجية',aiT:'🤖 مساعد AgriSoil الذكي',aiPh:'اكتب سؤالك…',aiHi:'أهلاً بك! أنا مساعد AgriSoil الذكي 🌱 اسألني عن تحليل تربتك أو التسميد أو الري أو الملوحة.',q1:'حلل تربتي',q2:'اشرح الملوحة',q3:'جدول الري',q4:'نصيحة تسميد',ctT:'تواصل معنا',ctNote:'أرسل شكواك أو مشكلتك أو اقتراحك مباشرة إلى المهندس أحمد.',ctName:'اسمك (اختياري)',ctMsg:'اكتب رسالتك هنا…',sMail:'إرسال عبر البريد',sWa:'إرسال عبر واتساب',tex:'نسيج التربة',sm:'الرطوبة (%)',sal:'الملوحة',lr:'احتياج الغسيل',irr:'الري الإجمالي (FAO-56)',c1:'مقارنة NPK: الحالي والهدف',c2:'العناصر الصغرى (نسبة من الحد الأدنى)',fert:'الاحتياجات السمادية',el:'العنصر',cur:'الحالي',tgt:'الهدف',prod:'السماد',qty:'الكمية',sched:'جدول التسميد المقسّم',stage:'المرحلة',org:'التوصيات العضوية والإصلاحية',foot:'AgriSoil AI Global Pro © 2026 — النتائج تقديرية وتسترشد بمعايير FAO وUSDA وIPNI',st:['التأسيس','النمو الخضري','المرحلة المتأخرة'],h:['ضعيفة','متوسطة','جيدة','ممتازة'],lowph:'حمضية جداً — أضف جير زراعي',hiph:'قلوية — أضف جبس زراعي',okph:'درجة الحموضة مناسبة',hiec:'ملوحة مرتفعة — يلزم غسيل وتحسين الصرف',okec:'الملوحة في الحدود الآمنة للمحصول',mic:'نقص في عناصر صغرى — رش شيلات EDTA',okmic:'العناصر الصغرى كافية',lom:'المادة العضوية منخفضة',cmp:'كمبوست',gyp:'جبس زراعي',lime:'جير زراعي',wash:'غسيل أملاح',hum:'هيوميك أسيد',great:'المؤشرات جيدة — استمر على نفس البرنامج',sa:'سلفات نشادر 20.6%',sp:'سوبر فوسفات 15.5%',sk:'سلفات بوتاسيوم 50%',ed:'شيلات EDTA',e1:'المساحة يجب أن تكون أكبر من صفر',e2:'pH بين 0 و14',e3:'EC بين 0 و60',e4:'قيم NPK لا يمكن أن تكون سالبة',cu:'الحالي',mn_:'الحد الأدنى'},
-en:{dir:'ltr',title:'Smart Soil, Fertilization & Irrigation Analysis',sub:'An engineering platform that turns soil test results into precise fertilizer and irrigation recommendations for each crop in seconds.',by:'Eng. Ahmed M. Abdel Aal — Founder',uni:'Faculty of Agriculture · Menofia University · Soil & Water',inp:'Analysis inputs',p1:'Ideal soil',p2:'Saline soil',p3:'Calcareous soil',crop:'Crop',area:'Area',unit:'Area unit',trials:'Trials:',run:'Run full analysis',lockT:'Free trials used up',lockD:'Activate via InstaPay, then email the receipt',act:'Activate',wrong:'Invalid code',okAct:'Activated ✅',perU:'Per area unit',total:'Total',lecw:'Irrigation water EC (dS/m)',let0:'ET₀ (mm/day)',leff:'Irrigation system and efficiency',vol:'Daily irrigation volume',df:'Soil moisture deficit',yr:'Relative yield (Maas–Hoffman)',meth:'Scientific methodology',n1:'Summary',n2:'Charts',n3:'Fertilizer',n4:'Organic',n5:'Method',aiT:'🤖 AgriSoil AI Assistant',aiPh:'Type your question…',aiHi:'Hello! I’m the AgriSoil AI assistant 🌱 Ask me about your soil analysis, fertilization, irrigation or salinity.',q1:'Analyze my soil',q2:'Explain salinity',q3:'Irrigation plan',q4:'Fertilizer advice',ctT:'Contact us',ctNote:'Send your complaint, issue or suggestion directly to Eng. Ahmed.',ctName:'Your name (optional)',ctMsg:'Write your message here…',sMail:'Send by email',sWa:'Send on WhatsApp',tex:'Soil texture',sm:'Moisture (%)',sal:'Salinity',lr:'Leaching need',irr:'Gross irrigation (FAO-56)',c1:'NPK: current vs target',c2:'Micronutrients (% of minimum)',fert:'Fertilizer requirements',el:'Element',cur:'Current',tgt:'Target',prod:'Product',qty:'Amount',sched:'Split fertilization schedule',stage:'Stage',org:'Organic and reclamation advice',foot:'AgriSoil AI Global Pro © 2026 — Estimates guided by FAO, USDA and IPNI standards',st:['Establishment','Vegetative','Late stage'],h:['Poor','Fair','Good','Excellent'],lowph:'Very acidic — add agricultural lime',hiph:'Alkaline — add agricultural gypsum',okph:'pH is suitable',hiec:'High salinity — leaching and better drainage needed',okec:'Salinity within the crop safe range',mic:'Micronutrient shortage — spray EDTA chelates',okmic:'Micronutrients are sufficient',lom:'Low organic matter',cmp:'compost',gyp:'agricultural gypsum',lime:'agricultural lime',wash:'salt leaching',hum:'humic acid',great:'Indicators look good — keep the current program',sa:'Ammonium sulfate 20.6%',sp:'Superphosphate 15.5%',sk:'Potassium sulfate 50%',ed:'EDTA chelates',e1:'Area must be greater than zero',e2:'pH must be between 0 and 14',e3:'EC must be between 0 and 60',e4:'NPK values cannot be negative',cu:'Current',mn_:'Minimum'}};
-let lang='ar',L=T.ar,c1,c2,trials=5,pro=false;
-// Activation code is stored only as a SHA-256 hash (client-side protection only).
-const CODE_HASH='c16a4834a3f457b30845cf395b01b09d452279ce829c2093728b7133fab2d5ef';
+const PRE={ideal:{ph:7,ec:1,om:3,cec:25,n:45,p:30,k:200,fe:6,zn:2,mn:3,sm:24,fc:28,na_ion:3,cama_ion:5},saline:{ph:8.2,ec:7.5,om:.8,cec:12,n:15,p:8,k:110,fe:2.5,zn:.7,mn:1.5,sm:12,fc:28,na_ion:12,cama_ion:4},calc:{ph:8.6,ec:3,om:.9,cec:9,n:22,p:10,k:140,fe:2,zn:.6,mn:.8,sm:15,fc:26,na_ion:6,cama_ion:4}};
+const T={ar:{dir:'rtl',title:'تحليل التربة والتسميد والري الذكي',sub:'منصة هندسية تحوّل نتائج تحليل التربة إلى توصيات تسميد وري دقيقة لكل محصول في ثوانٍ.',by:'م/ أحمد محمد سعيد عبد العال — مؤسس المنصة',uni:'كلية الزراعة · جامعة المنوفية · الأراضي والمياه',inp:'مدخلات التحليل',p1:'تربة مثالية',p2:'تربة ملحية',p3:'تربة جيرية',crop:'المحصول',area:'المساحة',unit:'وحدة المساحة',trials:'المحاولات:',run:'تشغيل التحليل الشامل',lockT:'انتهت المحاولات المجانية',lockD:'فعّل حسابك عبر InstaPay ثم أرسل الإيصال إلى البريد',act:'تفعيل',wrong:'رمز غير صحيح',okAct:'تم التفعيل ✅',perU:'لكل وحدة مساحة',total:'الإجمالي',lecw:'EC مياه الري (dS/m)',let0:'ET₀ (mm/يوم)',leff:'نظام الري وكفاءته',vol:'حجم الري اليومي',df:'عجز رطوبة التربة',yr:'المحصول النسبي (Maas–Hoffman)',meth:'المنهجية العلمية المعتمدة',n1:'ملخص',n2:'رسوم',n3:'تسميد',n4:'عضوي',n5:'منهجية',n6:'السجل',aiT:'🤖 مساعد AgriSoil الذكي',aiPh:'اكتب سؤالك…',aiHi:'أهلاً بك! أنا مساعد AgriSoil الذكي 🌱 اسألني عن تحليل تربتك أو التسميد أو الري أو الملوحة.',q1:'حلل تربتي',q2:'اشرح الملوحة',q3:'جدول الري',q4:'نصيحة تسميد',ctT:'تواصل معنا',ctNote:'أرسل شكواك أو مشكلتك أو اقتراحك مباشرة إلى المهندس أحمد.',ctName:'اسمك (اختياري)',ctMsg:'اكتب رسالتك هنا…',sMail:'إرسال عبر البريد',sWa:'إرسال عبر واتساب',tex:'نسيج التربة',sm:'الرطوبة (%)',sal:'الملوحة',lr:'احتياج الغسيل',irr:'الري الإجمالي (FAO-56)',c1:'مقارنة NPK: الحالي والهدف',c2:'العناصر الصغرى (نسبة من الحد الأدنى)',fert:'الاحتياجات السمادية',el:'العنصر',cur:'الحالي',tgt:'الهدف',prod:'السماد',qty:'الكمية',sched:'جدول التسميد المقسّم',stage:'المرحلة',org:'التوصيات العضوية والإصلاحية',foot:'AgriSoil AI Global Pro © 2026 — النتائج تقديرية وتسترشد بمعايير FAO وUSDA وIPNI',st:['التأسيس','النمو الخضري','المرحلة المتأخرة'],h:['ضعيفة','متوسطة','جيدة','ممتازة'],lowph:'حمضية جداً — أضف جير زراعي',hiph:'قلوية — أضف جبس زراعي',okph:'درجة الحموضة مناسبة',hiec:'ملوحة مرتفعة — يلزم غسيل وتحسين الصرف',okec:'الملوحة في الحدود الآمنة للمحصول',mic:'نقص في عناصر صغرى — رش شيلات EDTA',okmic:'العناصر الصغرى كافية',lom:'المادة العضوية منخفضة',cmp:'كمبوست',gyp:'جبس زراعي',lime:'جير زراعي',wash:'غسيل أملاح',hum:'هيوميك أسيد',great:'المؤشرات جيدة — استمر على نفس البرنامج',sa:'سلفات نشادر 20.6%',sp:'سوبر فوسفات 15.5%',sk:'سلفات بوتاسيوم 50%',ed:'شيلات EDTA',e1:'المساحة يجب أن تكون أكبر من صفر',e2:'pH بين 0 و14',e3:'EC بين 0 و60',e4:'قيم NPK لا يمكن أن تكون سالبة',cu:'الحالي',mn_:'الحد الأدنى',
+ save:'💾 حفظ',share:'📤 مشاركة',hist:'سجل التقارير المحفوظة',noH:'لا توجد تقارير محفوظة',load:'فتح',saved:'تم حفظ التقرير ✅',int:'فترة الري',days:'يوم',lock:'محاولات كثيرة — انتظر',e5:'تحقق من باقي القيم (لا يمكن أن تكون سالبة)',pav:'pH مرتفع يقلل تيسّر الفوسفور والحديد والزنك — يُفضّل التسميد الورقي والحمضي'},
+en:{dir:'ltr',title:'Smart Soil, Fertilization & Irrigation Analysis',sub:'An engineering platform that turns soil test results into precise fertilizer and irrigation recommendations for each crop in seconds.',by:'Eng. Ahmed M. Abdel Aal — Founder',uni:'Faculty of Agriculture · Menofia University · Soil & Water',inp:'Analysis inputs',p1:'Ideal soil',p2:'Saline soil',p3:'Calcareous soil',crop:'Crop',area:'Area',unit:'Area unit',trials:'Trials:',run:'Run full analysis',lockT:'Free trials used up',lockD:'Activate via InstaPay, then email the receipt',act:'Activate',wrong:'Invalid code',okAct:'Activated ✅',perU:'Per area unit',total:'Total',lecw:'Irrigation water EC (dS/m)',let0:'ET₀ (mm/day)',leff:'Irrigation system and efficiency',vol:'Daily irrigation volume',df:'Soil moisture deficit',yr:'Relative yield (Maas–Hoffman)',meth:'Scientific methodology',n1:'Summary',n2:'Charts',n3:'Fertilizer',n4:'Organic',n5:'Method',n6:'History',aiT:'🤖 AgriSoil AI Assistant',aiPh:'Type your question…',aiHi:'Hello! I’m the AgriSoil AI assistant 🌱 Ask me about your soil analysis, fertilization, irrigation or salinity.',q1:'Analyze my soil',q2:'Explain salinity',q3:'Irrigation plan',q4:'Fertilizer advice',ctT:'Contact us',ctNote:'Send your complaint, issue or suggestion directly to Eng. Ahmed.',ctName:'Your name (optional)',ctMsg:'Write your message here…',sMail:'Send by email',sWa:'Send on WhatsApp',tex:'Soil texture',sm:'Moisture (%)',sal:'Salinity',lr:'Leaching need',irr:'Gross irrigation (FAO-56)',c1:'NPK: current vs target',c2:'Micronutrients (% of minimum)',fert:'Fertilizer requirements',el:'Element',cur:'Current',tgt:'Target',prod:'Product',qty:'Amount',sched:'Split fertilization schedule',stage:'Stage',org:'Organic and reclamation advice',foot:'AgriSoil AI Global Pro © 2026 — Estimates guided by FAO, USDA and IPNI standards',st:['Establishment','Vegetative','Late stage'],h:['Poor','Fair','Good','Excellent'],lowph:'Very acidic — add agricultural lime',hiph:'Alkaline — add agricultural gypsum',okph:'pH is suitable',hiec:'High salinity — leaching and better drainage needed',okec:'Salinity within the crop safe range',mic:'Micronutrient shortage — spray EDTA chelates',okmic:'Micronutrients are sufficient',lom:'Low organic matter',cmp:'compost',gyp:'agricultural gypsum',lime:'agricultural lime',wash:'salt leaching',hum:'humic acid',great:'Indicators look good — keep the current program',sa:'Ammonium sulfate 20.6%',sp:'Superphosphate 15.5%',sk:'Potassium sulfate 50%',ed:'EDTA chelates',e1:'Area must be greater than zero',e2:'pH must be between 0 and 14',e3:'EC must be between 0 and 60',e4:'NPK values cannot be negative',cu:'Current',mn_:'Minimum',
+ save:'💾 Save',share:'📤 Share',hist:'Saved reports',noH:'No saved reports',load:'Open',saved:'Report saved ✅',int:'Irrigation interval',days:'d',lock:'Too many attempts — wait',e5:'Check the other values (cannot be negative)',pav:'High pH reduces P, Fe and Zn availability — prefer foliar and acidifying fertilizers'}};
+let lang='ar',L=T.ar,c1,c2,trials=5,pro=false,LAST=null;
+const CODE_HASH='c16a4834a3f457b30845cf395b01b09d452279ce829c2093728b7133fab2d5ef',SALT='agrisoil.v2.';
 function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
 async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
 const $=id=>document.getElementById(id),g=id=>parseFloat($(id).value);
+function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2200)}
+async function saveTrials(){store('agriTrials',trials);store('agriSig',await sha(SALT+'t'+trials))}
+async function initState(){
+  const t=parseInt(store('agriTrials')),sg=store('agriSig');
+  if(t>=0&&t<=5){trials=(sg&&sg===await sha(SALT+'t'+t))?t:(sg?0:t)}else trials=5;
+  pro=store('agriProSig')===await sha(SALT+'pro');
+  if(!sg)await saveTrials();
+}
 
 function applyLang(){
   L=T[lang];document.documentElement.lang=lang;document.documentElement.dir=L.dir;
@@ -190,11 +221,11 @@ function applyLang(){
   $('crop').innerHTML=Object.entries(C).map(([k,v])=>`<option value="${k}">${lang=='ar'?v[0]:v[1]}</option>`).join('');
   if(cur)$('crop').value=cur;
   $('aiIn').placeholder=L.aiPh;$('ctName').placeholder=L.ctName;$('ctMsg').placeholder=L.ctMsg;if(typeof mk==='function')mk();
-  run();
+  renderHist();run();
 }
 function run(click){
   if(!pro&&trials<=0){$('mPay').classList.add('on');return}
-  const v={};['area','ph','ec','n','p','k','fe','zn','mn','sm','fc','om','cec'].forEach(i=>v[i]=g(i));
+  const v={};['area','ph','ec','n','p','k','fe','zn','mn','sm','fc','om','cec','ecw','et0','na_ion','cama_ion'].forEach(i=>v[i]=g(i));
   const tex=parseFloat($('tex').value)||1,c=C[$('crop').value],tol=c[5];
   const e=$('err');e.style.display='none';
   const bad=m=>{e.textContent='❌ '+m;e.style.display='block'};
@@ -202,13 +233,17 @@ function run(click){
   if(isNaN(v.ph)||v.ph<0||v.ph>14)return bad(L.e2);
   if(isNaN(v.ec)||v.ec<0||v.ec>60)return bad(L.e3);
   if([v.n,v.p,v.k].some(x=>isNaN(x)||x<0))return bad(L.e4);
-  if(click&&!pro){trials--;store('agriTrials',trials);badge()}
+  if(['fe','zn','mn','sm','fc','om','cec','na_ion','cama_ion'].some(i=>isNaN(v[i])||v[i]<0))return bad(L.e5);
+  if(click&&!pro){trials--;saveTrials();badge()}
   const uf=parseFloat($('unit').value)/4200.83,un=$('unit').selectedOptions[0].textContent;
-  const xc=X[$('crop').value],ecw=g('ecw')||0,et0=g('et0')||5,ea=parseFloat($('eff').value)||.75,A=parseFloat($('unit').value);
+  const xc=X[$('crop').value],ecw=v.ecw||0,et0=v.et0||5,ea=parseFloat($('eff').value)||.75,A=parseFloat($('unit').value);
   const ti=['0.7','1','1.3','0.85'].indexOf($('tex').value),BD=[1.5,1.3,1.2,1.35][ti]||1.3;
   const yr=Math.max(0,Math.min(100,v.ec>tol?100-xc[0]*(v.ec-tol):100));
   const lrf=5*tol-ecw>0?ecw/(5*tol-ecw):1,LR=Math.min(100,Math.round(lrf*100));
   const etc=et0*xc[1],gross=etc/(ea*(1-Math.min(.5,lrf))),m3=Math.round(gross*A/1000),dmm=Math.round(Math.max(0,v.fc-v.sm)*10*xc[2]);
+  const taw=v.fc*.5*10*xc[2],intv=ea>=.9?1:Math.max(1,Math.floor(taw*.5/etc));
+
+  const sar = v.cama_ion > 0 ? (v.na_ion / Math.sqrt(v.cama_ion / 2)).toFixed(2) : 0;
 
   const mDef=(v.fe<4.5)+(v.zn<1)+(v.mn<1);
   let s=100;
@@ -223,65 +258,100 @@ function run(click){
   $('hstat').textContent=L.h[s>=85?3:s>=65?2:s>=40?1:0];$('hstat').className=cls;
   const r=$('ring');r.style.strokeDashoffset=390-390*s/100;r.style.stroke=`var(--${cls})`;
   const SC={ar:['غير ملحية','ملوحة طفيفة','ملوحة متوسطة','ملوحة شديدة','شديدة جداً'],en:['Non-saline','Slightly saline','Moderately saline','Strongly saline','Very strongly saline']}[lang][v.ec<2?0:v.ec<4?1:v.ec<8?2:v.ec<16?3:4];
-  $('rEC').textContent=v.ec+' dS/m · '+SC;$('rPH').textContent=v.ph;$('rLR').textContent=LR+' %';$('rIR').textContent=gross.toFixed(1)+' mm/d';$('rVOL').textContent=m3+' m³/d/'+un;$('rDF').textContent=dmm+' mm';$('rYR').textContent=Math.round(yr)+' %';
+  $('rEC').textContent=v.ec+' dS/m · '+SC;$('rPH').textContent=v.ph;$('rSAR').textContent=sar;$('rLR').textContent=LR+' %';$('rIR').textContent=gross.toFixed(1)+' mm/d';$('rVOL').textContent=m3+' m³/d/'+un;$('rINT').textContent=intv+' '+L.days;$('rYR').textContent=Math.round(yr)+' %';
 
-  const ms=A*.2*BD/1000,nEf=[.5,.65,.7,.6][ti]||.65,nF=Math.max(0,c[2]-v.n)*ms/(.206*nEf),pF=Math.max(0,c[3]-v.p)*ms*2.29/.155,kF=Math.max(0,c[4]-v.k)*ms*1.205/.5,mE=mDef*.5*uf,r0=x=>Math.round(x),tt=x=>Math.round(x*v.area);
-  $('tb').innerHTML=[['N',v.n,c[2],L.sa,r0(nF)+' kg/'+un,tt(nF)+' kg'],['P₂O₅',v.p,c[3],L.sp,r0(pF)+' kg/'+un,tt(pF)+' kg'],['K₂O',v.k,c[4],L.sk,r0(kF)+' kg/'+un,tt(kF)+' kg'],['Fe / Zn / Mn',`${v.fe} / ${v.zn} / ${v.mn}`,'4.5 / 1 / 1',L.ed,mDef?mE.toFixed(1)+' kg/'+un:'—',mDef?(mE*v.area).toFixed(1)+' kg':'—']].map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td class="ok"><b>${x[4]}</b></td><td class="ok"><b>${x[5]}</b></td></tr>`).join('');
+  const ms=A*.2*BD/1000,nEf=[.5,.65,.7,.6][ti]||.65,pFix=v.ph>7.5?1.25:1,nCur=v.n+v.om*4;
+  const nFerRate = parseFloat($('n_fert_type').value) || 0.206;
+  const nFerName = $('n_fert_type').selectedOptions[0].textContent;
+  const nF=Math.max(0,c[2]-nCur)*ms/(nFerRate*nEf),pF=Math.max(0,c[3]-v.p)*ms*2.29*pFix/.155,kF=Math.max(0,c[4]-v.k)*ms*1.205/.5,mE=mDef*.5*uf,r0=x=>Math.round(x),tt=x=>Math.round(x*v.area);
+  
+  $('tb').innerHTML=[['N',v.n,c[2],nFerName,r0(nF)+' kg/'+un,tt(nF)+' kg'],['P₂O₅',v.p,c[3],L.sp,r0(pF)+' kg/'+un,tt(pF)+' kg'],['K₂O',v.k,c[4],L.sk,r0(kF)+' kg/'+un,tt(kF)+' kg'],['Fe / Zn / Mn',`${v.fe} / ${v.zn} / ${v.mn}`,'4.5 / 1 / 1',L.ed,mDef?mE.toFixed(1)+' kg/'+un:'—',mDef?(mE*v.area).toFixed(1)+' kg':'—']].map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td><td class="ok"><b>${x[4]}</b></td><td class="ok"><b>${x[5]}</b></td></tr>`).join('');
   $('sch').innerHTML=ST.map((x,i)=>`<tr><td>${L.st[i]}</td><td>${Math.round(nF*x[0])} kg</td><td>${Math.round(pF*x[1])} kg</td><td>${Math.round(kF*x[2])} kg</td></tr>`).join('');
 
   const w=[v.ph<5.5?['er',L.lowph]:v.ph>8.5?['er',L.hiph]:['ok',L.okph],v.ec>tol?['er',L.hiec]:['ok',L.okec],mDef?['wn',L.mic]:['ok',L.okmic]];
   if(v.om<1)w.push(['wn',L.lom]);
+  if(v.ph>7.5)w.push(['wn',L.pav]);
+  if(sar > 10)w.push(['er', lang=='ar' ? 'قيمة SAR مرتفعة — خطر تدهور نفاذية التربة' : 'High SAR — risk of soil permeability degradation']);
   $('warns').innerHTML=w.map(x=>`<div class="badge ${x[0]}">${x[0]=='ok'?'✅':'⚠️'} ${x[1]}</div>`).join('');
 
   const o=[];
   if(v.om<2)o.push(`${L.cmp}: ${Math.round(10*uf)} t/${un}`);
-  if(v.ph>8)o.push(`${L.gyp}: ${Math.round(500*uf)} kg/${un}`);
+  if(v.ph>8||sar>10)o.push(`${L.gyp}: ${Math.round(500*uf)} kg/${un}`);
   if(v.ph<6)o.push(`${L.lime}: ${Math.round(400*uf)} kg/${un}`);
   if(v.ec>tol*.6)o.push(`${L.wash}: +${Math.round(lrf*100)}%`);
   if(v.cec<15)o.push(`${L.hum}: ${Math.round(10*uf)} kg/${un}`);
   if(!o.length)o.push(L.great);
   $('org').innerHTML=o.map(x=>`<li>${x}</li>`).join('');
 
-  LAST={crop:C[$('crop').value][1],area:v.area,unit:un,texture:$('tex').selectedOptions[0].textContent,ph:v.ph,ec:v.ec,om:v.om,cec:v.cec,N_ppm:v.n,P_ppm:v.p,K_ppm:v.k,Fe:v.fe,Zn:v.zn,Mn:v.mn,healthScore:s,relativeYieldPct:Math.round(yr),leachingReqPct:LR,grossIrrigation_mm_per_day:+gross.toFixed(1),irrigation_m3_per_day_per_unit:m3,soilMoistureDeficit_mm:dmm,fertilizerKgPerUnit:{ammoniumSulfate:r0(nF),superphosphate:r0(pF),potassiumSulfate:r0(kF)}};
+  LAST={crop:C[$('crop').value][1],area:v.area,unit:un,texture:$('tex').selectedOptions[0].textContent,ph:v.ph,ec:v.ec,sar:sar,om:v.om,cec:v.cec,N_ppm:v.n,P_ppm:v.p,K_ppm:v.k,Fe:v.fe,Zn:v.zn,Mn:v.mn,healthScore:s,relativeYieldPct:Math.round(yr),leachingReqPct:LR,grossIrrigation_mm_per_day:+gross.toFixed(1),irrigation_m3_per_day_per_unit:m3,irrigationIntervalDays:intv,soilMoistureDeficit_mm:dmm,fertilizerKgPerUnit:{nitrogenFertilizer:r0(nF),superphosphate:r0(pF),potassiumSulfate:r0(kF)}};
   const tc=getComputedStyle(document.body).color,gc='rgba(143,179,171,.2)';
   if(c1)c1.destroy();if(c2)c2.destroy();
   c1=new Chart($('c1'),{type:'bar',data:{labels:['N','P','K'],datasets:[{label:L.cu,data:[v.n,v.p,v.k],backgroundColor:'#f59e0b',borderRadius:8},{label:L.tgt,data:[c[2],c[3],c[4]],backgroundColor:'#2dd4bf',borderRadius:8}]},options:{responsive:true,plugins:{legend:{labels:{color:tc}}},scales:{x:{ticks:{color:tc},grid:{display:false}},y:{ticks:{color:tc},grid:{color:gc}}}}});
   const pc=(x,m)=>Math.min(200,Math.round(x/m*100));
   c2=new Chart($('c2'),{type:'radar',data:{labels:['Fe','Zn','Mn'],datasets:[{label:L.cu,data:[pc(v.fe,4.5),pc(v.zn,1),pc(v.mn,1)],backgroundColor:'rgba(245,158,11,.25)',borderColor:'#f59e0b'},{label:L.mn_,data:[100,100,100],backgroundColor:'rgba(45,212,191,.15)',borderColor:'#2dd4bf'}]},options:{responsive:true,scales:{r:{min:0,max:200,ticks:{color:tc,backdropColor:'transparent'},grid:{color:gc},angleLines:{color:gc},pointLabels:{color:tc}}},plugins:{legend:{labels:{color:tc}}}}});
 }
+
+const FIELDS=['crop','area','unit','tex','ph','ec','om','cec','n','p','k','fe','zn','mn','sm','fc','ecw','et0','eff','na_ion','cama_ion'];
+function hist(){try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h:[]}catch(e){return[]}}
+function renderHist(){
+  const h=hist();
+  $('hl').innerHTML=h.length?h.map((x,i)=>`<li><b>${(C[x.c]||[])[lang=='ar'?0:1]||''}</b> · ${x.s}/100 · ${new Date(x.d).toLocaleDateString(lang=='ar'?'ar-EG':'en-GB')} · <a data-l="${i}">${L.load}</a> · <a data-d="${i}">✕</a></li>`).join(''):`<li>${L.noH}</li>`;
+}
+$('hl').onclick=e=>{
+  const a=e.target.closest('a');if(!a)return;const h=hist();
+  if(a.dataset.l!==undefined){const x=h[a.dataset.l];if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=x.v[f]});run();scrollTo({top:0})}}
+  else if(a.dataset.d!==undefined){h.splice(a.dataset.d,1);store('agriHist',JSON.stringify(h));renderHist()}
+};
+$('save').onclick=()=>{
+  if(!LAST)return;const v={};FIELDS.forEach(f=>v[f]=$(f).value);
+  const h=hist();h.unshift({d:Date.now(),c:$('crop').value,s:LAST.healthScore,v});
+  store('agriHist',JSON.stringify(h.slice(0,12)));renderHist();toast(L.saved);
+};
+$('share').onclick=()=>{
+  if(!LAST)return;const a=LAST,f=a.fertilizerKgPerUnit,ar=lang=='ar';
+  const t=ar?`AgriSoil AI — ${C[$('crop').value][0]}\nالصحة: ${a.healthScore}/100 · pH ${a.ph} · EC ${a.ec}\nSAR: ${a.sar}\nالمحصول النسبي: ${a.relativeYieldPct}%\nالري: ${a.grossIrrigation_mm_per_day} مم/يوم كل ${a.irrigationIntervalDays} يوم`:`AgriSoil AI — ${a.crop}\nHealth: ${a.healthScore}/100 · pH ${a.ph} · EC ${a.ec}\nSAR: ${a.sar}\nRelative yield: ${a.relativeYieldPct}%`;
+  if(navigator.share)navigator.share({text:t}).catch(()=>{});else window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank','noopener');
+};
+$('csvBtn').onclick=()=>{
+  if(!LAST)return;const csv='data:text/csv;charset=utf-8,'+Object.entries(LAST).map(e=>e.join(',')).join('\n');
+  const encodedUri=encodeURI(csv),link=document.createElement('a');link.setAttribute('href',encodedUri);link.setAttribute('download','agrisoil_report.csv');document.body.appendChild(link);link.click();document.body.removeChild(link);
+};
 document.querySelectorAll('aside input,aside select').forEach(el=>el.addEventListener('input',()=>run()));
 document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];run()});
 $('lang').onchange=e=>{lang=e.target.value;applyLang()};
 $('pdf').onclick=()=>{if(!pro&&trials<=0){$('mPay').classList.add('on');return}window.print()};
 $('runb').onclick=()=>run(true);
 $('cPay').onclick=()=>$('mPay').classList.remove('on');
-$('unlock').onclick=async()=>{const h=await sha($('code').value.trim());if(h===CODE_HASH){pro=true;store('agriPro','1');$('mPay').classList.remove('on');badge();alert(L.okAct);run()}else alert(L.wrong)};
+let fails=0,lockUntil=0;
+$('unlock').onclick=async()=>{
+  if(Date.now()<lockUntil)return alert(L.lock+' '+Math.ceil((lockUntil-Date.now())/1000)+'s');
+  const h=await sha($('code').value.trim());
+  if(h===CODE_HASH){pro=true;store('agriProSig',await sha(SALT+'pro'));fails=0;$('code').value='';$('mPay').classList.remove('on');badge();alert(L.okAct);run()}
+  else{fails++;if(fails>=5){lockUntil=Date.now()+30000*fails;}alert(L.wrong)}
+};
 $('fs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
-// ===== AI assistant + contact =====
-let LAST=null,AI=null,AIC=false,busy=false;
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
+addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.on').forEach(m=>m.classList.remove('on'))});
+let AI=null,AIC=false,busy=false;
 const MAIL='ahmed00mohamed20003@gmail.com',WA='201113276215';
 function addMsg(c,t){const m=$('msgs'),d=document.createElement('div');d.className='m '+c;d.textContent=t;m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
 async function getAI(){if(!AIC){AIC=true;try{if(window.claude&&claude.use)AI=await claude.use('sample')}catch(e){AI=null}}return AI}
 function fb(q){
   const t=q.toLowerCase(),a=LAST,ar=lang=='ar',p=(x,y)=>ar?x:y;
   if(!a)return p('شغّل التحليل أولاً.','Run the analysis first.');
-  const cn=C[$('crop').value][ar?0:1],f=a.fertilizerKgPerUnit;
-  if(/ملوح|ec|salin/.test(t))return a.ec>2?p(`الملوحة ${a.ec} dS/m والمحصول النسبي المتوقع ${a.relativeYieldPct}%. أضف حوالي ${a.leachingReqPct}% من مياه الري للغسيل مع صرف جيد.`,`Salinity is ${a.ec} dS/m and expected relative yield is ${a.relativeYieldPct}%. Add about ${a.leachingReqPct}% extra irrigation water for leaching and keep drainage working.`):p('الملوحة منخفضة وآمنة للمحصول.','Salinity is low and safe for this crop.');
-  if(/ري|مياه|irrig|water/.test(t))return p(`الري الإجمالي ${a.grossIrrigation_mm_per_day} مم/يوم (${a.irrigation_m3_per_day_per_unit} م³ لكل ${a.unit}). عجز رطوبة التربة ${a.soilMoistureDeficit_mm} مم.`,`Gross irrigation is ${a.grossIrrigation_mm_per_day} mm/day (${a.irrigation_m3_per_day_per_unit} m³ per ${a.unit}). Soil moisture deficit is ${a.soilMoistureDeficit_mm} mm.`);
-  if(/سماد|تسميد|fert|npk/.test(t))return p(`لكل ${a.unit}: سلفات نشادر ${f.ammoniumSulfate} كجم، سوبر فوسفات ${f.superphosphate} كجم، سلفات بوتاسيوم ${f.potassiumSulfate} كجم، مقسّمة على 3 دفعات.`,`Per ${a.unit}: ammonium sulfate ${f.ammoniumSulfate} kg, superphosphate ${f.superphosphate} kg, potassium sulfate ${f.potassiumSulfate} kg, split into 3 doses.`);
-  if(/ph|حموض|قلو/.test(t))return a.ph>8?p('الـpH مرتفع: جبس زراعي وكبريت وأسمدة حمضية.','pH is high: apply gypsum, sulfur and acidifying fertilizers.'):a.ph<6?p('الـpH منخفض: أضف جيراً زراعياً.','pH is low: apply agricultural lime.'):p('الـpH مناسب.','pH is suitable.');
-  return p(`ملخص تربتك (${cn}): الصحة ${a.healthScore}/100، pH ${a.ph}، EC ${a.ec}، المحصول النسبي ${a.relativeYieldPct}%. اسألني عن الملوحة أو الري أو التسميد.`,`Your soil summary (${cn}): health ${a.healthScore}/100, pH ${a.ph}, EC ${a.ec}, relative yield ${a.relativeYieldPct}%. Ask about salinity, irrigation or fertilizer.`);
+  const cn=C[$('crop').value][ar?0:1];
+  if(/ملوح|ec|salin/.test(t))return a.ec>2?p(`الملوحة ${a.ec} dS/m والمحصول النسبي المتوقع ${a.relativeYieldPct}%.`,`Salinity is ${a.ec} dS/m.`):p('الملوحة منخفضة وآمنة.','Salinity is safe.');
+  return p(`ملخص تربتك (${cn}): الصحة ${a.healthScore}/100، pH ${a.ph}، SAR ${a.sar}.`,`Your soil summary: health ${a.healthScore}/100, SAR ${a.sar}.`);
 }
 async function send(q){
-  if(!q||busy)return;busy=true;addMsg('u',q);const b=addMsg('b','…');let out=null;
-  const hist=[...$('msgs').querySelectorAll('.m')].slice(-8,-2).map(m=>(m.classList.contains('u')?'User: ':'AI: ')+m.textContent).join('\n');
-  const sm=await getAI();
-  if(sm){try{const r=await sm(`You are AgriSoil AI, an expert assistant in soil science, fertilization and irrigation (FAO-56, FAO-29, USDA, IPNI). Answer in the user's language, in under 120 words, practical and honest about uncertainty. Current analysis: ${JSON.stringify(LAST)}\nConversation so far:\n${hist}\nUser: ${q}`,{cache:false,onText:({text})=>{b.textContent=text}});out=r.text}catch(e){out=null}}
+  if(!q||busy)return;busy=true;addMsg('u',q);const b=addMsg('b','…');
+  let out=null; const sm=await getAI();
+  if(sm){try{const r=await sm(`You are AgriSoil AI... Current analysis: ${JSON.stringify(LAST)}\nUser: ${q}`);out=r.text}catch(e){out=null}}
   b.textContent=out||fb(q);busy=false;
 }
 function mk(){
   const ty=$('ctType').selectedOptions[0].textContent,nm=$('ctName').value.trim(),ms=$('ctMsg').value.trim(),a=LAST;
-  const body=`${ty}\n${nm?nm+'\n':''}${ms}\n\n---\nAgriSoil AI`+(a?` | ${a.crop} | pH ${a.ph} | EC ${a.ec} | Health ${a.healthScore}/100`:'');
+  const body=`${ty}\n${nm?nm+'\n':''}${ms}\n\n---\nAgriSoil AI`+(a?` | ${a.crop} | pH ${a.ph} | SAR ${a.sar} | Health ${a.healthScore}/100`:'');
   $('ctMail').href=`mailto:${MAIL}?subject=${encodeURIComponent('AgriSoil AI — '+ty)}&body=${encodeURIComponent(body)}`;
   $('ctWa').href=`https://wa.me/${WA}?text=${encodeURIComponent(body)}`;
 }
@@ -293,8 +363,13 @@ document.querySelectorAll('.qr button').forEach(b=>b.onclick=()=>send(b.textCont
 $('ctFab').onclick=()=>{mk();$('mCt').classList.add('on')};
 $('ctX').onclick=()=>$('mCt').classList.remove('on');
 ['ctType','ctName','ctMsg'].forEach(i=>$(i).addEventListener('input',mk));
-const t0=parseInt(store('agriTrials'));trials=(t0>=0&&t0<=5)?t0:5;pro=store('agriPro')==='1';
-badge();applyLang();
+initState().then(()=>{badge();applyLang()});
 </script>
 </body>
 </html>
+
+
+ 
+  
+ 
+  
