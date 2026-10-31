@@ -432,7 +432,7 @@ function fillVr(){
 function vrChg(){$('vrC').style.display=$('vr').value==='__c'?'block':'none'}
 function vname(){return $('vr').value==='__c'?($('vrC').value.trim()||'—'):$('vr').value}
 $('vr').addEventListener('change',vrChg);
-function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<18?L2('نهارك سعيد','Good afternoon'):L2('مساء الخير','Good evening'))+' 👋 '+L2('أهلاً بك في نماء','Welcome to Namaa')+(USER?' — '+(USER.displayName||(USER.email||'').split('@')[0]):'')}
+function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<17?L2('نهارك سعيد','Good afternoon'):L2('مسائك خير','Good evening'))+' 👋 '+L2('أهلاً بك في نماء','Welcome to Namaa')+(USER?' — '+(USER.displayName||(USER.email||'').split('@')[0]):'')}
 $('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>run(),60)};
 {const t=store('nmTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}
 
@@ -633,6 +633,8 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
+
+
 
 
  
