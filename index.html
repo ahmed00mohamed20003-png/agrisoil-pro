@@ -165,7 +165,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 </div>
 
 <div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3>انتهت المحاولات المجانية</h3><p style="font-size:.85rem;color:var(--mut)">حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيله</p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px;margin:6px 0">01113276215</p><p style="font-size:.78rem;color:var(--mut);direction:ltr;margin:0 0 10px">حسابك: <b id="payMail"></b></p><div class="row" style="justify-content:center"><button id="payWa">📲 إرسال الإيصال</button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
-<div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center"><div class="logo" style="margin:0 auto 8px">🌱</div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
+<div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center;position:relative"><button class="sec" id="aX" style="position:absolute;top:10px;inset-inline-end:10px;min-height:32px;padding:2px 10px">✕</button><div class="logo" style="margin:0 auto 8px">🌱</div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
 <div id="toast"></div>
 
 <script>
@@ -306,6 +306,7 @@ $('aFor').onclick=ev=>{ev.preventDefault();const e=$('aEmail').value.trim();if(!
   authGo(async A=>{await A.reset(e);authMsg(L2('تم إرسال رابط إعادة التعيين ✅','Reset link sent ✅'),true)})};
 ['aEmail','aPass','aName'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter')$('aGo').click()}));
 function doLogout(){if(window.NamaaAuth&&confirm(L2('تسجيل الخروج؟','Sign out?')))NamaaAuth.out()}
+$('aX').onclick=()=>$('mAuth').classList.remove('on');
 $('logout').onclick=doLogout;$('logout2').onclick=doLogout;
 $('payWa').onclick=()=>window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('تفعيل Pro — حسابي: '+(USER?USER.email:'')),'_blank','noopener');
 $('cPay').onclick=()=>$('mPay').classList.remove('on');
@@ -436,7 +437,7 @@ $('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement
 
 // ===== المحرك =====
 function run(click){
-  if(!USER){if(AUTH_READY)$('mAuth').classList.add('on');return}
+  if(!USER){if(click&&AUTH_READY)$('mAuth').classList.add('on');return}
   if(!pro&&trials<=0){$('mPay').classList.add('on');return}
   const e=$('err'),bad=m=>{e.textContent='❌ '+m;e.style.display='block';show('res')};e.style.display='none';
   const v={};['area','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','prW','fNC','fNR','fPC','fPR','fKC','fKR','orN','orP','orK','orT','orR','bioR','caco3'].forEach(i=>v[i]=g(i));
@@ -631,7 +632,7 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
- 
+
   
  
   
