@@ -284,7 +284,7 @@ let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login',AUTH_READY=false;
 function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
 function saveTrials(){if(window.NamaaAuth)NamaaAuth.setTrials(trials)}
 function authMsg(t,ok){$('aMsg').textContent=t||'';$('aMsg').style.color=ok?'var(--ok)':'var(--er)'}
-function authUI(){const s=aMode==='signup';$('logout').textContent=USER?'🚪':'👤 '+L2('دخول','Sign in');$('logout2').textContent='🚪 '+L2('تسجيل الخروج','Sign out');
+function authUI(){const s=aMode==='signup';$('logout').textContent='👤 '+L2('دخول','Sign in');$('logout').style.display=USER?'none':'';$('logout2').textContent='🚪 '+L2('تسجيل الخروج','Sign out');
   $('aTitle').textContent=s?L2('إنشاء حساب جديد','Create account'):L2('تسجيل الدخول','Sign in');
   $('aSub').textContent=s?L2('سجّل واحصل على 5 محاولات مجانية','Sign up and get 5 free trials'):L2('سجّل دخولك لاستخدام نماء','Sign in to use Namaa');
   $('aNameW').style.display=s?'block':'none';
@@ -633,6 +633,8 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
+
+
  
 
 
