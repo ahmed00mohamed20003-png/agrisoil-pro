@@ -3,69 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AgriSoil AI Global Pro</title>
+<title>نماء | Namaa — منصة التربة والمياه والأسمدة الذكية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DN3N51944"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-2DN3N51944');</script>
 <style>
-:root{--bg:#04100f;--bg2:#0a2420;--card:rgba(255,255,255,.05);--fg:#e8f3f0;--mut:#8fb3ab;--ac:#2dd4bf;--gold:#e9c46a;--bd:rgba(45,212,191,.22);--in:rgba(0,0,0,.28);--ok:#34d399;--wn:#fbbf24;--er:#fb7185;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef6f4;--bg2:#d9ece7;--card:rgba(255,255,255,.85);--fg:#0b2623;--mut:#46665f;--ac:#0d9488;--gold:#a16207;--bd:rgba(13,148,136,.3);--in:rgba(255,255,255,.9);--ok:#047857;--wn:#b45309;--er:#be123c}}
+:root{--bg:#f7f4ea;--bg2:#e0efd8;--card:rgba(255,255,255,.9);--fg:#16301f;--mut:#58705f;--ac:#1c8a57;--ac2:#34b87c;--gold:#9a6200;--bd:rgba(28,138,87,.22);--in:#fff;--ok:#15803d;--wn:#b45309;--er:#be123c;--onac:#fff;--sh:0 10px 30px rgba(28,100,60,.12);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#07130e;--bg2:#10301f;--card:rgba(255,255,255,.06);--fg:#e9f5ee;--mut:#98b7a6;--ac:#4ade80;--ac2:#2dd4bf;--gold:#fbbf24;--bd:rgba(74,222,128,.22);--in:rgba(0,0,0,.3);--ok:#4ade80;--wn:#fbbf24;--er:#fb7185;--onac:#032413;--sh:0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#07130e;--bg2:#10301f;--card:rgba(255,255,255,.06);--fg:#e9f5ee;--mut:#98b7a6;--ac:#4ade80;--ac2:#2dd4bf;--gold:#fbbf24;--bd:rgba(74,222,128,.22);--in:rgba(0,0,0,.3);--ok:#4ade80;--wn:#fbbf24;--er:#fb7185;--onac:#032413;--sh:0 10px 30px rgba(0,0,0,.35)}
 *{box-sizing:border-box;font-family:'Cairo',system-ui,sans-serif}
-body{margin:0;color:var(--fg);background:radial-gradient(1200px 600px at 80% -10%,var(--bg2),transparent),var(--bg);min-height:100vh}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--fg);background:radial-gradient(1000px 520px at 85% -10%,var(--bg2),transparent),radial-gradient(800px 420px at 0% 100%,var(--bg2),transparent),var(--bg);min-height:100vh;transition:background .3s,color .3s}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .wrap{max-width:1100px;margin:auto;padding:14px 14px 90px}
-.hero{border:1px solid var(--bd);border-radius:24px;padding:22px 18px;background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(233,196,106,.08));margin-bottom:14px}
-.top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
-.tag{font-size:.7rem;letter-spacing:2px;color:var(--gold);font-weight:600}
-h1{font-size:clamp(1.5rem,5vw,2.6rem);margin:6px 0;font-weight:900;line-height:1.2;background:linear-gradient(90deg,var(--ac),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--mut);font-size:.9rem;margin:0}
+.hero{position:relative;overflow:hidden;border:1px solid var(--bd);border-radius:28px;padding:22px 18px;background:linear-gradient(135deg,rgba(52,184,124,.22),rgba(217,142,4,.12) 70%,transparent);margin-bottom:14px;box-shadow:var(--sh);animation:up .6s both}
+.sun{position:absolute;width:140px;height:140px;border-radius:50%;inset-inline-end:24px;top:-34px;background:radial-gradient(circle,#ffd86b 0%,rgba(255,216,107,.55) 45%,transparent 70%);animation:float 6s ease-in-out infinite;pointer-events:none}
+.leaf{position:absolute;bottom:-6px;font-size:3rem;transform-origin:bottom center;animation:sway 5s ease-in-out infinite;opacity:.85;pointer-events:none}
+.top{position:relative;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:1.6rem;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 6px 18px rgba(28,138,87,.35)}
+.brand b{font-size:1.45rem;font-weight:900;line-height:1}.brand small{display:block;font-size:.66rem;letter-spacing:2px;color:var(--gold);font-weight:700;margin-top:3px}
+.greet{position:relative;margin:16px 0 2px;font-size:clamp(1.2rem,4vw,1.8rem);font-weight:900}
+h1{font-size:clamp(1.05rem,3.2vw,1.4rem);margin:4px 0 6px;font-weight:700;color:var(--ac)}
+.sub{position:relative;color:var(--mut);font-size:.9rem;margin:0;line-height:1.8}
 .chip{border:1px solid var(--bd);background:var(--card);border-radius:99px;padding:5px 12px;font-size:.72rem}
-.who{margin-top:10px;font-size:.82rem;color:var(--gold)}
+.who{position:relative;margin-top:10px;font-size:.82rem;color:var(--gold);font-weight:600}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
 @media(min-width:700px){.tiles{grid-template-columns:repeat(9,1fr)}}
-.tile{border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:18px;padding:12px 4px;font-size:.74rem;font-weight:600;text-align:center;cursor:pointer;min-height:78px;transition:.2s}
+.tile{border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:18px;padding:12px 4px;font-size:.74rem;font-weight:700;text-align:center;cursor:pointer;min-height:78px;transition:.2s;box-shadow:var(--sh)}
 .tile span{display:block;font-size:1.7rem;margin-bottom:2px}
 .tile.on,.tile:hover{border-color:var(--ac);background:var(--in);color:var(--ac);transform:translateY(-2px)}
-.card{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px}
-h3{margin:0 0 12px;font-size:1rem;color:var(--ac)}
+.card{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--bd);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+h3{margin:0 0 12px;font-size:1rem;color:var(--ac);font-weight:700}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .f{grid-column:1/-1}
 label{display:block;font-size:.72rem;color:var(--mut);margin-bottom:3px}
-input,select,textarea{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--bd);border-radius:10px;padding:9px;font-size:16px;min-height:42px}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--ac)}
-.sep{grid-column:1/-1;font-size:.72rem;color:var(--gold);margin-top:6px;font-weight:700}
-button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--ac),#10b981);color:#032;min-height:42px}
-button.sec{background:var(--card);color:var(--ac);border:1px solid var(--bd)}
-.pn{display:none}.pn.on{display:block}
+input,select,textarea{width:100%;background:var(--in);color:var(--fg);border:1px solid var(--bd);border-radius:12px;padding:9px;font-size:16px;min-height:42px;transition:border .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(52,184,124,.25)}
+.sep{grid-column:1/-1;font-size:.72rem;color:var(--gold);margin-top:6px;font-weight:700;border-top:1px dashed var(--bd);padding-top:8px}
+button{border:0;border-radius:14px;padding:10px 14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--onac);min-height:42px;transition:transform .15s,box-shadow .15s}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(28,138,87,.3)}
+button.sec{background:var(--card);color:var(--ac);border:1px solid var(--bd);box-shadow:none}
+.pn{display:none}.pn.on{display:block;animation:up .4s both}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}
-.kpi{background:var(--in);border:1px solid var(--bd);border-radius:14px;padding:11px;text-align:center}
+.kpi{background:var(--in);border:1px solid var(--bd);border-radius:16px;padding:11px;text-align:center}
 .kpi span{font-size:.7rem;color:var(--mut)}.kpi b{display:block;font-size:1.02rem;margin-top:3px}
 .gauge{display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap}
 .gw{position:relative;width:140px;height:140px}.gw svg{transform:rotate(-90deg)}
 .gw div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.gw b{font-size:2.2rem}
 .ok{color:var(--ok)}.wn{color:var(--wn)}.er{color:var(--er)}
-.badge{padding:9px 12px;border-radius:12px;font-size:.8rem;margin-top:7px;border:1px solid;background:var(--in)}
+.badge{padding:9px 12px;border-radius:12px;font-size:.8rem;margin-top:7px;border:1px solid var(--bd);background:var(--in)}
 .tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.8rem}
 th,td{padding:8px 7px;border-bottom:1px solid var(--bd);text-align:start;white-space:nowrap}th{color:var(--gold)}
 ul{margin:0;padding-inline-start:18px;font-size:.84rem;line-height:1.9}ul a{color:var(--ac);cursor:pointer}
 #runb{position:fixed;inset-inline:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:6;max-width:1070px;margin:auto;box-shadow:0 6px 20px rgba(0,0,0,.35)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}.modal.on{display:flex}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}.modal.on{display:flex}
 #msgs{height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
-.m{max-width:88%;padding:9px 12px;border-radius:14px;font-size:.84rem;line-height:1.7;white-space:pre-wrap}.m.b{background:var(--in);border:1px solid var(--bd);align-self:flex-start}.m.u{background:linear-gradient(135deg,var(--ac),#10b981);color:#032;align-self:flex-end}
+.m{max-width:88%;padding:9px 12px;border-radius:16px;font-size:.84rem;line-height:1.7;white-space:pre-wrap}.m.b{background:var(--in);border:1px solid var(--bd);align-self:flex-start}.m.u{background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--onac);align-self:flex-end}
 .row{display:flex;gap:8px;flex-wrap:wrap}.row button{font-size:.74rem;padding:7px 11px}
-.btn{display:block;text-align:center;text-decoration:none;border-radius:12px;padding:11px;font-weight:700;background:linear-gradient(135deg,var(--ac),#10b981);color:#032}.btn.wa{background:#25d366}
-#toast{position:fixed;inset-inline:16px;bottom:80px;margin:auto;max-width:320px;text-align:center;background:var(--bg2);color:var(--fg);border:1px solid var(--ac);border-radius:12px;padding:10px;font-size:.85rem;z-index:20;opacity:0;pointer-events:none;transition:opacity .25s}#toast.on{opacity:1}
+.btn{display:block;text-align:center;text-decoration:none;border-radius:14px;padding:11px;font-weight:700;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--onac)}.btn.wa{background:#25d366;color:#fff}
+#toast{position:fixed;inset-inline:16px;bottom:80px;margin:auto;max-width:320px;text-align:center;background:var(--card);backdrop-filter:blur(10px);color:var(--fg);border:1px solid var(--ac);border-radius:14px;padding:10px;font-size:.85rem;z-index:20;opacity:0;pointer-events:none;transition:opacity .25s}#toast.on{opacity:1}
 footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
-@media print{body{background:#fff!important;color:#000!important}.tiles,#runb,.noprint{display:none!important}.pn{display:block!important}#p-hist,#p-ai,#p-ct,#p-crop,#p-soil,#p-water{display:none!important}.card{background:#fff!important;border:1px solid #aaa!important;color:#000!important}th,td{color:#000!important}h1{-webkit-text-fill-color:#0d9488!important}}
+.triW{display:grid;gap:12px;grid-template-columns:1fr;align-items:start;margin-top:10px}
+@media(min-width:760px){.triW{grid-template-columns:minmax(300px,440px) 1fr}}
+#tri{width:100%;height:auto;border-radius:14px;border:1px solid var(--bd);background:var(--in);touch-action:none;cursor:crosshair}
+.lg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.lg i{font-style:normal;font-size:.68rem;border:1px solid var(--bd);border-radius:99px;padding:2px 8px;display:flex;align-items:center;gap:4px}.lg i:before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+.printHead{display:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{body{background:#fff!important;color:#000!important}.tiles,#runb,.noprint,.sun,.leaf{display:none!important}.pn{display:block!important}#p-hist,#p-ai,#p-ct,#p-crop,#p-soil,#p-water{display:none!important}.card{background:#fff!important;border:1px solid #aaa!important;color:#000!important;box-shadow:none}th,td{color:#000!important}.printHead{display:block;border-bottom:2px solid #14633f;margin-bottom:10px;font-weight:700;color:#14633f}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <section class="hero">
-  <div class="top"><span class="tag">AGRISOIL · AI · GLOBAL PRO v9</span>
-    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><select id="lang" style="width:auto;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select><button class="sec" id="prt">🖨️</button></div></div>
+  <div class="sun"></div><span class="leaf" style="inset-inline-end:16px">🌿</span><span class="leaf" style="inset-inline-end:64px;animation-delay:-2s;font-size:2.2rem">🌱</span>
+  <div class="top"><div class="brand"><div class="logo">🌱</div><div><b>نماء</b><small>NAMAA · SMART AGRI</small></div></div>
+    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><select id="lang" style="width:auto;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select><button class="sec" id="theme" style="min-height:36px;padding:4px 12px">🌓</button><button class="sec" id="prt" style="min-height:36px;padding:4px 12px">🖨️</button></div></div>
+  <div class="greet" id="greet"></div>
   <h1>منصة التربة والمياه والملوحة والأسمدة</h1>
-  <p class="sub">40 محصولاً بأصنافها حسب المحافظة · تحليل ملوحة التربة والمياه · بنك الأسمدة المصري (معدني وعضوي وحيوي) · FAO-29 / FAO-56 / IPNI</p>
+  <p class="sub">40 محصولاً بأصنافها حسب المحافظة · قوام التربة بمثلث USDA · تحليل ملوحة التربة والمياه · بنك الأسمدة المصري (معدني وعضوي وحيوي) · FAO-29 / FAO-56 / IPNI</p>
   <div class="who">م/ أحمد محمد سعيد عبد العال — كلية الزراعة · جامعة المنوفية · الأراضي والمياه</div>
 </section>
 
@@ -75,13 +95,18 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
   <div class="f"><label>اسم الحقل / المالك</label><input id="fname" value="حقل التميز النموذجي"></div>
   <div class="f"><label>المحافظة (تحدد الأصناف المناسبة ومعدل ET₀)</label><select id="gov"></select></div>
   <div class="f"><label>المحصول (40 محصولاً)</label><select id="crop"></select></div>
-  <div class="f"><label>الصنف</label><select id="vr"></select></div>
+  <div class="f"><label>الصنف</label><select id="vr"></select><input id="vrC" placeholder="اكتب اسم الصنف" style="display:none;margin-top:6px"></div>
   <div><label>المساحة</label><input id="area" type="number" inputmode="decimal" value="1" step="0.5" min="0.1"></div>
   <div><label>الوحدة</label><select id="unit"><option value="4200.83">فدان</option><option value="10000">هكتار</option><option value="4046.86">أكر</option></select></div>
-  <div class="f"><label>نسيج التربة</label><select id="tex"><option value="0">رملية</option><option value="1" selected>لومية</option><option value="2">طينية</option><option value="3">جيرية</option></select></div>
 </div><p style="font-size:.72rem;color:var(--mut)" id="vnote"></p></div></div>
 
-<div class="pn" id="p-soil"><div class="card"><h3>🧪 تحليل التربة</h3>
+<div class="pn" id="p-soil"><div class="card"><h3>🧱 قوام التربة — مثلث القوام الأمريكي (USDA)</h3>
+  <div class="g3"><div><label>الرمل Sand %</label><input id="sand" type="number" inputmode="decimal" value="40" step="1" min="0" max="100"></div><div><label>السلت Silt %</label><input id="silt" type="number" inputmode="decimal" value="40" step="1" min="0" max="100"></div><div><label>الطين Clay %</label><input id="clay" type="number" inputmode="decimal" value="20" step="1" min="0" max="100"></div></div>
+  <div class="g2" style="margin-top:10px"><div class="f"><label>أو اختر قواماً نموذجياً لملء النسب</label><select id="texPick"></select></div></div>
+  <div id="texSum" class="badge"></div>
+  <div class="triW"><div><canvas id="tri" width="460" height="420"></canvas><div class="lg" id="texLg"></div></div>
+  <div><div class="kpis" id="texK"></div><p style="font-size:.78rem;color:var(--mut);line-height:1.8" id="texNote"></p></div></div></div>
+<div class="card"><h3>🧪 تحليل التربة</h3>
   <div class="row" style="margin-bottom:10px"><button class="sec" data-p="ideal">تربة مثالية</button><button class="sec" data-p="saline">تربة ملحية</button><button class="sec" data-p="calc">تربة جيرية</button><button class="sec" data-p="sodic">تربة صودية</button></div>
   <div class="g2" id="soilF"></div></div></div>
 
@@ -105,6 +130,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
   <div class="g2" id="fertF"></div></div></div>
 
 <div class="pn" id="p-res">
+  <div class="printHead" id="phd"></div>
   <div class="card"><div id="sub" style="color:var(--gold);font-size:.85rem;margin-bottom:10px"></div><div class="gauge">
     <div class="gw"><svg width="140" height="140" viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" fill="none" stroke="var(--bd)" stroke-width="12"/><circle id="ring" cx="75" cy="75" r="62" fill="none" stroke="var(--ok)" stroke-width="12" stroke-linecap="round" stroke-dasharray="390" stroke-dashoffset="390" style="transition:stroke-dashoffset 1s,stroke .5s"/></svg><div><b id="score">—</b><span id="hstat" style="font-size:.8rem"></span></div></div>
     <div class="kpis" style="flex:1;min-width:240px">
@@ -142,52 +168,53 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 
 <script>
 // ===== البيانات =====
-const REG={D:'الدلتا',U:'الصعيد',N:'الأراضي الجديدة/الصحراوية',C:'الساحل الشمالي وسيناء'};
-const GOV={'القاهرة':['D',5],'الجيزة':['DU',5.5],'القليوبية':['D',4.8],'الإسكندرية':['DC',4.5],'البحيرة':['DNC',5],'الغربية':['D',4.7],'كفر الشيخ':['D',4.6],'الدقهلية':['D',4.6],'دمياط':['D',4.4],'الشرقية':['D',5],'المنوفية':['D',4.8],'بورسعيد':['C',4.5],'الإسماعيلية':['DN',5.5],'السويس':['N',6],'شمال سيناء':['C',5],'جنوب سيناء':['N',6.5],'مطروح':['C',5],'الفيوم':['U',5.8],'بني سويف':['U',5.8],'المنيا':['U',6],'أسيوط':['U',6.2],'سوهاج':['U',6.4],'قنا':['U',6.8],'الأقصر':['U',7],'أسوان':['U',7.5],'البحر الأحمر':['N',6.5],'الوادي الجديد':['N',7]};
+const REG={N:'شمال الدلتا',M:'وسط وجنوب الدلتا',F:'مصر الوسطى',U:'الصعيد',R:'الأراضي الجديدة/الصحراوية',C:'الساحل الشمالي وسيناء'};
+const GOV={'القاهرة':['M',5],'الجيزة':['FR',5.5],'القليوبية':['M',4.8],'الإسكندرية':['NC',4.5],'البحيرة':['NRC',5],'الغربية':['M',4.7],'كفر الشيخ':['N',4.6],'الدقهلية':['NM',4.6],'دمياط':['N',4.4],'الشرقية':['MR',5],'المنوفية':['MR',4.8],'بورسعيد':['NC',4.5],'الإسماعيلية':['MR',5.5],'السويس':['R',6],'شمال سيناء':['CR',5],'جنوب سيناء':['R',6.5],'مطروح':['CR',5],'الفيوم':['FR',5.8],'بني سويف':['F',5.8],'المنيا':['FR',6],'أسيوط':['UR',6.2],'سوهاج':['U',6.4],'قنا':['U',6.8],'الأقصر':['U',7],'أسوان':['UR',7.5],'البحر الأحمر':['R',6.5],'الوادي الجديد':['R',7]};
 const G={cer:'حبوب',leg:'بقوليات',ind:'صناعية وزيتية',fod:'علف',veg:'خضر',fru:'فاكهة'};
 const ZR={cer:.9,leg:.7,ind:.9,fod:1,veg:.6,fru:1.2};
-// [الاسم, المجموعة, N, P, K (ppm مستهدف), تحمل EC, ميل الانخفاض, Kc, أيام الموسم, أصناف: الاسم:المناطق]
+// [الاسم, المجموعة, N, P, K (ppm مستهدف), تحمل EC, ميل الانخفاض, Kc, أيام الموسم, أصناف: الاسم:المناطق[:محافظات بعينها مفصولة بـ |]]
+// المناطق: N شمال الدلتا · M وسط وجنوب الدلتا · F مصر الوسطى · U الصعيد · R أراضٍ جديدة · C ساحل وسيناء
 const C={
-wheat:['القمح','cer',40,25,180,6,7.1,1.15,150,'جيزة 171:DUN;سخا 95:DC;مصر 3:UN;بني سويف 7:U;جميزة 11:DU'],
-barley:['الشعير','cer',40,25,170,8,5,1.15,140,'جيزة 126:DUC;جيزة 138:UN'],
-maize:['الذرة الشامية','cer',55,30,200,1.7,12,1.2,120,'هجين فردي 168:DU;هجين فردي 176:DU;هجين ثلاثي 321:DUN;هجين ثلاثي 324:DUN'],
-rice:['الأرز','cer',50,25,150,3,12,1.2,135,'جيزة 179:DC;سخا 108:DC;سخا 106:DC;جيزة 178:DC'],
-sorghum:['الذرة الرفيعة','cer',45,25,170,6.8,16,1,120,'جيزة 15:UN;بلدي:DU'],
-oat:['الشوفان','cer',40,20,160,6,8.6,1.15,130,'صنف علفي قياسي:DUN'],
-faba:['الفول البلدي','leg',20,25,170,1.6,9.6,1.15,150,'جيزة 716:DU;جيزة 843:DUN;سخا 3:D;مصر 1:U;نوبارية 1:N'],
-soybean:['فول الصويا','leg',30,30,180,5,20,1.15,125,'جيزة 111:DU;كريمسون:UN'],
-peanut:['الفول السوداني','leg',25,30,170,3.2,29,1.15,120,'جيزة 6:DN;جيزة 5:N'],
-lentil:['العدس','leg',20,25,160,1.5,12,1.1,130,'سخا 1:U;جيزة 4:U'],
-chickpea:['الحمص','leg',20,25,160,1.7,12,1,130,'جيزة 195:U;جيزة 3:UN'],
-cotton:['القطن','ind',50,30,200,7.7,5.2,1.15,200,'جيزة 94:D;جيزة 96:D;جيزة 92:D;جيزة 95:DU'],
-sugarbeet:['بنجر السكر','ind',60,30,220,7,5.9,1.2,190,'متعدد الأجنة مستورد:DCN'],
-sugarcane:['قصب السكر','ind',70,35,250,1.7,5.9,1.25,330,'GT 54-9:U;G 2003-47:U;G 2004-27:U'],
-sunflower:['عباد الشمس','ind',45,30,190,4.8,5,1.15,110,'سخا 53:DUN;هجين مستورد:DUN'],
-sesame:['السمسم','ind',35,25,150,3,16,1.1,110,'شندويل 3:U;جيزة 32:U'],
-alfalfa:['البرسيم الحجازي','fod',20,30,200,2,7.3,1.2,300,'سيوة:N;حجازي:DU;جيزة 1:DU'],
-berseem:['البرسيم المصري','fod',30,25,180,1.5,5.7,1.15,180,'مسقاوي:D;فحل:DU;جيزة 6:DU'],
-tomato:['الطماطم','veg',60,35,220,2.5,9,1.15,130,'GS 12:DUN;كاسل روك:DUN;هجن الصوب:DUNC'],
-potato:['البطاطس','veg',55,40,250,1.7,12,1.15,110,'سبونتا:DN;دياموند:DN;كارا:DN'],
-onion:['البصل','veg',45,30,180,1.2,16,1.05,150,'جيزة 6 محسن:U;جيزة 20:U;شندويل 1:UN'],
-garlic:['الثوم','veg',45,30,180,3.9,14,1,180,'بلدي مصري:DU;صيني:DUN'],
-pepper:['الفلفل','veg',55,35,210,1.5,14,1.05,140,'كاليفورنيا وندر:DUN;حارة محلية:DU'],
-cucumber:['الخيار','veg',55,35,200,2.5,13,1,90,'بيتا ألفا:DUN;هجن الصوب:DUNC'],
-eggplant:['الباذنجان','veg',55,35,210,1.1,6.9,1.05,150,'بلدي أسود:DU;بلاك بيوتي:DUN'],
-squash:['الكوسة','veg',50,30,190,4.7,10,1,90,'إسكندراني:DUN;هجن مستوردة:DUNC'],
-watermelon:['البطيخ','veg',45,30,200,2.2,10,1,100,'شوجر بيبي:DUN;كريمسون سويت:DUN'],
-cantaloupe:['الكانتالوب','veg',45,30,200,2.2,7.6,1.05,95,'جاليا:DUN;أناناس:DU'],
-okra:['البامية','veg',45,30,180,2,12,1,100,'بلدي مصري:DU;كليمسون:DUN'],
-cabbage:['الكرنب','veg',60,30,200,1.8,9.7,1.05,110,'بلدي:D;هجن مستوردة:DUN'],
-carrot:['الجزر','veg',45,30,200,1,14,1.05,110,'نانتس:DU;شانتني:DUN'],
-sweetpotato:['البطاطا','veg',40,30,220,1.5,11,1.15,140,'بيريجارد:DU;مصري أبيض:DU'],
-citrus:['الموالح','fru',50,30,200,1.7,16,.7,365,'بلدي:DN;فالنسيا:DN;أبو سرة:DN;يوسفي:DN'],
-dates:['نخيل البلح','fru',40,25,180,4,3.6,.95,365,'سيوي:N;زغلول:DC;سمانى:DC;برحي:NU;مجدول:NU'],
-grapes:['العنب','fru',40,25,200,1.5,9.6,.85,270,'بناتي:DN;فلام سيدلس:DN;كريمسون:N'],
-olive:['الزيتون','fru',35,20,150,4,6,.7,365,'بيكوال:NC;كوروني:NC;عجيزي:NC'],
-strawberry:['الفراولة','fru',50,35,200,1,33,.85,180,'فستيفال:DN;سويت تشارلي:DN'],
-banana:['الموز','fru',60,35,250,1.2,10,1.1,365,'وليامز (كافنديش):DU;هندي:DU'],
-mango:['المانجو','fru',50,30,200,1.5,12,1,365,'زبدية:DUN;عويس:DUN;كيت:UN;نعومي:DN'],
-pomegranate:['الرمان','fru',45,25,190,2.7,9,.85,365,'مانفلوري:UN;وندرفل:UN']};
+wheat:['القمح','cer',40,25,180,6,7.1,1.15,150,'مصر 3:NMFUR;مصر 4:NMFUR;مصر 5:NMFUR;جيزة 171:NMFUR;سخا 95:NMFUR;سخا 96:NMFUR;سخا 97:NMFUR;سدس 15:NMFUR;مصر 1:UR;سدس 12:U;سدس 14:U;بني سويف 5:F;بني سويف 7:F;سوهاج 5:FU;سوهاج 6:FU;جميزة 11:NMFU;جميزة 12:NMFUR'],
+barley:['الشعير','cer',40,25,170,8,5,1.15,140,'جيزة 123:NMFU;جيزة 124:NMFUC;جيزة 126:NMFUC;جيزة 130:CR;جيزة 131:NMFUR;جيزة 132:CR;جيزة 138:FUR;جيزة 2000:NMFUR'],
+maize:['الذرة الشامية','cer',55,30,200,1.7,12,1.2,120,'هجين فردي 128:NMFU;هجين فردي 130:NMFU;هجين فردي 162:NMFU;هجين فردي 168:NMFU;هجين فردي 176:NMFU;هجين ثلاثي 321:NMFUR;هجين ثلاثي 322:NMFUR;هجين ثلاثي 323:NMFUR;هجين ثلاثي 324:NMFUR;هجين ثلاثي 327:NMFUR;هجين ثلاثي 329:NMFUR'],
+rice:['الأرز','cer',50,25,150,3,12,1.2,135,'جيزة 177:NMC;جيزة 178:NMCR;جيزة 179:NMC;سخا 101:NMC;سخا 102:NMC;سخا 104:NMCR;سخا 105:NMC;سخا 106:NMC;سخا 107:NMC;سخا 108:NMCR;سخا 109:NR;سخا سوبر 300:NMCR;هجين مصري 1:NM;هجين مصري 2:R;هجين مصري 3:R'],
+sorghum:['الذرة الرفيعة','cer',45,25,170,6.8,16,1,120,'جيزة 15:FUR;دورادو:MFUR;بلدي:MFU'],
+oat:['الشوفان','cer',40,20,160,6,8.6,1.15,130,'صنف علفي قياسي:NMFUR'],
+faba:['الفول البلدي','leg',20,25,170,1.6,9.6,1.15,150,'سخا 1:NMF;جيزة 716:NM;جيزة 843:NMF;مصر 1:MFU;جيزة بلانكا:NMFR;نوبارية 1:R;نوبارية 2:R;نوبارية 3:R'],
+soybean:['فول الصويا','leg',30,30,180,5,20,1.15,125,'جيزة 35:NMFU;جيزة 82:NMFU;جيزة 111:NMFU;كريمسون:FUR'],
+peanut:['الفول السوداني','leg',25,30,170,3.2,29,1.15,120,'جيزة 6:NMR;جيزة 5:R'],
+lentil:['العدس','leg',20,25,160,1.5,12,1.1,130,'سخا 1:FU;جيزة 4:FU;جيزة 9:FU;جيزة 51:FU'],
+chickpea:['الحمص','leg',20,25,160,1.7,12,1,130,'جيزة 195:FU;جيزة 3:FUR'],
+cotton:['القطن','ind',50,30,200,7.7,5.2,1.15,200,'إكسترا جيزة 92:N:دمياط;إكسترا جيزة 96:N:كفر الشيخ;سوبر جيزة 86:NR:البحيرة|الإسكندرية;سوبر جيزة 94:NM:الدقهلية|الشرقية|بورسعيد|الإسماعيلية|كفر الشيخ|الغربية;سوبر جيزة 97:M:القليوبية|المنوفية|البحيرة|الغربية;جيزة 95:F:بني سويف;جيزة 98:FUR:الفيوم|المنيا|أسيوط|سوهاج|الوادي الجديد|قنا|الأقصر'],
+sugarbeet:['بنجر السكر','ind',60,30,220,7,5.9,1.2,190,'صنف متعدد الأجنة مستورد:NMCR'],
+sugarcane:['قصب السكر','ind',70,35,250,1.7,5.9,1.25,330,'GT 54-9:FUR;G 2003-47:FUR;G 2004-27:FUR;G 99-103:FUR;G 98-28:FUR'],
+sunflower:['عباد الشمس','ind',45,30,190,4.8,5,1.15,110,'سخا 53:NMFUR;هجين مستورد:NMFUR'],
+sesame:['السمسم','ind',35,25,150,3,16,1.1,110,'شندويل 3:FUR;جيزة 32:FUR'],
+alfalfa:['البرسيم الحجازي','fod',20,30,200,2,7.3,1.2,300,'سيوة:RC;حجازي:MFU;جيزة 1:MFU'],
+berseem:['البرسيم المصري','fod',30,25,180,1.5,5.7,1.15,180,'مسقاوي:NM;سخا 4:NM;فحل:MFU;جيزة 6:MFU'],
+tomato:['الطماطم','veg',60,35,220,2.5,9.9,1.15,130,'GS 12:NMFUR;كاسل روك:NMFUR;سوبر ماروندي:NMFUR;سوبر سترين بي:NMFU;هجن الصوب:NMFURC'],
+potato:['البطاطس','veg',55,40,250,1.7,12,1.15,110,'سبونتا:NMR;دياموند:NMR;كارا:NMR;لادي روزيتا:NMR;ألفا:NM;هيرمز:NMR'],
+onion:['البصل','veg',45,30,180,1.2,16,1.05,150,'جيزة 6 محسن:FU;جيزة 20:FU;بحيري:NM;شندويل 1:FUR'],
+garlic:['الثوم','veg',45,30,180,3.9,14.3,1,180,'بلدي مصري:NMFU;سدس 40:FU;صيني:NMFUR'],
+pepper:['الفلفل','veg',55,35,210,1.5,14,1.05,140,'كاليفورنيا وندر:NMFUR;حارة محلية:MFU;هجن الصوب:NMFURC'],
+cucumber:['الخيار','veg',55,35,200,2.5,13,1,90,'بيتا ألفا:NMFUR;هجن الصوب:NMFURC'],
+eggplant:['الباذنجان','veg',55,35,210,1.1,6.9,1.05,150,'بلدي أسود:NMFU;بلاك بيوتي:NMFUR'],
+squash:['الكوسة','veg',50,30,190,4.9,10.5,1,90,'إسكندراني:NMFUR;هجن مستوردة:NMFURC'],
+watermelon:['البطيخ','veg',45,30,200,2.2,10,1,100,'شوجر بيبي:NMFUR;كريمسون سويت:NMFUR'],
+cantaloupe:['الكانتالوب','veg',45,30,200,1,8.4,1.05,95,'جاليا:NMFU;أناناس:MFU'],
+okra:['البامية','veg',45,30,180,2,12,1,100,'بلدي مصري:MFU;كليمسون:NMFUR'],
+cabbage:['الكرنب','veg',60,30,200,1.8,9.7,1.05,110,'بلدي:NM;هجن مستوردة:NMFUR'],
+carrot:['الجزر','veg',45,30,200,1,14,1.05,110,'نانتس:NMFU;شانتني:NMFUR'],
+sweetpotato:['البطاطا','veg',40,30,220,1.5,11,1.15,140,'بيريجارد:NMFU;مصري أبيض:MFU'],
+citrus:['الموالح','fru',50,30,200,1.3,13.1,.7,365,'بلدي:NMR;فالنسيا:NMR;أبو سرة:NMR;يوسفي:NMR'],
+dates:['نخيل البلح','fru',40,25,180,4,3.6,.95,365,'سيوي:R;زغلول:NMC;سمانى:NMC;برحي:UR;مجدول:UR'],
+grapes:['العنب','fru',40,25,200,1.5,9.6,.85,270,'بناتي:NMR;فلام سيدلس:NMFUR;سوبيريور:NMFUR;كريمسون:R'],
+olive:['الزيتون','fru',35,20,150,4,6,.7,365,'بيكوال:CR;كوروني:CR;عجيزي:CR;كالاماتا:CR;مانزانيلو:CR'],
+strawberry:['الفراولة','fru',50,35,200,1,33,.85,180,'فستيفال:NMR;سويت تشارلي:NMR;كاميروزا:NMR'],
+banana:['الموز','fru',60,35,250,1.2,10,1.1,365,'وليامز (كافنديش):MFU;جراند نين:MFU;هندي:MFU'],
+mango:['المانجو','fru',50,30,200,1.5,12,1,365,'زبدية:NMFUR;عويس:NMFUR;كيت:FUR;نعومي:NMR;تومي أتكنز:FUR'],
+pomegranate:['الرمان','fru',45,25,190,2.7,9,.85,365,'مانفلوري:UR;وندرفل:UR']};
 const LEG=['faba','soybean','peanut','lentil','chickpea','alfalfa','berseem'];
 // بنك الأسمدة: [الاسم, % العنصر, سعر الطن]
 const FN=[['سلفات نشادر (20.6% N)',20.6,9000],['نترات نشادر (33.5% N)',33.5,12000],['يوريا (46% N)',46,14000],['نترات كالسيوم (15.5% N)',15.5,18000]];
@@ -195,13 +222,13 @@ const FP=[['سوبر فوسفات عادي (15.5% P₂O₅)',15.5,7500],['سوب
 const FK=[['سلفات بوتاسيوم (50% K₂O)',50,24000],['كلوريد بوتاسيوم (60% K₂O)',60,16000],['نترات بوتاسيوم (46% K₂O)',46,30000]];
 const OR=[['بدون',0,0,0,0],['كمبوست',1.5,.8,1.2,1800],['سماد بلدي (مواشي)',1,.5,1,800],['سماد دواجن',3,2.5,2,1500]];
 const BIO=[['بدون',0,0,'',0],['ميكروبين (يوفر 25% N)',.25,0,'',350],['سيريالين — نجيليات (25% N)',.25,0,'cer',350],['نيتروبين/العقدين — بقوليات (50% N)',.5,0,'leg',350],['فوسفورين (25% P)',0,.25,'',350]];
-const PRE={ideal:{ph:7,ec:1,om:3,cec:25,esp:3,n:45,p:30,k:200,fe:6,zn:2,mn:3,sm:24,fc:28,wCa:4,wMg:2,wNa:3},saline:{ph:8.2,ec:7.5,om:.8,cec:12,esp:10,n:15,p:8,k:110,fe:2.5,zn:.7,mn:1.5,sm:12,fc:28,wCa:6,wMg:3,wNa:18},calc:{ph:8.6,ec:3,om:.9,cec:9,esp:6,n:22,p:10,k:140,fe:2,zn:.6,mn:.8,sm:15,fc:26,wCa:5,wMg:2,wNa:8},sodic:{ph:9,ec:3.5,om:.7,cec:20,esp:22,n:15,p:9,k:120,fe:2,zn:.6,mn:1,sm:14,fc:28,wCa:3,wMg:1.5,wNa:16}};
+const PRE={ideal:{ph:7,ec:1,om:3,cec:25,esp:3,n:45,p:30,k:200,fe:6,zn:2,mn:3,sm:22,wCa:4,wMg:2,wNa:3,ecw:.9,sand:40,silt:40,clay:20,caco3:3},saline:{ph:8.2,ec:7.5,om:.8,cec:12,esp:10,n:15,p:8,k:110,fe:2.5,zn:.7,mn:1.5,sm:15,wCa:6,wMg:3,wNa:18,ecw:2.7,sand:30,silt:35,clay:35,caco3:8},calc:{ph:8.6,ec:3,om:.9,cec:9,esp:6,n:22,p:10,k:140,fe:2,zn:.6,mn:.8,sm:12,wCa:5,wMg:2,wNa:8,ecw:1.5,sand:62,silt:25,clay:13,caco3:25},sodic:{ph:9,ec:3.5,om:.7,cec:20,esp:22,n:15,p:9,k:120,fe:2,zn:.6,mn:1,sm:20,wCa:3,wMg:1.5,wNa:16,ecw:2,sand:25,silt:35,clay:40,caco3:6}};
 const ST=[[.3,1,.3],[.4,0,.35],[.3,0,.35]];
 const BDS=[1.5,1.3,1.2,1.35],NE=[.5,.65,.7,.6];
 
 // ===== اللغات =====
 let lang=store('agriLang')||'ar';
-const LX={en:{"م³":"m³","منصة التربة والمياه والملوحة والأسمدة": "Soil, Water, Salinity & Fertilizer Platform", "40 محصولاً بأصنافها حسب المحافظة": "40 crops with varieties by governorate", "تحليل ملوحة التربة والمياه": "soil & water salinity analysis", "بنك الأسمدة المصري (معدني وعضوي وحيوي)": "Egyptian fertilizer bank (mineral, organic & bio)", "م/ أحمد محمد سعيد عبد العال": "Eng. Ahmed Mohamed Saeed Abdel Aal", "كلية الزراعة": "Faculty of Agriculture", "جامعة المنوفية": "Menoufia University", "الأراضي والمياه": "Soil & Water", "المحاولات:": "Trials:", "المحصول": "Crop", "التربة": "Soil", "المياه": "Water", "الملوحة": "Salinity", "الأسمدة": "Fertilizers", "النتائج": "Results", "السجل": "History", "المساعد": "Assistant", "تواصل": "Contact", "المحافظة والمحصول": "Governorate & Crop", "اسم الحقل / المالك": "Field / Owner name", "المحافظة (تحدد الأصناف المناسبة ومعدل ET₀)": "Governorate (sets suitable varieties and ET₀)", "المحصول (40 محصولاً)": "Crop (40 crops)", "الصنف": "Variety", "المساحة": "Area", "الوحدة": "Unit", "نسيج التربة": "Soil texture", "رملية": "Sandy", "لومية": "Loam", "طينية": "Clay", "جيرية": "Calcareous", "فدان": "Feddan", "هكتار": "Hectare", "أكر": "Acre", "كل الأصناف (عام / عالمي)": "All varieties (general / global)", "حقل التميز النموذجي": "Model Excellence Field", "لا توجد أصناف مسجلة لمنطقة هذه المحافظة — عُرضت كل الأصناف.": "No varieties registered for this governorate region — all varieties shown.", "أصناف منطقة: ": "Varieties of region: ", "الدلتا": "Nile Delta", "الصعيد": "Upper Egypt", "الأراضي الجديدة/الصحراوية": "New/desert lands", "الساحل الشمالي وسيناء": "North Coast & Sinai", "حبوب": "Cereals", "بقوليات": "Legumes", "صناعية وزيتية": "Industrial & oil crops", "علف": "Fodder", "خضر": "Vegetables", "فاكهة": "Fruits", "القاهرة": "Cairo", "الجيزة": "Giza", "القليوبية": "Qalyubia", "الإسكندرية": "Alexandria", "البحيرة": "Beheira", "الغربية": "Gharbia", "كفر الشيخ": "Kafr El Sheikh", "الدقهلية": "Dakahlia", "دمياط": "Damietta", "الشرقية": "Sharqia", "المنوفية": "Menoufia", "بورسعيد": "Port Said", "الإسماعيلية": "Ismailia", "السويس": "Suez", "شمال سيناء": "North Sinai", "جنوب سيناء": "South Sinai", "مطروح": "Matrouh", "الفيوم": "Fayoum", "بني سويف": "Beni Suef", "المنيا": "Minya", "أسيوط": "Assiut", "سوهاج": "Sohag", "قنا": "Qena", "الأقصر": "Luxor", "أسوان": "Aswan", "البحر الأحمر": "Red Sea", "الوادي الجديد": "New Valley", "القمح": "Wheat", "الشعير": "Barley", "الذرة الشامية": "Maize", "الأرز": "Rice", "الذرة الرفيعة": "Sorghum", "الشوفان": "Oat", "الفول البلدي": "Faba bean", "فول الصويا": "Soybean", "الفول السوداني": "Peanut", "العدس": "Lentil", "الحمص": "Chickpea", "القطن": "Cotton", "بنجر السكر": "Sugar beet", "قصب السكر": "Sugarcane", "عباد الشمس": "Sunflower", "السمسم": "Sesame", "البرسيم الحجازي": "Alfalfa", "البرسيم المصري": "Egyptian clover", "الطماطم": "Tomato", "البطاطس": "Potato", "البصل": "Onion", "الثوم": "Garlic", "الفلفل": "Pepper", "الخيار": "Cucumber", "الباذنجان": "Eggplant", "الكوسة": "Squash", "البطيخ": "Watermelon", "الكانتالوب": "Cantaloupe", "البامية": "Okra", "الكرنب": "Cabbage", "الجزر": "Carrot", "البطاطا": "Sweet potato", "الموالح": "Citrus", "نخيل البلح": "Date palm", "العنب": "Grapes", "الزيتون": "Olive", "الفراولة": "Strawberry", "الموز": "Banana", "المانجو": "Mango", "الرمان": "Pomegranate", "جيزة": "Giza", "سخا": "Sakha", "مصر ": "Misr ", "جميزة": "Gemmeiza", "هجين فردي": "Single cross", "هجين ثلاثي": "Three-way cross", "هجين": "Hybrid", "بلدي أسود": "Local black", "بلدي مصري": "Egyptian local", "بلدي": "Local", "صنف علفي قياسي": "Standard fodder variety", "نوبارية": "Nubaria", "كريمسون سويت": "Crimson Sweet", "كريمسون": "Crimson", "متعدد الأجنة مستورد": "Imported multigerm", "شندويل": "Shandaweel", "سيوة": "Siwa", "حجازي": "Hegazi", "مسقاوي": "Mesqawi", "فحل": "Fahl", "كاسل روك": "Castle Rock", "هجن الصوب": "Greenhouse hybrids", "سبونتا": "Spunta", "دياموند": "Diamant", "كارا": "Cara", "محسن": "improved", "صيني": "Chinese", "كاليفورنيا وندر": "California Wonder", "حارة محلية": "Local hot", "بيتا ألفا": "Beta Alpha", "بلاك بيوتي": "Black Beauty", "إسكندراني": "Iskandarani", "هجن مستوردة": "Imported hybrids", "شوجر بيبي": "Sugar Baby", "جاليا": "Galia", "أناناس": "Ananas", "كليمسون": "Clemson", "نانتس": "Nantes", "شانتني": "Chantenay", "بيريجارد": "Beauregard", "مصري أبيض": "Egyptian white", "فالنسيا": "Valencia", "أبو سرة": "Navel", "يوسفي": "Mandarin", "سيوي": "Siwi", "زغلول": "Zaghloul", "سمانى": "Samany", "برحي": "Barhi", "مجدول": "Medjool", "بناتي": "Banati", "فلام سيدلس": "Flame Seedless", "بيكوال": "Picual", "كوروني": "Koroneiki", "عجيزي": "Agizi", "فستيفال": "Festival", "سويت تشارلي": "Sweet Charlie", "وليامز (كافنديش)": "Williams (Cavendish)", "هندي": "Indian", "زبدية": "Zibdia", "عويس": "Owais", "كيت": "Keitt", "نعومي": "Naomi", "مانفلوري": "Manfloria", "وندرفل": "Wonderful", "هجين مستورد": "Imported hybrid", "تحليل التربة": "Soil analysis", "تربة مثالية": "Ideal soil", "تربة ملحية": "Saline soil", "تربة جيرية": "Calcareous soil", "تربة صودية": "Sodic soil", "EC التربة (dS/m)": "Soil EC (dS/m)", "المادة العضوية %": "Organic matter %", "ESP الحالي %": "Current ESP %", "ESP المستهدف %": "Target ESP %", "NPK المتاح (ppm)": "Available NPK (ppm)", "العناصر الصغرى (DTPA ppm)": "Micronutrients (DTPA ppm)", "مياه الري والرطوبة": "Irrigation water & moisture", "الرطوبة والتبخر": "Moisture & evaporation", "الرطوبة الحالية %": "Current moisture %", "السعة الحقلية FC %": "Field capacity FC %", "ET₀ (مم/يوم)": "ET₀ (mm/day)", "كيمياء مياه الري": "Irrigation water chemistry", "نظام الري وكفاءته": "Irrigation system & efficiency", "سطحي (55%)": "Surface (55%)", "رش (75%)": "Sprinkler (75%)", "تنقيط (90%)": "Drip (90%)", "سعر المتر المكعب مياه/طاقة (ج)": "Water/energy cost per m³ (EGP)", "ملوحة التربة": "Soil salinity", "التصنيف": "Class", "حد تحمل المحصول": "Crop tolerance limit", "المحصول النسبي": "Relative yield", "جبس مطلوب": "Gypsum required", "ملوحة مياه الري": "Irrigation water salinity", "الخطورة (FAO)": "Hazard (FAO)", "تصنيف USSL": "USSL class", "خطر النفاذية": "Infiltration hazard", "احتياج الغسيل LR": "Leaching requirement LR", "مقارنة الملوحة": "Salinity comparison", "EC التربة": "Soil EC", "حد المياه (0.7)": "Water limit (0.7)", "ECw مياه الري": "Irrigation ECw", "غير ملحية": "Non-saline", "طفيفة": "Slight", "متوسطة": "Moderate", "شديدة جداً": "Very strong", "شديدة": "Strong", "لا خطورة": "No hazard", "خطورة طفيفة–متوسطة": "Slight–moderate hazard", "خطورة شديدة": "Severe hazard", "لا خطر": "No risk", "متوسط": "Moderate", "بنك الأسمدة المصري — اختيار وتعديل يدوي": "Egyptian fertilizer bank — select & edit manually", "اختر السماد من البنك ثم عدّل النسبة والسعر يدوياً (الأسعار افتراضية تقريبية — حدّثها حسب السوق).": "Pick a fertilizer from the bank, then edit the percentage and price manually (default prices are approximate — update to the market).", "سماد النيتروجين (معدني)": "Nitrogen fertilizer (mineral)", "سماد الفوسفور (معدني)": "Phosphorus fertilizer (mineral)", "سماد البوتاسيوم (معدني)": "Potassium fertilizer (mineral)", "يدوي (أدخل بنفسك)": "Manual (enter yourself)", "يدوي": "Manual", "% العنصر": "% nutrient", "سعر الطن (ج)": "Price per ton (EGP)", "السماد العضوي": "Organic fertilizer", "المعدل (طن/وحدة)": "Rate (t/unit)", "المخصبات الحيوية": "Bio-fertilizers", "تكلفة الجرعة لكل وحدة (ج)": "Dose cost per unit (EGP)", "بدون": "None", "سلفات نشادر": "Ammonium sulfate", "نترات نشادر": "Ammonium nitrate", "يوريا": "Urea", "نترات كالسيوم": "Calcium nitrate", "سوبر فوسفات عادي": "Single superphosphate", "سوبر فوسفات ثلاثي": "Triple superphosphate", "حامض فوسفوريك": "Phosphoric acid", "سلفات بوتاسيوم": "Potassium sulfate", "كلوريد بوتاسيوم": "Potassium chloride", "نترات بوتاسيوم": "Potassium nitrate", "كمبوست": "Compost", "سماد بلدي (مواشي)": "Farmyard manure (cattle)", "سماد دواجن": "Poultry manure", "ميكروبين (يوفر 25% N)": "Microbein (saves 25% N)", "سيريالين — نجيليات (25% N)": "Cerealine — cereals (25% N)", "نيتروبين/العقدين — بقوليات (50% N)": "Nitrobein/rhizobia — legumes (50% N)", "فوسفورين (25% P)": "Phosphorein (25% P)", "ميكروبين": "Microbein", "سيريالين": "Cerealine", "نيتروبين/العقدين": "Nitrobein/rhizobia", "فوسفورين": "Phosphorein", "الري الإجمالي": "Gross irrigation", "مم/يوم": "mm/day", "م³/يوم/وحدة": "m³/day/unit", "مياه الموسم م³": "Seasonal water m³", "فترة الري": "Irrigation interval", "عجز الرطوبة": "Moisture deficit", "إجمالي التكاليف": "Total cost", "ج.م": "EGP", "برنامج التسميد والتكلفة": "Fertilization program & cost", "العنصر": "Element", "الحالي": "Current", "الهدف": "Target", "السماد": "Fertilizer", "لكل وحدة": "Per unit", "الإجمالي": "Total", "التكلفة (ج)": "Cost (EGP)", "جدول التسميد المقسّم": "Split fertilization schedule", "المرحلة المتأخرة": "Late stage", "المرحلة": "Stage", "التأسيس": "Establishment", "النمو الخضري": "Vegetative growth", "NPK: الحالي والهدف": "NPK: current vs target", "توصيات الإصلاح": "Reclamation recommendations", "حفظ": "Save", "مشاركة": "Share", "ممتازة": "Excellent", "جيدة": "Good", "ضعيفة": "Poor", " كجم": " kg", " طن": " t", " يوم": " d", " مم": " mm", "عضوي": "Organic", "حيوي": "Bio", "غير مناسب": "Not suitable", "مياه": "Water", "موسمي": "Seasonal", "شيلات EDTA": "EDTA chelates", "مياه الري غير صالحة لهذا المحصول (ECw تتجاوز حد التحمل).": "Irrigation water is unsuitable for this crop (ECw exceeds tolerance).", "مياه شديدة الملوحة — استخدم محاصيل مقاومة وارفع نسبة الغسيل.": "Highly saline water — use tolerant crops and raise the leaching fraction.", "خطر على نفاذية التربة من ارتفاع SAR مع انخفاض ECw — أضف الجبس.": "Soil infiltration risk from high SAR with low ECw — add gypsum.", "SAR مياه الري=": "Irrigation water SAR=", " — أضف جبس زراعي.": " — add agricultural gypsum.", "جودة مياه الري مقبولة لهذا المحصول.": "Irrigation water quality is acceptable for this crop.", "ملوحة التربة أعلى من حد المحصول (": "Soil salinity exceeds the crop limit (", ") — غسيل وصرف.": ") — leaching and drainage needed.", "تربة صودية (ESP>15) — جبس + غسيل لتحسين النفاذية.": "Sodic soil (ESP>15) — gypsum + leaching to improve infiltration.", "pH مرتفع يقلل تيسر P وFe وZn — فضّل التسميد الورقي والحمضي.": "High pH reduces P, Fe and Zn availability — prefer foliar and acidifying fertilizers.", "نقص عناصر صغرى — رش شيلات EDTA.": "Micronutrient shortage — spray EDTA chelates.", "كلوريد البوتاسيوم يزيد الملوحة — الأفضل سلفات البوتاسيوم في هذا الظرف.": "Potassium chloride adds salinity — potassium sulfate is better in this situation.", "المخصب الحيوي المختار لا يناسب هذا المحصول فلم يُحتسب.": "The selected bio-fertilizer does not suit this crop and was not counted.", "لا تحذيرات حرجة على التربة.": "No critical soil warnings.", "كمبوست 10 طن/": "Compost 10 t/", " (يرفع المادة العضوية ويحسن الاحتفاظ بالماء)": " (raises organic matter and water retention)", "جبس زراعي ≈ ": "Agricultural gypsum ≈ ", " (يخفض ESP من ": " (lowers ESP from ", " إلى ": " to ", "ضاعف الغسيل: +": "Increase leaching: +", "% من مياه الري مع تأمين الصرف": "% of irrigation water with proper drainage", "جير زراعي ": "Agricultural lime ", "تربة رملية: قسّم النيتروجين على 4–5 دفعات لتقليل الفقد.": "Sandy soil: split nitrogen into 4–5 doses to reduce losses.", "هيوميك أسيد ": "Humic acid ", "المؤشرات جيدة — استمر على نفس البرنامج": "Indicators are good — continue the same program", "المساحة يجب أن تكون أكبر من صفر": "Area must be greater than zero", "pH بين 0 و14": "pH must be between 0 and 14", "EC بين 0 و60": "EC must be between 0 and 60", "نسبة العنصر في السماد يجب أن تكون أكبر من صفر": "Nutrient percentage in the fertilizer must be greater than zero", "لا توجد تقارير محفوظة": "No saved reports", "فتح": "Open", "التقارير المحفوظة": "Saved reports", "تم حفظ التقرير ✅": "Report saved ✅", "تم تطبيق النموذج": "Preset applied", "انتهت المحاولات المجانية": "Free trials used up", "فعّل حسابك عبر InstaPay ثم أرسل الإيصال إلى البريد": "Activate via InstaPay, then email the receipt", "تفعيل": "Activate", "محاولات كثيرة — انتظر ": "Too many attempts — wait ", "تم التفعيل ✅": "Activated ✅", "رمز غير صحيح": "Invalid code", "مساعد AgriSoil": "AgriSoil Assistant", "حلل تربتي": "Analyze my soil", "اشرح الملوحة": "Explain salinity", "جدول الري": "Irrigation plan", "نصيحة تسميد": "Fertilizer advice", "اكتب سؤالك…": "Type your question…", "أهلاً بك! أنا مساعد AgriSoil 🌱 اسألني عن الملوحة أو الري أو التسميد.": "Welcome! I am the AgriSoil assistant 🌱 Ask me about salinity, irrigation or fertilization.", "شغّل التحليل أولاً.": "Run the analysis first.", "ملوحة التربة ": "Soil salinity ", " (المحصول النسبي ": " (relative yield ", "ملوحة المياه ": "water salinity ", "% مياه غسيل مع صرف جيد": "% extra leaching water with good drainage", "الري ": "Irrigation ", " كل ": " every ", " يوم تقريباً، والموسم ≈ ": " day(s), season ≈ ", "عجز الرطوبة ": "moisture deficit ", ". عجز الرطوبة ": ". Moisture deficit ", "لكل ": "Per ", " (بعد خصم العضوي والحيوي). التكلفة الإجمالية ": " (after deducting organic and bio inputs). Total cost ", "ملخص (": "Summary (", "الصحة ": "health ", "تواصل مع المهندس أحمد": "Contact Eng. Ahmed", "شكوى": "Complaint", "مشكلة فنية": "Technical issue", "اقتراح": "Suggestion", "اسمك (اختياري)": "Your name (optional)", "اكتب رسالتك هنا…": "Write your message here…", "إرسال بالبريد": "Send by email", "إرسال واتساب": "Send on WhatsApp", "تشغيل التحليل الشامل": "Run full analysis", "النتائج تقديرية وتسترشد بمعايير FAO وUSDA وIPNI، والأصناف حسب المنطقة إرشادية": "Results are estimates guided by FAO, USDA and IPNI standards; varieties by region are indicative", "موسم ≈ ": "season ≈ ", " يوماً": " days", "اللغة": "Language", "أصناف": "Varieties", "المحصول النسبي ": "Relative yield ", "غسيل ": "leaching ", "التكلفة ": "Cost ", " ث": " s", "،": ",", "، وجبس ≈ ": ", and gypsum ≈ ", "%)، ملوحة المياه ": "%), water salinity ", " dS/m وSAR ": " dS/m and SAR ", ". أضف ": ". Add ", "العربية": "العربية", "أضف ": "Add "}};
+const LX={en:{"م³":"m³","منصة التربة والمياه والملوحة والأسمدة": "Soil, Water, Salinity & Fertilizer Platform", "40 محصولاً بأصنافها حسب المحافظة": "40 crops with varieties by governorate", "تحليل ملوحة التربة والمياه": "soil & water salinity analysis", "بنك الأسمدة المصري (معدني وعضوي وحيوي)": "Egyptian fertilizer bank (mineral, organic & bio)", "م/ أحمد محمد سعيد عبد العال": "Eng. Ahmed Mohamed Saeed Abdel Aal", "كلية الزراعة": "Faculty of Agriculture", "جامعة المنوفية": "Menoufia University", "الأراضي والمياه": "Soil & Water", "المحاولات:": "Trials:", "المحصول": "Crop", "التربة": "Soil", "المياه": "Water", "الملوحة": "Salinity", "الأسمدة": "Fertilizers", "النتائج": "Results", "السجل": "History", "المساعد": "Assistant", "تواصل": "Contact", "المحافظة والمحصول": "Governorate & Crop", "اسم الحقل / المالك": "Field / Owner name", "المحافظة (تحدد الأصناف المناسبة ومعدل ET₀)": "Governorate (sets suitable varieties and ET₀)", "المحصول (40 محصولاً)": "Crop (40 crops)", "الصنف": "Variety", "المساحة": "Area", "الوحدة": "Unit", "نسيج التربة": "Soil texture", "رملية": "Sandy", "لومية": "Loam", "طينية": "Clay", "جيرية": "Calcareous", "فدان": "Feddan", "هكتار": "Hectare", "أكر": "Acre", "كل الأصناف (عام / عالمي)": "All varieties (general / global)", "حقل التميز النموذجي": "Model Excellence Field", "لا توجد أصناف مسجلة لمنطقة هذه المحافظة — عُرضت كل الأصناف.": "No varieties registered for this governorate region — all varieties shown.", "أصناف منطقة: ": "Varieties of region: ", "الدلتا": "Nile Delta", "الصعيد": "Upper Egypt", "الأراضي الجديدة/الصحراوية": "New/desert lands", "الساحل الشمالي وسيناء": "North Coast & Sinai", "حبوب": "Cereals", "بقوليات": "Legumes", "صناعية وزيتية": "Industrial & oil crops", "علف": "Fodder", "خضر": "Vegetables", "فاكهة": "Fruits", "القاهرة": "Cairo", "الجيزة": "Giza", "القليوبية": "Qalyubia", "الإسكندرية": "Alexandria", "البحيرة": "Beheira", "الغربية": "Gharbia", "كفر الشيخ": "Kafr El Sheikh", "الدقهلية": "Dakahlia", "دمياط": "Damietta", "الشرقية": "Sharqia", "المنوفية": "Menoufia", "بورسعيد": "Port Said", "الإسماعيلية": "Ismailia", "السويس": "Suez", "شمال سيناء": "North Sinai", "جنوب سيناء": "South Sinai", "مطروح": "Matrouh", "الفيوم": "Fayoum", "بني سويف": "Beni Suef", "المنيا": "Minya", "أسيوط": "Assiut", "سوهاج": "Sohag", "قنا": "Qena", "الأقصر": "Luxor", "أسوان": "Aswan", "البحر الأحمر": "Red Sea", "الوادي الجديد": "New Valley", "القمح": "Wheat", "الشعير": "Barley", "الذرة الشامية": "Maize", "الأرز": "Rice", "الذرة الرفيعة": "Sorghum", "الشوفان": "Oat", "الفول البلدي": "Faba bean", "فول الصويا": "Soybean", "الفول السوداني": "Peanut", "العدس": "Lentil", "الحمص": "Chickpea", "القطن": "Cotton", "بنجر السكر": "Sugar beet", "قصب السكر": "Sugarcane", "عباد الشمس": "Sunflower", "السمسم": "Sesame", "البرسيم الحجازي": "Alfalfa", "البرسيم المصري": "Egyptian clover", "الطماطم": "Tomato", "البطاطس": "Potato", "البصل": "Onion", "الثوم": "Garlic", "الفلفل": "Pepper", "الخيار": "Cucumber", "الباذنجان": "Eggplant", "الكوسة": "Squash", "البطيخ": "Watermelon", "الكانتالوب": "Cantaloupe", "البامية": "Okra", "الكرنب": "Cabbage", "الجزر": "Carrot", "البطاطا": "Sweet potato", "الموالح": "Citrus", "نخيل البلح": "Date palm", "العنب": "Grapes", "الزيتون": "Olive", "الفراولة": "Strawberry", "الموز": "Banana", "المانجو": "Mango", "الرمان": "Pomegranate", "جيزة": "Giza", "سخا": "Sakha", "مصر ": "Misr ", "جميزة": "Gemmeiza", "هجين فردي": "Single cross", "هجين ثلاثي": "Three-way cross", "هجين": "Hybrid", "بلدي أسود": "Local black", "بلدي مصري": "Egyptian local", "بلدي": "Local", "صنف علفي قياسي": "Standard fodder variety", "نوبارية": "Nubaria", "كريمسون سويت": "Crimson Sweet", "كريمسون": "Crimson", "متعدد الأجنة مستورد": "Imported multigerm", "شندويل": "Shandaweel", "سيوة": "Siwa", "حجازي": "Hegazi", "مسقاوي": "Mesqawi", "فحل": "Fahl", "كاسل روك": "Castle Rock", "هجن الصوب": "Greenhouse hybrids", "سبونتا": "Spunta", "دياموند": "Diamant", "كارا": "Cara", "محسن": "improved", "صيني": "Chinese", "كاليفورنيا وندر": "California Wonder", "حارة محلية": "Local hot", "بيتا ألفا": "Beta Alpha", "بلاك بيوتي": "Black Beauty", "إسكندراني": "Iskandarani", "هجن مستوردة": "Imported hybrids", "شوجر بيبي": "Sugar Baby", "جاليا": "Galia", "أناناس": "Ananas", "كليمسون": "Clemson", "نانتس": "Nantes", "شانتني": "Chantenay", "بيريجارد": "Beauregard", "مصري أبيض": "Egyptian white", "فالنسيا": "Valencia", "أبو سرة": "Navel", "يوسفي": "Mandarin", "سيوي": "Siwi", "زغلول": "Zaghloul", "سمانى": "Samany", "برحي": "Barhi", "مجدول": "Medjool", "بناتي": "Banati", "فلام سيدلس": "Flame Seedless", "بيكوال": "Picual", "كوروني": "Koroneiki", "عجيزي": "Agizi", "فستيفال": "Festival", "سويت تشارلي": "Sweet Charlie", "وليامز (كافنديش)": "Williams (Cavendish)", "هندي": "Indian", "زبدية": "Zibdia", "عويس": "Owais", "كيت": "Keitt", "نعومي": "Naomi", "مانفلوري": "Manfloria", "وندرفل": "Wonderful", "هجين مستورد": "Imported hybrid", "تحليل التربة": "Soil analysis", "تربة مثالية": "Ideal soil", "تربة ملحية": "Saline soil", "تربة جيرية": "Calcareous soil", "تربة صودية": "Sodic soil", "EC التربة (dS/m)": "Soil EC (dS/m)", "المادة العضوية %": "Organic matter %", "ESP الحالي %": "Current ESP %", "ESP المستهدف %": "Target ESP %", "NPK المتاح (ppm)": "Available NPK (ppm)", "العناصر الصغرى (DTPA ppm)": "Micronutrients (DTPA ppm)", "مياه الري والرطوبة": "Irrigation water & moisture", "الرطوبة والتبخر": "Moisture & evaporation", "الرطوبة الحالية %": "Current moisture %", "السعة الحقلية FC %": "Field capacity FC %", "ET₀ (مم/يوم)": "ET₀ (mm/day)", "كيمياء مياه الري": "Irrigation water chemistry", "نظام الري وكفاءته": "Irrigation system & efficiency", "سطحي (55%)": "Surface (55%)", "رش (75%)": "Sprinkler (75%)", "تنقيط (90%)": "Drip (90%)", "سعر المتر المكعب مياه/طاقة (ج)": "Water/energy cost per m³ (EGP)", "ملوحة التربة": "Soil salinity", "التصنيف": "Class", "حد تحمل المحصول": "Crop tolerance limit", "المحصول النسبي": "Relative yield", "جبس مطلوب": "Gypsum required", "ملوحة مياه الري": "Irrigation water salinity", "الخطورة (FAO)": "Hazard (FAO)", "تصنيف USSL": "USSL class", "خطر النفاذية": "Infiltration hazard", "احتياج الغسيل LR": "Leaching requirement LR", "مقارنة الملوحة": "Salinity comparison", "EC التربة": "Soil EC", "حد المياه (0.7)": "Water limit (0.7)", "ECw مياه الري": "Irrigation ECw", "غير ملحية": "Non-saline", "طفيفة": "Slight", "متوسطة": "Moderate", "شديدة جداً": "Very strong", "شديدة": "Strong", "لا خطورة": "No hazard", "خطورة طفيفة–متوسطة": "Slight–moderate hazard", "خطورة شديدة": "Severe hazard", "لا خطر": "No risk", "متوسط": "Moderate", "بنك الأسمدة المصري — اختيار وتعديل يدوي": "Egyptian fertilizer bank — select & edit manually", "اختر السماد من البنك ثم عدّل النسبة والسعر يدوياً (الأسعار افتراضية تقريبية — حدّثها حسب السوق).": "Pick a fertilizer from the bank, then edit the percentage and price manually (default prices are approximate — update to the market).", "سماد النيتروجين (معدني)": "Nitrogen fertilizer (mineral)", "سماد الفوسفور (معدني)": "Phosphorus fertilizer (mineral)", "سماد البوتاسيوم (معدني)": "Potassium fertilizer (mineral)", "يدوي (أدخل بنفسك)": "Manual (enter yourself)", "يدوي": "Manual", "% العنصر": "% nutrient", "سعر الطن (ج)": "Price per ton (EGP)", "السماد العضوي": "Organic fertilizer", "المعدل (طن/وحدة)": "Rate (t/unit)", "المخصبات الحيوية": "Bio-fertilizers", "تكلفة الجرعة لكل وحدة (ج)": "Dose cost per unit (EGP)", "بدون": "None", "سلفات نشادر": "Ammonium sulfate", "نترات نشادر": "Ammonium nitrate", "يوريا": "Urea", "نترات كالسيوم": "Calcium nitrate", "سوبر فوسفات عادي": "Single superphosphate", "سوبر فوسفات ثلاثي": "Triple superphosphate", "حامض فوسفوريك": "Phosphoric acid", "سلفات بوتاسيوم": "Potassium sulfate", "كلوريد بوتاسيوم": "Potassium chloride", "نترات بوتاسيوم": "Potassium nitrate", "كمبوست": "Compost", "سماد بلدي (مواشي)": "Farmyard manure (cattle)", "سماد دواجن": "Poultry manure", "ميكروبين (يوفر 25% N)": "Microbein (saves 25% N)", "سيريالين — نجيليات (25% N)": "Cerealine — cereals (25% N)", "نيتروبين/العقدين — بقوليات (50% N)": "Nitrobein/rhizobia — legumes (50% N)", "فوسفورين (25% P)": "Phosphorein (25% P)", "ميكروبين": "Microbein", "سيريالين": "Cerealine", "نيتروبين/العقدين": "Nitrobein/rhizobia", "فوسفورين": "Phosphorein", "الري الإجمالي": "Gross irrigation", "مم/يوم": "mm/day", "م³/يوم/وحدة": "m³/day/unit", "مياه الموسم م³": "Seasonal water m³", "فترة الري": "Irrigation interval", "عجز الرطوبة": "Moisture deficit", "إجمالي التكاليف": "Total cost", "ج.م": "EGP", "برنامج التسميد والتكلفة": "Fertilization program & cost", "العنصر": "Element", "الحالي": "Current", "الهدف": "Target", "السماد": "Fertilizer", "لكل وحدة": "Per unit", "الإجمالي": "Total", "التكلفة (ج)": "Cost (EGP)", "جدول التسميد المقسّم": "Split fertilization schedule", "المرحلة المتأخرة": "Late stage", "المرحلة": "Stage", "التأسيس": "Establishment", "النمو الخضري": "Vegetative growth", "NPK: الحالي والهدف": "NPK: current vs target", "توصيات الإصلاح": "Reclamation recommendations", "حفظ": "Save", "مشاركة": "Share", "ممتازة": "Excellent", "جيدة": "Good", "ضعيفة": "Poor", " كجم": " kg", " طن": " t", " يوم": " d", " مم": " mm", "عضوي": "Organic", "حيوي": "Bio", "غير مناسب": "Not suitable", "مياه": "Water", "موسمي": "Seasonal", "شيلات EDTA": "EDTA chelates", "مياه الري غير صالحة لهذا المحصول (ECw تتجاوز حد التحمل).": "Irrigation water is unsuitable for this crop (ECw exceeds tolerance).", "مياه شديدة الملوحة — استخدم محاصيل مقاومة وارفع نسبة الغسيل.": "Highly saline water — use tolerant crops and raise the leaching fraction.", "خطر على نفاذية التربة من ارتفاع SAR مع انخفاض ECw — أضف الجبس.": "Soil infiltration risk from high SAR with low ECw — add gypsum.", "SAR مياه الري=": "Irrigation water SAR=", " — أضف جبس زراعي.": " — add agricultural gypsum.", "جودة مياه الري مقبولة لهذا المحصول.": "Irrigation water quality is acceptable for this crop.", "ملوحة التربة أعلى من حد المحصول (": "Soil salinity exceeds the crop limit (", ") — غسيل وصرف.": ") — leaching and drainage needed.", "تربة صودية (ESP>15) — جبس + غسيل لتحسين النفاذية.": "Sodic soil (ESP>15) — gypsum + leaching to improve infiltration.", "pH مرتفع يقلل تيسر P وFe وZn — فضّل التسميد الورقي والحمضي.": "High pH reduces P, Fe and Zn availability — prefer foliar and acidifying fertilizers.", "نقص عناصر صغرى — رش شيلات EDTA.": "Micronutrient shortage — spray EDTA chelates.", "كلوريد البوتاسيوم يزيد الملوحة — الأفضل سلفات البوتاسيوم في هذا الظرف.": "Potassium chloride adds salinity — potassium sulfate is better in this situation.", "المخصب الحيوي المختار لا يناسب هذا المحصول فلم يُحتسب.": "The selected bio-fertilizer does not suit this crop and was not counted.", "لا تحذيرات حرجة على التربة.": "No critical soil warnings.", "كمبوست 10 طن/": "Compost 10 t/", " (يرفع المادة العضوية ويحسن الاحتفاظ بالماء)": " (raises organic matter and water retention)", "جبس زراعي ≈ ": "Agricultural gypsum ≈ ", " (يخفض ESP من ": " (lowers ESP from ", " إلى ": " to ", "ضاعف الغسيل: +": "Increase leaching: +", "% من مياه الري مع تأمين الصرف": "% of irrigation water with proper drainage", "جير زراعي ": "Agricultural lime ", "تربة رملية: قسّم النيتروجين على 4–5 دفعات لتقليل الفقد.": "Sandy soil: split nitrogen into 4–5 doses to reduce losses.", "هيوميك أسيد ": "Humic acid ", "المؤشرات جيدة — استمر على نفس البرنامج": "Indicators are good — continue the same program", "المساحة يجب أن تكون أكبر من صفر": "Area must be greater than zero", "pH بين 0 و14": "pH must be between 0 and 14", "EC بين 0 و60": "EC must be between 0 and 60", "نسبة العنصر في السماد يجب أن تكون أكبر من صفر": "Nutrient percentage in the fertilizer must be greater than zero", "لا توجد تقارير محفوظة": "No saved reports", "فتح": "Open", "التقارير المحفوظة": "Saved reports", "تم حفظ التقرير ✅": "Report saved ✅", "تم تطبيق النموذج": "Preset applied", "انتهت المحاولات المجانية": "Free trials used up", "فعّل حسابك عبر InstaPay ثم أرسل الإيصال إلى البريد": "Activate via InstaPay, then email the receipt", "تفعيل": "Activate", "محاولات كثيرة — انتظر ": "Too many attempts — wait ", "تم التفعيل ✅": "Activated ✅", "رمز غير صحيح": "Invalid code", "مساعد AgriSoil": "AgriSoil Assistant", "حلل تربتي": "Analyze my soil", "اشرح الملوحة": "Explain salinity", "جدول الري": "Irrigation plan", "نصيحة تسميد": "Fertilizer advice", "اكتب سؤالك…": "Type your question…", "أهلاً بك! أنا مساعد AgriSoil 🌱 اسألني عن الملوحة أو الري أو التسميد.": "Welcome! I am the AgriSoil assistant 🌱 Ask me about salinity, irrigation or fertilization.", "شغّل التحليل أولاً.": "Run the analysis first.", "ملوحة التربة ": "Soil salinity ", " (المحصول النسبي ": " (relative yield ", "ملوحة المياه ": "water salinity ", "% مياه غسيل مع صرف جيد": "% extra leaching water with good drainage", "الري ": "Irrigation ", " كل ": " every ", " يوم تقريباً، والموسم ≈ ": " day(s), season ≈ ", "عجز الرطوبة ": "moisture deficit ", ". عجز الرطوبة ": ". Moisture deficit ", "لكل ": "Per ", " (بعد خصم العضوي والحيوي). التكلفة الإجمالية ": " (after deducting organic and bio inputs). Total cost ", "ملخص (": "Summary (", "الصحة ": "health ", "تواصل مع المهندس أحمد": "Contact Eng. Ahmed", "شكوى": "Complaint", "مشكلة فنية": "Technical issue", "اقتراح": "Suggestion", "اسمك (اختياري)": "Your name (optional)", "اكتب رسالتك هنا…": "Write your message here…", "إرسال بالبريد": "Send by email", "إرسال واتساب": "Send on WhatsApp", "تشغيل التحليل الشامل": "Run full analysis", "النتائج تقديرية وتسترشد بمعايير FAO وUSDA وIPNI، والأصناف حسب المنطقة إرشادية": "Results are estimates guided by FAO, USDA and IPNI standards; varieties by region are indicative", "موسم ≈ ": "season ≈ ", " يوماً": " days", "اللغة": "Language", "أصناف": "Varieties", "المحصول النسبي ": "Relative yield ", "غسيل ": "leaching ", "التكلفة ": "Cost ", " ث": " s", "،": ",", "، وجبس ≈ ": ", and gypsum ≈ ", "%)، ملوحة المياه ": "%), water salinity ", " dS/m وSAR ": " dS/m and SAR ", ". أضف ": ". Add ", "العربية": "العربية", "أضف ": "Add ", "سخا سوبر": "Sakha Super", "نماء": "Namaa", "قوام التربة بمثلث USDA": "USDA soil-texture triangle", "قوام التربة — مثلث القوام الأمريكي (USDA)": "Soil texture — USDA texture triangle", "الرمل Sand %": "Sand %", "السلت Silt %": "Silt %", "الطين Clay %": "Clay %", "أو اختر قواماً نموذجياً لملء النسب": "Or pick a typical texture to fill the percentages", "— اختر —": "— choose —", "CaCO₃ (كربونات كالسيوم) %": "CaCO₃ (calcium carbonate) %", "صنف آخر (اكتبه)": "Other variety (type it)", "اكتب اسم الصنف": "Type the variety name", "شمال الدلتا": "North Delta", "وسط وجنوب الدلتا": "Mid & South Delta", "مصر الوسطى": "Middle Egypt", "القطن: الأصناف حسب القرار الوزاري لكل محافظة.": "Cotton: varieties follow the ministerial decree for each governorate.", "زراعة الأرز مقصورة على المناطق المصرح بها من وزارة الري.": "Rice cultivation is restricted to areas authorized by the Ministry of Irrigation.", "⚠️ تربة جيرية (CaCO₃ مرتفع): خطر نقص Fe وZn وتثبيت الفوسفور.": "⚠️ Calcareous soil (high CaCO₃): risk of Fe/Zn deficiency and P fixation.", "ℹ️ مجموع الكاتيونات (Ca+Mg+Na) لا يتسق مع ECw (≈ ECw×10 ميلي مكافئ/لتر) — راجع نتائج تحليل المياه.": "ℹ️ The sum of cations (Ca+Mg+Na) does not match ECw (≈ ECw×10 meq/L) — check the water analysis.", "تربة رملية/خفيفة: قسّم النيتروجين على 4–5 دفعات لتقليل الفقد.": "Sandy/light soil: split nitrogen into 4–5 doses to reduce losses.", "تربة طينية ثقيلة: احرص على الصرف وقلّل الغمر الطويل وقسّم الري.": "Heavy clay soil: keep drainage working, avoid long flooding and split irrigation.", "تربة جيرية: استخدم شيلات Fe/Zn (EDDHA/EDTA) ورشاً ورقياً وأسمدة حمضية.": "Calcareous soil: use Fe/Zn chelates (EDDHA/EDTA), foliar sprays and acidifying fertilizers.", "أدخل نسب الرمل والسلت والطين (قيم موجبة).": "Enter sand, silt and clay percentages (positive values).", "الرمل %": "Sand %", "سدس": "Sids", "هجين مصري": "Egyptian hybrid", "إكسترا جيزة": "Extra Giza", "سوبر جيزة": "Super Giza", "دورادو": "Dorado", "جيزة بلانكا": "Giza Blanka", "سوبر ماروندي": "Super Marmande", "سوبر سترين بي": "Super Strain B", "لادي روزيتا": "Lady Rosetta", "ألفا": "Alpha", "هيرمز": "Hermes", "بحيري": "Beheiri", "سوبيريور": "Superior", "كاميروزا": "Camarosa", "كالاماتا": "Kalamata", "مانزانيلو": "Manzanillo", "جراند نين": "Grand Nain", "تومي أتكنز": "Tommy Atkins", "صنف متعدد الأجنة مستورد": "Imported multigerm variety", "التسرب": "Infiltration"}};
 const _kc={};
 function tx(s){s=String(s);if(lang==='ar'||!LX[lang])return s;const d=LX[lang],k=_kc[lang]||(_kc[lang]=Object.keys(d).sort((a,b)=>b.length-a.length));for(const x of k)if(s.includes(x))s=s.split(x).join(d[x]);return s}
 function tr(){
@@ -229,7 +256,7 @@ $('tiles').innerHTML=TL.map(t=>`<button class="tile${t[0]=='crop'?' on':''}" dat
 function show(id){document.querySelectorAll('.pn').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('on',t.dataset.t===id));if(id==='ct')mk();scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('.tile').forEach(t=>t.onclick=()=>show(t.dataset.t));
 
-$('soilF').innerHTML=[['ph','pH',7.4,.1],['ec','EC التربة (dS/m)',2.5,.1],['om','المادة العضوية %',1.5,.1],['cec','CEC (cmol/kg)',15,.5],['esp','ESP الحالي %',8,.5],['espT','ESP المستهدف %',5,.5]].map(a=>inp(...a)).join('')+
+$('soilF').innerHTML=[['ph','pH',7.4,.1],['ec','EC التربة (dS/m)',2.5,.1],['om','المادة العضوية %',1.5,.1],['cec','CEC (cmol/kg)',15,.5],['caco3','CaCO₃ (كربونات كالسيوم) %',5,.5],['esp','ESP الحالي %',8,.5],['espT','ESP المستهدف %',5,.5]].map(a=>inp(...a)).join('')+
  '<div class="sep">NPK المتاح (ppm)</div>'+[['n','N',20],['p','P',12],['k','K',130]].map(a=>inp(...a)).join('')+
  '<div class="sep">العناصر الصغرى (DTPA ppm)</div>'+[['fe','Fe',4.5,.1],['zn','Zn',1.2,.1],['mn','Mn',2,.1]].map(a=>inp(...a)).join('');
 $('waterF').innerHTML='<div class="sep">الرطوبة والتبخر</div>'+[['sm','الرطوبة الحالية %',18,.5],['fc','السعة الحقلية FC %',28,.5],['et0','ET₀ (مم/يوم)',5,.5]].map(a=>inp(...a)).join('')+
@@ -247,15 +274,6 @@ $('bioS').onchange=()=>{const x=BIO[+$('bioS').value];$('bioR').value=x[4];run()
 
 $('gov').innerHTML='<option value="">كل الأصناف (عام / عالمي)</option>'+Object.keys(GOV).map(x=>`<option value="${x}">${x}</option>`).join('');
 $('crop').innerHTML=Object.entries(G).map(([gk,gn])=>`<optgroup label="${gn}">${Object.keys(C).filter(k=>C[k][1]===gk).map(k=>`<option value="${k}">${C[k][0]}</option>`).join('')}</optgroup>`).join('');
-function fillVr(){
-  const gv=$('gov').value,rg=gv?GOV[gv][0]:'';
-  const all=C[$('crop').value][9].split(';').map(s=>s.split(':'));
-  let list=gv?all.filter(([,r])=>[...r].some(ch=>rg.includes(ch))):all;
-  let note='';
-  if(gv&&!list.length){list=all;note='لا توجد أصناف مسجلة لمنطقة هذه المحافظة — عُرضت كل الأصناف.'}
-  else if(gv)note='أصناف منطقة: '+[...rg].map(ch=>REG[ch]).join(' + ');
-  $('vr').innerHTML=list.map(([n])=>`<option value="${n}">${n}</option>`).join('');$('vnote').textContent=note;
-}
 $('gov').onchange=()=>{const gv=$('gov').value;if(gv)$('et0').value=GOV[gv][1];fillVr();run()};
 $('crop').onchange=()=>{fillVr();run()};
 
@@ -275,19 +293,133 @@ $('unlock').onclick=async()=>{
   else{fails++;if(fails>=5)lockUntil=Date.now()+30000*fails;alert('رمز غير صحيح')}};
 $('cPay').onclick=()=>$('mPay').classList.remove('on');
 
+// ===== قوام التربة (مثلث USDA — 12 قواماً) =====
+const L2=(a,e)=>lang==='ar'?a:e;
+// [id, عربي, English, اختصار, [رمل,سلت,طين] نموذجي, كثافة ظاهرية, FC% حجمي, WP% حجمي, كفاءة N, تسرب مم/س, لون]
+const TEX=[
+['sand','رملية','Sand','S',[92,5,3],1.6,12,4,.45,50,'#f4e3a1'],
+['loamy sand','رملية لومية','Loamy sand','LS',[82,12,6],1.55,15,6,.5,25,'#e8d58a'],
+['sandy loam','لومية رملية','Sandy loam','SL',[65,25,10],1.45,23,10,.55,13,'#dcc47a'],
+['loam','لومية','Loam','L',[40,40,20],1.35,25,12,.65,8,'#b8d99a'],
+['silt loam','لومية سلتية','Silt loam','SiL',[20,65,15],1.3,29,15,.65,7,'#a3d3b0'],
+['silt','سلتية','Silt','Si',[7,88,5],1.3,32,17,.65,6,'#8fd0c4'],
+['sandy clay loam','لومية طينية رملية','Sandy clay loam','SCL',[60,13,27],1.4,28,15,.65,4,'#e6b98a'],
+['clay loam','لومية طينية','Clay loam','CL',[33,34,33],1.3,33,19,.7,3,'#d9a07c'],
+['silty clay loam','لومية طينية سلتية','Silty clay loam','SiCL',[10,57,33],1.25,34,20,.7,2.5,'#c0a7c9'],
+['sandy clay','طينية رملية','Sandy clay','SC',[52,6,42],1.3,32,20,.7,2,'#e29b8e'],
+['silty clay','طينية سلتية','Silty clay','SiC',[6,47,47],1.2,36,23,.7,1.5,'#a99bd0'],
+['clay','طينية','Clay','C',[22,20,58],1.15,36,22,.7,1,'#cf7f6f']];
+const TI={};TEX.forEach((t,i)=>TI[t[0]]=i);
+// تصنيف USDA — المدخلات نسب مئوية (رمل، سلت، طين)
+function usda(S,Si,Cl){
+  if(Si+1.5*Cl<15)return'sand';
+  if(Si+1.5*Cl>=15&&Si+2*Cl<30)return'loamy sand';
+  if((Cl>=7&&Cl<20&&S>52&&Si+2*Cl>=30)||(Cl<7&&Si<50&&Si+2*Cl>=30))return'sandy loam';
+  if(Cl>=7&&Cl<27&&Si>=28&&Si<50&&S<=52)return'loam';
+  if((Si>=50&&Cl>=12&&Cl<27)||(Si>=50&&Si<80&&Cl<12))return'silt loam';
+  if(Si>=80&&Cl<12)return'silt';
+  if(Cl>=20&&Cl<35&&Si<28&&S>45)return'sandy clay loam';
+  if(Cl>=27&&Cl<40&&S>20&&S<=45)return'clay loam';
+  if(Cl>=27&&Cl<40&&S<=20)return'silty clay loam';
+  if(Cl>=35&&S>45)return'sandy clay';
+  if(Cl>=40&&Si>=40)return'silty clay';
+  if(Cl>=40&&S<=45&&Si<40)return'clay';
+  return'loam';
+}
+const TG={x0:30,L:400,top:22,H:346};
+let triBase=null,fcManual=false;
+const triXY=(Si,Cl)=>[TG.x0+Si*TG.L+Cl*TG.L/2,TG.top+TG.H*(1-Cl)];
+function isDark(){const t=document.documentElement.getAttribute('data-theme');return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches}
+function buildTri(){
+  const W=460,Hh=420,c=document.createElement('canvas');c.width=W;c.height=Hh;const x=c.getContext('2d'),img=x.createImageData(W,Hh),d=img.data,map=new Int8Array(W*Hh).fill(-1);
+  for(let py=0;py<Hh;py++)for(let px=0;px<W;px++){const Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)continue;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)continue;map[py*W+px]=TI[usda(S*100,Si*100,Cl*100)]}
+  for(let py=0;py<Hh;py++)for(let px=0;px<W;px++){const k=py*W+px,m=map[k];if(m<0)continue;
+    const edge=(px<W-1&&map[k+1]!==m)||(py<Hh-1&&map[k+W]!==m)||(px>0&&map[k-1]!==m)||(py>0&&map[k-W]!==m);
+    const h=TEX[m][10],rgb=edge?[50,70,55]:[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+    d[k*4]=rgb[0];d[k*4+1]=rgb[1];d[k*4+2]=rgb[2];d[k*4+3]=255}
+  x.putImageData(img,0,0);return c;
+}
+function drawTri(n){
+  const cv=$('tri'),x=cv.getContext('2d');if(!triBase)triBase=buildTri();
+  const tc=isDark()?'#e9f5ee':'#16301f',bot=TG.top+TG.H;
+  x.clearRect(0,0,460,420);x.drawImage(triBase,0,0);
+  x.strokeStyle='rgba(255,255,255,.6)';x.lineWidth=.6;x.beginPath();
+  for(let k=1;k<10;k++){const t=k/10;let a=triXY(0,t),b=triXY(1-t,t);x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);a=triXY(t,0);b=triXY(t,1-t);x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);a=triXY(1-t,0);b=triXY(0,1-t);x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1])}
+  x.stroke();
+  x.fillStyle=tc;x.font='11px Cairo,sans-serif';
+  for(let k=2;k<=8;k+=2){const t=k/10;
+    x.textAlign='right';let p=triXY(0,t);x.fillText(k*10,p[0]-6,p[1]+4);
+    x.textAlign='left';p=triXY(t,1-t);x.fillText(k*10,p[0]+6,p[1]+4);
+    x.textAlign='center';p=triXY(1-t,0);x.fillText(k*10,p[0],bot+14)}
+  x.font='bold 12px Cairo,sans-serif';x.textAlign='center';
+  x.fillText(L2('طين 100%','Clay 100%'),TG.x0+TG.L/2,TG.top-7);
+  x.fillText(L2('رمل 100%','Sand 100%'),TG.x0+10,bot+32);x.fillText(L2('سلت 100%','Silt 100%'),TG.x0+TG.L-10,bot+32);
+  x.font='bold 11px Cairo,sans-serif';x.fillStyle='#1f2d24';
+  TEX.forEach(t=>{const s=t[4],p=triXY(s[1]/100,s[2]/100);x.fillText(t[3],p[0],p[1]+4)});
+  if(n){const p=triXY(n[1]/100,n[2]/100);x.beginPath();x.arc(p[0],p[1],8,0,7);x.fillStyle='#e11d48';x.fill();x.lineWidth=2.5;x.strokeStyle='#fff';x.stroke();x.beginPath();x.arc(p[0],p[1],2.5,0,7);x.fillStyle='#fff';x.fill()}
+}
+function texInfo(){
+  const S=g('sand'),Si=g('silt'),Cl=g('clay'),sum=S+Si+Cl;
+  if(S<0||Si<0||Cl<0||!(sum>0))return null;
+  const n=[S/sum*100,Si/sum*100,Cl/sum*100],id=usda(n[0],n[1],n[2]);
+  return{n,sum,id,t:TEX[TI[id]]};
+}
+function updTex(){
+  const T0=texInfo(),sm=$('texSum');
+  if(!T0){sm.className='badge er';sm.textContent=L2('⚠️ أدخل نسب الرمل والسلت والطين (قيم موجبة).','⚠️ Enter sand, silt and clay percentages (positive values).');drawTri(null);return null}
+  const ok=Math.abs(T0.sum-100)<=1,n=T0.n.map(x=>x.toFixed(1));
+  sm.className='badge '+(ok?'ok':'wn');
+  sm.textContent=ok?L2(`✅ المجموع ${T0.sum.toFixed(0)}% — القوام: ${T0.t[1]}`,`✅ Total ${T0.sum.toFixed(0)}% — Texture: ${T0.t[2]}`):L2(`⚠️ المجموع ${T0.sum.toFixed(1)}% وليس 100% — تم تطبيع النسب تلقائياً إلى رمل ${n[0]} / سلت ${n[1]} / طين ${n[2]} — القوام: ${T0.t[1]}`,`⚠️ Total is ${T0.sum.toFixed(1)}%, not 100% — normalized to sand ${n[0]} / silt ${n[1]} / clay ${n[2]} — Texture: ${T0.t[2]}`);
+  const t=T0.t;
+  $('texK').innerHTML=[[L2('القوام','Texture'),L2(t[1],t[2])+' ('+t[3]+')',1],[L2('الكثافة الظاهرية','Bulk density'),t[5]+' g/cm³'],[L2('السعة الحقلية FC (تقديرية)','Field capacity FC (est.)'),t[6]+' %'],[L2('نقطة الذبول WP (تقديرية)','Wilting point WP (est.)'),t[7]+' %'],[L2('الماء الميسر','Available water'),(t[6]-t[7])+' %'],[L2('معدل التسرب الأساسي','Basic infiltration'),'≈ '+t[9]+' mm/h'],[L2('كفاءة النيتروجين','N efficiency'),Math.round(t[8]*100)+' %']].map(a=>`<div class="kpi"><span>${a[0]}</span><b${a[2]?'':' dir="ltr"'}>${a[1]}</b></div>`).join('');
+  const cl=T0.n[2],sa=T0.n[0];
+  $('texNote').textContent=sa>=70?L2('قوام خفيف: صرف سريع وسعة مائية منخفضة — يلزم ري متكرر على جرعات صغيرة وتقسيم السماد على دفعات أكثر لتقليل الفقد بالغسيل.','Light texture: fast drainage and low water holding — irrigate often in small doses and split fertilizer into more applications to cut leaching losses.'):cl>=27?L2('قوام ثقيل: احتفاظ مرتفع بالماء والعناصر لكن نفاذية بطيئة — احرص على الصرف وتجنب الغمر الطويل والري الغزير المتقطع.','Heavy texture: high water and nutrient retention but slow infiltration — keep drainage working and avoid long flooding and heavy irregular irrigation.'):t[0]==='silt'||t[0]==='silt loam'?L2('قوام سلتي: خصوبة جيدة واحتفاظ مناسب بالماء، لكنه عرضة لتكوّن قشرة سطحية وانجراف — حافظ على المادة العضوية.','Silty texture: good fertility and water retention, but prone to surface crusting and erosion — maintain organic matter.'):L2('قوام متوازن: احتفاظ جيد بالماء والعناصر مع صرف مناسب.','Balanced texture: good water and nutrient retention with adequate drainage.');
+  if(!fcManual)$('fc').value=t[6];
+  const pk=$('texPick');pk.innerHTML='<option value="">'+L2('— اختر —','— choose —')+'</option>'+TEX.map(a=>`<option value="${a[0]}">${L2(a[1],a[2])} (${a[3]})</option>`).join('');pk.value=T0.id;
+  $('texLg').innerHTML=TEX.map(a=>`<i style="--c:${a[10]}">${a[3]} · ${L2(a[1],a[2])}</i>`).join('');
+  drawTri(T0.n);return T0;
+}
+$('texPick').onchange=()=>{const t=TEX[TI[$('texPick').value]];if(!t)return;$('sand').value=t[4][0];$('silt').value=t[4][1];$('clay').value=t[4][2];fcManual=false;run()};
+$('fc').addEventListener('input',()=>{fcManual=true});
+function triPick(e){const cv=$('tri'),r=cv.getBoundingClientRect(),sc=cv.width/r.width,px=(e.clientX-r.left)*sc,py=(e.clientY-r.top)*sc,Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)return;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)return;const a=Math.round(S*100),b=Math.round(Cl*100);$('sand').value=a;$('clay').value=b;$('silt').value=Math.max(0,100-a-b);fcManual=false;run()}
+let tdown=false;
+$('tri').addEventListener('pointerdown',e=>{tdown=true;try{$('tri').setPointerCapture(e.pointerId)}catch(_){}triPick(e)});
+$('tri').addEventListener('pointermove',e=>{if(tdown)triPick(e)});
+['pointerup','pointercancel'].forEach(n=>$('tri').addEventListener(n,()=>{tdown=false}));
+// ===== الصنف حسب المحافظة =====
+function fillVr(){
+  const gv=$('gov').value,rg=gv?GOV[gv][0]:'',cr=$('crop').value;
+  const all=C[cr][9].split(';').map(s=>{const p=s.split(':');return{n:p[0],r:p[1]||'',g:p[2]?p[2].split('|'):null}});
+  let list=all,note='';
+  if(gv)list=all.filter(x=>x.g?x.g.includes(gv):[...x.r].some(ch=>rg.includes(ch)));
+  if(gv&&!list.length){list=all.filter(x=>!x.g);if(!list.length)list=all;note='لا توجد أصناف مسجلة لمنطقة هذه المحافظة — عُرضت كل الأصناف.'}
+  else if(gv)note='أصناف منطقة: '+[...rg].map(ch=>REG[ch]).join(' + ');
+  if(cr==='cotton')note+=(note?' · ':'')+'القطن: الأصناف حسب القرار الوزاري لكل محافظة.';
+  if(cr==='rice')note+=(note?' · ':'')+'زراعة الأرز مقصورة على المناطق المصرح بها من وزارة الري.';
+  $('vr').innerHTML=list.map(x=>`<option value="${x.n}">${x.n}</option>`).join('')+'<option value="__c">صنف آخر (اكتبه)</option>';
+  $('vnote').textContent=note;vrChg();
+}
+function vrChg(){$('vrC').style.display=$('vr').value==='__c'?'block':'none'}
+function vname(){return $('vr').value==='__c'?($('vrC').value.trim()||'—'):$('vr').value}
+$('vr').addEventListener('change',vrChg);
+function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<18?L2('نهارك سعيد','Good afternoon'):L2('مساء الخير','Good evening'))+' 👋 '+L2('أهلاً بك في نماء','Welcome to Namaa')}
+$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>run(),60)};
+{const t=store('nmTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}
+
 // ===== المحرك =====
 function run(click){
   if(!pro&&trials<=0){$('mPay').classList.add('on');return}
   const e=$('err'),bad=m=>{e.textContent='❌ '+m;e.style.display='block';show('res')};e.style.display='none';
-  const v={};['area','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','prW','fNC','fNR','fPC','fPR','fKC','fKR','orN','orP','orK','orT','orR','bioR'].forEach(i=>v[i]=g(i));
+  const v={};['area','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','prW','fNC','fNR','fPC','fPR','fKC','fKR','orN','orP','orK','orT','orR','bioR','caco3'].forEach(i=>v[i]=g(i));
   if(!(v.area>0))return bad('المساحة يجب أن تكون أكبر من صفر');
   if(v.ph<0||v.ph>14)return bad('pH بين 0 و14');
   if(v.ec<0||v.ec>60)return bad('EC بين 0 و60');
+  const tex=updTex();if(!tex)return bad('أدخل نسب الرمل والسلت والطين (قيم موجبة).');
   if(v.fNC<=0||v.fPC<=0||v.fKC<=0)return bad('نسبة العنصر في السماد يجب أن تكون أكبر من صفر');
   if(click&&!pro){trials--;saveTrials();badge()}
 
   const key=$('crop').value,c=C[key],tol=c[5],slope=c[6],kc=c[7],days=c[8],zr=ZR[c[1]];
-  const A=parseFloat($('unit').value),uf=A/4200.83,un=$('unit').selectedOptions[0].textContent,ti=+$('tex').value,BD=BDS[ti];
+  const A=parseFloat($('unit').value),uf=A/4200.83,un=$('unit').selectedOptions[0].textContent,BD=tex.t[5];
   const ea=parseFloat($('eff').value)||.75;
 
   // ملوحة التربة
@@ -302,7 +434,7 @@ function run(click){
   const den=5*tol-v.ecw,lrf=den>0?v.ecw/den:1,LR=Math.min(100,Math.round(lrf*100));
   // الري
   const etc=v.et0*kc,gross=etc/(ea*(1-Math.min(.5,lrf))),m3=Math.round(gross*A/1000),season=Math.round(m3*days*.8);
-  const dmm=Math.round(Math.max(0,v.fc-v.sm)*10*zr),taw=v.fc*.5*10*zr,intv=ea>=.9?1:Math.max(1,Math.floor(taw*.5/etc));
+  const dmm=Math.round(Math.max(0,v.fc-v.sm)*10*zr),taw=Math.max(0,v.fc-v.fc*tex.t[7]/tex.t[6])*10*zr,intv=ea>=.9?1:Math.max(1,Math.floor(taw*.5/etc));
   // الجبس: meq Ca/100g × 0.86 جم/كجم تربة، نقاوة 80%
   const soilKg=A*.2*BD*1000,gyp=v.esp>v.espT?Math.round(v.cec*(v.esp-v.espT)/100*.86*soilKg/1000/.8):0;
 
@@ -321,7 +453,7 @@ function run(click){
   set('wEC',v.ecw+' dS/m');set('wCls',wC,v.ecw>3?'er':v.ecw>.7?'wn':'ok');set('wSAR',sar.toFixed(1),sar>10?'er':sar>6?'wn':'ok');set('wUS',cC+'-'+sS);set('wInf',inf[0],inf[1]);set('wLR',LR+' %');
 
   // التسميد: كجم عنصر لكل وحدة مساحة
-  const ms=A*.2*BD/1000,nEf=NE[ti],pFix=v.ph>7.5?1.25:1,nCur=v.n+v.om*4;
+  const ms=A*.2*BD/1000,nEf=tex.t[8]*(v.caco3>15?.9:1),pFix=(v.ph>7.5||v.caco3>15)?1.25:1,nCur=v.n+v.om*4;
   let nN=Math.max(0,c[2]-nCur)*ms/nEf,nP=Math.max(0,c[3]-v.p)*ms*2.29*pFix,nK=Math.max(0,c[4]-v.k)*ms*1.205;
   const oN=v.orT*10*v.orN*.3,oP=v.orT*10*v.orP*.5,oK=v.orT*10*v.orK*.8;
   const bx=BIO[+$('bioS').value];let bioOK=true;
@@ -343,7 +475,7 @@ function run(click){
    ['Fe/Zn/Mn',`${v.fe}/${v.zn}/${v.mn}`,'4.5/1/1','شيلات EDTA',mDef?mE.toFixed(1)+' كجم':'—',mDef?(mE*v.area).toFixed(1)+' كجم':'—','—'],
    ['مياه','—','—','موسمي',r(season)+' م³',r(season*v.area)+' م³',r(cW)]].map(row).join('');
   $('sch').innerHTML=ST.map((x,i)=>`<tr><td>${['التأسيس','النمو الخضري','المرحلة المتأخرة'][i]}</td><td>${r(kN*x[0])} كجم</td><td>${r(kP*x[1])} كجم</td><td>${r(kK*x[2])} كجم</td></tr>`).join('');
-  $('sub').textContent=`${$('fname').value} — ${c[0]} (${$('vr').value})${$('gov').value?' — '+$('gov').value:''} — موسم ≈ ${days} يوماً`;
+  $('sub').textContent=`${$('fname').value} — ${c[0]} (${vname()})${$('gov').value?' — '+$('gov').value:''} — موسم ≈ ${days} يوماً`;
 
   // التحذيرات
   const w=[],sw=[];
@@ -351,9 +483,11 @@ function run(click){
   else if(v.ecw>3)sw.push(['er','⚠️ مياه شديدة الملوحة — استخدم محاصيل مقاومة وارفع نسبة الغسيل.']);
   if(inf[1]!=='ok')sw.push([inf[1],'⚠️ خطر على نفاذية التربة من ارتفاع SAR مع انخفاض ECw — أضف الجبس.']);
   if(sar>10)sw.push(['er',`⚠️ SAR مياه الري=${sar.toFixed(1)} — أضف جبس زراعي.`]);
+  if(v.ecw>0&&Math.abs((v.wCa+v.wMg+v.wNa)-v.ecw*10)>v.ecw*3)sw.push(['wn','ℹ️ مجموع الكاتيونات (Ca+Mg+Na) لا يتسق مع ECw (≈ ECw×10 ميلي مكافئ/لتر) — راجع نتائج تحليل المياه.']);
   if(!sw.length)sw.push(['ok','✅ جودة مياه الري مقبولة لهذا المحصول.']);
   if(ec>tol)w.push(['er',`⚠️ ملوحة التربة أعلى من حد المحصول (${tol} dS/m) — غسيل وصرف.`]);
   if(v.esp>15)w.push(['er','⚠️ تربة صودية (ESP>15) — جبس + غسيل لتحسين النفاذية.']);
+  if(v.caco3>15)w.push(['wn','⚠️ تربة جيرية (CaCO₃ مرتفع): خطر نقص Fe وZn وتثبيت الفوسفور.']);
   if(v.ph>7.5)w.push(['wn','⚠️ pH مرتفع يقلل تيسر P وFe وZn — فضّل التسميد الورقي والحمضي.']);
   if(mDef)w.push(['wn','⚠️ نقص عناصر صغرى — رش شيلات EDTA.']);
   if(/كلوريد|chloride/i.test($('fKS').selectedOptions[0].textContent)&&(ec>tol*.6||v.ecw>1))w.push(['wn','⚠️ كلوريد البوتاسيوم يزيد الملوحة — الأفضل سلفات البوتاسيوم في هذا الظرف.']);
@@ -365,12 +499,15 @@ function run(click){
   if(gyp)o.push(`جبس زراعي ≈ ${gyp} كجم/${un} (يخفض ESP من ${v.esp}% إلى ${v.espT}%)`);
   if(ec>tol*.6||v.ecw>.7)o.push(`ضاعف الغسيل: +${LR}% من مياه الري مع تأمين الصرف`);
   if(v.ph<6)o.push(`جير زراعي ${Math.round(400*uf)} كجم/${un}`);
-  if(ti===0)o.push('تربة رملية: قسّم النيتروجين على 4–5 دفعات لتقليل الفقد.');
+  if(tex.n[0]>=70)o.push('تربة رملية/خفيفة: قسّم النيتروجين على 4–5 دفعات لتقليل الفقد.');
+  if(tex.n[2]>=40)o.push('تربة طينية ثقيلة: احرص على الصرف وقلّل الغمر الطويل وقسّم الري.');
+  if(v.caco3>15)o.push('تربة جيرية: استخدم شيلات Fe/Zn (EDDHA/EDTA) ورشاً ورقياً وأسمدة حمضية.');
   if(v.cec<15)o.push(`هيوميك أسيد ${Math.round(10*uf)} كجم/${un}`);
   if(!o.length)o.push('المؤشرات جيدة — استمر على نفس البرنامج');
   $('org').innerHTML=o.map(x=>`<li>${x}</li>`).join('');
 
-  LAST={crop:c[0],variety:$('vr').value,governorate:$('gov').value,area:v.area,unit:un,ph:v.ph,ec,esp:v.esp,sar:+sar.toFixed(1),ECw:v.ecw,healthScore:s,relativeYieldPct:Math.round(yr),leachingReqPct:LR,gross_mm_day:+gross.toFixed(1),m3_day_unit:m3,seasonal_m3_unit:season,intervalDays:intv,deficit_mm:dmm,gypsum_kg_unit:gyp,N_kg:Math.round(kN),P_kg:Math.round(kP),K_kg:Math.round(kK),totalCost_EGP:total};
+  $('phd').textContent=L2('🌱 نماء — تقرير تحليل التربة','🌱 Namaa — Soil analysis report')+' · '+$('fname').value+' · '+new Date().toLocaleDateString(lang==='ar'?'ar-EG':'en-GB');
+  LAST={field:$('fname').value,crop:c[0],variety:vname(),texture:L2(tex.t[1],tex.t[2]),sand_pct:+tex.n[0].toFixed(1),silt_pct:+tex.n[1].toFixed(1),clay_pct:+tex.n[2].toFixed(1),caco3_pct:v.caco3,governorate:$('gov').value,area:v.area,unit:un,ph:v.ph,ec,esp:v.esp,sar:+sar.toFixed(1),ECw:v.ecw,healthScore:s,relativeYieldPct:Math.round(yr),leachingReqPct:LR,gross_mm_day:+gross.toFixed(1),m3_day_unit:m3,seasonal_m3_unit:season,intervalDays:intv,deficit_mm:dmm,gypsum_kg_unit:gyp,N_kg:Math.round(kN),P_kg:Math.round(kP),K_kg:Math.round(kK),totalCost_EGP:total};
 
   const tc=getComputedStyle(document.body).color,gc='rgba(143,179,171,.2)',ax={x:{ticks:{color:tc},grid:{display:false}},y:{ticks:{color:tc},grid:{color:gc}}};
   if(window.Chart){if(c1)c1.destroy();if(c2)c2.destroy();
@@ -379,11 +516,11 @@ function run(click){
 }
 
 // ===== حفظ / تصدير / مشاركة =====
-const FIELDS=['gov','crop','area','unit','tex','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR'];
+const FIELDS=['fname','gov','crop','area','unit','sand','silt','clay','caco3','vrC','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR'];
 const hist=()=>{try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h:[]}catch(e){return[]}};
 function renderHist(){const h=hist();$('hl').innerHTML=h.length?h.map((x,i)=>`<li><b>${(C[x.c]||[])[0]||''}</b> · ${x.s}/100 · ${new Date(x.d).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')} · <a data-l="${i}">فتح</a> · <a data-d="${i}">✕</a></li>`).join(''):'<li>لا توجد تقارير محفوظة</li>'}
 $('hl').onclick=e=>{const a=e.target.closest('a');if(!a)return;const h=hist();
-  if(a.dataset.l!==undefined){const x=h[a.dataset.l];if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=x.v[f]});fillVr();if(x.v.vr)$('vr').value=x.v.vr;run();show('res')}}
+  if(a.dataset.l!==undefined){const x=h[a.dataset.l];if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=x.v[f]});fcManual=true;fillVr();if(x.v.vr)$('vr').value=x.v.vr;vrChg();run();show('res')}}
   else if(a.dataset.d!==undefined){h.splice(a.dataset.d,1);store('agriHist',JSON.stringify(h));renderHist()}};
 $('save').onclick=()=>{if(!LAST)return;const v={vr:$('vr').value};FIELDS.forEach(f=>v[f]=$(f).value);const h=hist();h.unshift({d:Date.now(),c:$('crop').value,s:LAST.healthScore,v});store('agriHist',JSON.stringify(h.slice(0,12)));renderHist();toast('تم حفظ التقرير ✅')};
 $('csvB').onclick=()=>{if(!LAST)return;const csv='\ufeffParameter,Value\n'+Object.entries(LAST).map(([k,x])=>`${k},"${tx(String(x))}"`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='AgriSoil_'+Date.now()+'.csv';a.click()};
@@ -394,6 +531,7 @@ $('prt').onclick=()=>{if(!pro&&trials<=0){$('mPay').classList.add('on');return}s
 // ===== المساعد والتواصل =====
 function addMsg(c,t){const m=$('msgs'),d=document.createElement('div');d.className='m '+c;d.textContent=t;m.appendChild(d);m.scrollTop=m.scrollHeight;if(lang!=='ar')tr()}
 function fb(q){const a=LAST;if(!a)return 'شغّل التحليل أولاً.';
+  if(/قوام|نسيج|رمل|طين|سلت|texture|sand|clay|silt/i.test(q))return L2(`قوام التربة: ${a.texture} (رمل ${a.sand_pct}% / سلت ${a.silt_pct}% / طين ${a.clay_pct}%).`,`Soil texture: ${a.texture} (sand ${a.sand_pct}% / silt ${a.silt_pct}% / clay ${a.clay_pct}%).`);
   if(/ملوح|ec|sar|صودي|salin|sodic/i.test(q))return `ملوحة التربة ${a.ec} dS/m (المحصول النسبي ${a.relativeYieldPct}%)، ملوحة المياه ${a.ECw} dS/m وSAR ${a.sar}. أضف ${a.leachingReqPct}% مياه غسيل مع صرف جيد${a.gypsum_kg_unit?`، وجبس ≈ ${a.gypsum_kg_unit} كجم/${a.unit}`:''}.`;
   if(/ري|مياه|irrig|water/i.test(q))return `الري ${a.gross_mm_day} مم/يوم (${a.m3_day_unit} م³/${a.unit}) كل ${a.intervalDays} يوم تقريباً، والموسم ≈ ${a.seasonal_m3_unit} م³/${a.unit}. عجز الرطوبة ${a.deficit_mm} مم.`;
   if(/سماد|تسميد|npk|fert/i.test(q))return `لكل ${a.unit}: N ${a.N_kg} كجم، P₂O₅ ${a.P_kg} كجم، K₂O ${a.K_kg} كجم (بعد خصم العضوي والحيوي). التكلفة الإجمالية ${a.totalCost_EGP} ج.م.`;
@@ -410,15 +548,17 @@ function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg
 
 // ===== ربط الأحداث =====
 document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>run())});
-document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];run();toast('تم تطبيق النموذج')});
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;run();toast('تم تطبيق النموذج')});
 $('runb').onclick=()=>{run(true);show('res')};
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
 
 // ===== ربط اللغة =====
 const _run=run;run=function(c){_run(c);tr()};
-function setLang(l){lang=l;store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run()}
+const FN0={ar:'حقل التميز النموذجي',en:'Model Excellence Field'};
+function fnameLang(){const v=$('fname').value.trim();if(!v||v===FN0.ar||v===FN0.en)$('fname').value=FN0[lang]}
+function setLang(l){lang=l;greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run()}
 $('lang').value=lang;$('lang').onchange=e=>setLang(e.target.value);
-initState().then(()=>{badge();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;run()});
+initState().then(()=>{badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;run()});
 
 </script>
 </body>
