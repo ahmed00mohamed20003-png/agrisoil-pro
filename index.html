@@ -82,7 +82,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 <section class="hero">
   <div class="sun"></div><span class="leaf" style="inset-inline-end:16px">🌿</span><span class="leaf" style="inset-inline-end:64px;animation-delay:-2s;font-size:2.2rem">🌱</span>
   <div class="top"><div class="brand"><div class="logo">🌱</div><div><b>نماء</b><small>NAMAA · SMART AGRI</small></div></div>
-    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><select id="lang" style="width:auto;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select><button class="sec" id="theme" style="min-height:36px;padding:4px 12px">🌓</button><button class="sec" id="prt" style="min-height:36px;padding:4px 12px">🖨️</button></div></div>
+    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><select id="lang" style="width:auto;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select><button class="sec" id="theme" style="min-height:36px;padding:4px 12px">🌓</button><button class="sec" id="prt" style="min-height:36px;padding:4px 12px">🖨️</button><button class="sec" id="logout" style="min-height:36px;padding:4px 12px">🚪</button></div></div>
   <div class="greet" id="greet"></div>
   <h1>منصة التربة والمياه والملوحة والأسمدة</h1>
   <p class="sub">40 محصولاً بأصنافها حسب المحافظة · قوام التربة بمثلث USDA · تحليل ملوحة التربة والمياه · بنك الأسمدة المصري (معدني وعضوي وحيوي) · FAO-29 / FAO-56 / IPNI</p>
@@ -163,7 +163,8 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 <footer>AgriSoil AI Global Pro © 2026 — النتائج تقديرية وتسترشد بمعايير FAO وUSDA وIPNI، والأصناف حسب المنطقة إرشادية</footer>
 </div>
 
-<div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3>انتهت المحاولات المجانية</h3><p style="font-size:.85rem;color:var(--mut)">فعّل حسابك عبر InstaPay ثم أرسل الإيصال إلى البريد</p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px">01113276215</p><input id="code" type="password" autocomplete="off" placeholder="••••" style="text-align:center;margin:8px 0"><div class="row" style="justify-content:center"><button id="unlock">تفعيل</button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
+<div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3>انتهت المحاولات المجانية</h3><p style="font-size:.85rem;color:var(--mut)">حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيله</p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px;margin:6px 0">01113276215</p><p style="font-size:.78rem;color:var(--mut);direction:ltr;margin:0 0 10px">حسابك: <b id="payMail"></b></p><div class="row" style="justify-content:center"><button id="payWa">📲 إرسال الإيصال</button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
+<div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center"><div class="logo" style="margin:0 auto 8px">🌱</div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
 <div id="toast"></div>
 
 <script>
@@ -277,21 +278,44 @@ $('crop').innerHTML=Object.entries(G).map(([gk,gn])=>`<optgroup label="${gn}">${
 $('gov').onchange=()=>{const gv=$('gov').value;if(gv)$('et0').value=GOV[gv][1];fillVr();run()};
 $('crop').onchange=()=>{fillVr();run()};
 
-// ===== الحالة والتفعيل (كما في نسختك) =====
-let trials=5,pro=false,LAST=null,c1,c2;
-const CODE_HASH='c16a4834a3f457b30845cf395b01b09d452279ce829c2093728b7133fab2d5ef',SALT='agrisoil.v2.';
-async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+// ===== الحساب والمحاولات (Firebase) =====
+let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login';
 function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
-async function saveTrials(){store('agriTrials',trials);store('agriSig',await sha(SALT+'t'+trials))}
-async function initState(){const t=parseInt(store('agriTrials')),sg=store('agriSig');
-  if(t>=0&&t<=5){trials=(sg&&sg===await sha(SALT+'t'+t))?t:(sg?0:t)}else trials=5;
-  pro=store('agriProSig')===await sha(SALT+'pro');if(!sg)await saveTrials()}
-let fails=0,lockUntil=0;
-$('unlock').onclick=async()=>{
-  if(Date.now()<lockUntil)return alert('محاولات كثيرة — انتظر '+Math.ceil((lockUntil-Date.now())/1000)+' ث');
-  if(await sha($('code').value.trim())===CODE_HASH){pro=true;store('agriProSig',await sha(SALT+'pro'));fails=0;$('code').value='';$('mPay').classList.remove('on');badge();alert('تم التفعيل ✅');run()}
-  else{fails++;if(fails>=5)lockUntil=Date.now()+30000*fails;alert('رمز غير صحيح')}};
+function saveTrials(){if(window.NamaaAuth)NamaaAuth.setTrials(trials)}
+function authMsg(t,ok){$('aMsg').textContent=t||'';$('aMsg').style.color=ok?'var(--ok)':'var(--er)'}
+function authUI(){const s=aMode==='signup';
+  $('aTitle').textContent=s?L2('إنشاء حساب جديد','Create account'):L2('تسجيل الدخول','Sign in');
+  $('aSub').textContent=s?L2('سجّل واحصل على 5 محاولات مجانية','Sign up and get 5 free trials'):L2('سجّل دخولك لاستخدام نماء','Sign in to use Namaa');
+  $('aNameW').style.display=s?'block':'none';
+  $('aName').placeholder=L2('الاسم','Name');$('aEmail').placeholder=L2('البريد الإلكتروني','Email');
+  $('aPass').placeholder=L2('كلمة المرور (6 أحرف على الأقل)','Password (min 6 chars)');$('aPass').autocomplete=s?'new-password':'current-password';
+  $('aGo').textContent=s?L2('إنشاء الحساب','Sign up'):L2('دخول','Sign in');
+  $('aG').textContent='🔵 '+L2('المتابعة بحساب Google','Continue with Google');
+  $('aSw').textContent=s?L2('عندي حساب','I have an account'):L2('حساب جديد','New account');
+  $('aFor').textContent=L2('نسيت كلمة المرور؟','Forgot password?');$('aFor').style.display=s?'none':'inline'}
+const AE={'auth/invalid-credential':['البريد أو كلمة المرور غير صحيحة','Wrong email or password'],'auth/wrong-password':['البريد أو كلمة المرور غير صحيحة','Wrong email or password'],'auth/user-not-found':['البريد أو كلمة المرور غير صحيحة','Wrong email or password'],'auth/invalid-email':['اكتب بريداً وكلمة مرور صحيحين','Enter a valid email and password'],'auth/email-already-in-use':['هذا البريد مسجّل بالفعل، سجّل دخولك','This email is already registered'],'auth/weak-password':['كلمة المرور ضعيفة (6 أحرف على الأقل)','Weak password (min 6 chars)'],'auth/too-many-requests':['محاولات كثيرة، انتظر قليلاً','Too many attempts, wait a bit'],'auth/network-request-failed':['تحقق من اتصال الإنترنت','Check your internet connection'],'auth/popup-closed-by-user':['',''],'auth/cancelled-popup-request':['',''],'auth/unauthorized-domain':['الدومين غير مضاف في Firebase (Authorized domains)','Domain not authorized in Firebase']};
+function authErr(e){const m=AE[e&&e.code];return m?L2(m[0],m[1]):L2('حدث خطأ، حاول مرة أخرى','Something went wrong, try again')}
+async function authGo(fn){const A=window.NamaaAuth;if(!A){authMsg(L2('الخدمة غير جاهزة — تأكد من الاتصال وإعداد Firebase','Service not ready — check connection / Firebase setup'));return}
+  authMsg('');$('aGo').disabled=$('aG').disabled=true;try{await fn(A)}catch(e){authMsg(authErr(e))}$('aGo').disabled=$('aG').disabled=false}
+$('aGo').onclick=()=>authGo(async A=>{const e=$('aEmail').value.trim(),p=$('aPass').value;if(!e||!p)throw{code:'auth/invalid-email'};
+  if(aMode==='signup'){await A.signup($('aName').value.trim(),e,p);if(USER)greet()}else await A.login(e,p)});
+$('aG').onclick=()=>authGo(A=>A.google());
+$('aSw').onclick=ev=>{ev.preventDefault();aMode=aMode==='login'?'signup':'login';authMsg('');authUI()};
+$('aFor').onclick=ev=>{ev.preventDefault();const e=$('aEmail').value.trim();if(!e){authMsg(L2('اكتب بريدك أولاً','Enter your email first'));return}
+  authGo(async A=>{await A.reset(e);authMsg(L2('تم إرسال رابط إعادة التعيين ✅','Reset link sent ✅'),true)})};
+['aEmail','aPass','aName'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter')$('aGo').click()}));
+$('logout').onclick=()=>{if(window.NamaaAuth)NamaaAuth.out()};
+$('payWa').onclick=()=>window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('تفعيل Pro — حسابي: '+(USER?USER.email:'')),'_blank','noopener');
 $('cPay').onclick=()=>$('mPay').classList.remove('on');
+// يستدعيها سكربت Firebase عند تغيّر حالة الدخول
+window.onUser=(u,d,err)=>{
+  if(!u||!d){USER=null;pro=false;trials=0;badge();greet();
+    $('mAuth').classList.add('on');
+    if(u&&!d)authMsg(L2('تعذر قراءة بيانات الحساب — راجع قواعد Firestore','Could not read account data — check Firestore rules'));
+    return}
+  USER=u;trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
+  $('payMail').textContent=u.email||'';$('mAuth').classList.remove('on');authMsg('');
+  badge();greet();run()};
 
 // ===== قوام التربة (مثلث USDA — 12 قواماً) =====
 const L2=(a,e)=>lang==='ar'?a:e;
@@ -402,12 +426,13 @@ function fillVr(){
 function vrChg(){$('vrC').style.display=$('vr').value==='__c'?'block':'none'}
 function vname(){return $('vr').value==='__c'?($('vrC').value.trim()||'—'):$('vr').value}
 $('vr').addEventListener('change',vrChg);
-function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<18?L2('نهارك سعيد','Good afternoon'):L2('مساء الخير','Good evening'))+' 👋 '+L2('أهلاً بك في نماء','Welcome to Namaa')}
+function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<18?L2('نهارك سعيد','Good afternoon'):L2('مساء الخير','Good evening'))+' 👋 '+L2('أهلاً بك في نماء','Welcome to Namaa')+(USER?' — '+(USER.displayName||(USER.email||'').split('@')[0]):'')}
 $('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>run(),60)};
 {const t=store('nmTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}
 
 // ===== المحرك =====
 function run(click){
+  if(!USER){$('mAuth').classList.add('on');return}
   if(!pro&&trials<=0){$('mPay').classList.add('on');return}
   const e=$('err'),bad=m=>{e.textContent='❌ '+m;e.style.display='block';show('res')};e.style.display='none';
   const v={};['area','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','prW','fNC','fNR','fPC','fPR','fKC','fKR','orN','orP','orK','orT','orR','bioR','caco3'].forEach(i=>v[i]=g(i));
@@ -550,16 +575,54 @@ function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg
 document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>run())});
 document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;run();toast('تم تطبيق النموذج')});
 $('runb').onclick=()=>{run(true);show('res')};
-document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
+document.querySelectorAll('.modal:not(#mAuth)').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
 
 // ===== ربط اللغة =====
 const _run=run;run=function(c){_run(c);tr()};
 const FN0={ar:'حقل التميز النموذجي',en:'Model Excellence Field'};
 function fnameLang(){const v=$('fname').value.trim();if(!v||v===FN0.ar||v===FN0.en)$('fname').value=FN0[lang]}
-function setLang(l){lang=l;greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run()}
+function setLang(l){lang=l;authUI();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run()}
 $('lang').value=lang;$('lang').onchange=e=>setLang(e.target.value);
-initState().then(()=>{badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;run()});
+authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;run();
 
+</script>
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,signOut,sendPasswordResetEmail,updateProfile} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import {getFirestore,doc,getDoc,setDoc,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+// >>> الصق هنا إعدادات Firebase بتاعتك (Project settings > Your apps > Web app) <<<
+const firebaseConfig={
+  apiKey:"AIzaSyAEi8A9qffNflU8yBJnXYFJ9z3tB8kB_O0",
+  authDomain:"namaa-421cb.firebaseapp.com",
+  projectId:"namaa-421cb",
+  storageBucket:"namaa-421cb.firebasestorage.app",
+  messagingSenderId:"323663971723",
+  appId:"1:323663971723:web:07b581c610b2451f1c5b8e"
+};
+
+if(!firebaseConfig.apiKey.startsWith('PASTE')){
+  const auth=getAuth(initializeApp(firebaseConfig)),db=getFirestore();
+  let ref=null;
+  window.NamaaAuth={
+    login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
+    signup:async(n,e,p)=>{const c=await createUserWithEmailAndPassword(auth,e,p);if(n)await updateProfile(c.user,{displayName:n});return c},
+    google:()=>signInWithPopup(auth,new GoogleAuthProvider()),
+    reset:e=>sendPasswordResetEmail(auth,e),
+    out:()=>signOut(auth),
+    setTrials:n=>{if(ref)updateDoc(ref,{trials:n}).catch(()=>{})}
+  };
+  onAuthStateChanged(auth,async u=>{
+    if(!u){ref=null;window.onUser(null);return}
+    ref=doc(db,'users',u.uid);
+    try{
+      const s=await getDoc(ref);let d;
+      if(s.exists())d=s.data();
+      else{d={email:u.email,trials:5,pro:false};await setDoc(ref,{...d,createdAt:serverTimestamp()})}
+      window.onUser(u,d);
+    }catch(e){console.error(e);window.onUser(u,null,e)}
+  });
+}
 </script>
 </body>
 </html>
