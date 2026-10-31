@@ -82,7 +82,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 <section class="hero">
   <div class="sun"></div><span class="leaf" style="inset-inline-end:16px">🌿</span><span class="leaf" style="inset-inline-end:64px;animation-delay:-2s;font-size:2.2rem">🌱</span>
   <div class="top"><div class="brand"><div class="logo">🌱</div><div><b>نماء</b><small>NAMAA · SMART AGRI</small></div></div>
-    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><select id="lang" style="width:auto;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select><button class="sec" id="theme" style="min-height:36px;padding:4px 12px">🌓</button><button class="sec" id="prt" style="min-height:36px;padding:4px 12px">🖨️</button><button class="sec" id="logout" style="min-height:36px;padding:4px 12px;display:none">🚪</button></div></div>
+    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><select id="lang" style="width:auto;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select><button class="sec" id="theme" style="min-height:36px;padding:4px 12px">🌓</button><button class="sec" id="prt" style="min-height:36px;padding:4px 12px">🖨️</button><button class="sec" id="logout" style="min-height:36px;padding:4px 12px">👤</button></div></div>
   <div class="greet" id="greet"></div>
   <div class="noprint row" id="acct" style="display:none;margin:6px 0;gap:8px"><span class="chip" id="acctMail" style="direction:ltr"></span><button class="sec" id="logout2" style="min-height:34px;padding:4px 12px"></button></div>
   <h1>منصة التربة والمياه والملوحة والأسمدة</h1>
@@ -284,7 +284,7 @@ let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login',AUTH_READY=false;
 function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
 function saveTrials(){if(window.NamaaAuth)NamaaAuth.setTrials(trials)}
 function authMsg(t,ok){$('aMsg').textContent=t||'';$('aMsg').style.color=ok?'var(--ok)':'var(--er)'}
-function authUI(){const s=aMode==='signup';$('logout2').textContent='🚪 '+L2('تسجيل الخروج','Sign out');
+function authUI(){const s=aMode==='signup';$('logout').textContent=USER?'🚪':'👤 '+L2('دخول','Sign in');$('logout2').textContent='🚪 '+L2('تسجيل الخروج','Sign out');
   $('aTitle').textContent=s?L2('إنشاء حساب جديد','Create account'):L2('تسجيل الدخول','Sign in');
   $('aSub').textContent=s?L2('سجّل واحصل على 5 محاولات مجانية','Sign up and get 5 free trials'):L2('سجّل دخولك لاستخدام نماء','Sign in to use Namaa');
   $('aNameW').style.display=s?'block':'none';
@@ -305,7 +305,8 @@ $('aSw').onclick=ev=>{ev.preventDefault();aMode=aMode==='login'?'signup':'login'
 $('aFor').onclick=ev=>{ev.preventDefault();const e=$('aEmail').value.trim();if(!e){authMsg(L2('اكتب بريدك أولاً','Enter your email first'));return}
   authGo(async A=>{await A.reset(e);authMsg(L2('تم إرسال رابط إعادة التعيين ✅','Reset link sent ✅'),true)})};
 ['aEmail','aPass','aName'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter')$('aGo').click()}));
-function doLogout(){if(USER&&window.NamaaAuth&&confirm(L2('تسجيل الخروج؟','Sign out?')))NamaaAuth.out()}
+function doLogout(){if(!USER){authMsg('');$('mAuth').classList.add('on');return}
+  if(window.NamaaAuth&&confirm(L2('تسجيل الخروج؟','Sign out?')))NamaaAuth.out()}
 $('aX').onclick=()=>$('mAuth').classList.remove('on');
 $('logout').onclick=doLogout;$('logout2').onclick=doLogout;
 $('payWa').onclick=()=>window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('تفعيل Pro — حسابي: '+(USER?USER.email:'')),'_blank','noopener');
@@ -315,12 +316,12 @@ window.onUser=(u,d,err)=>{
   AUTH_READY=true;
   if(!u||!d){USER=null;pro=false;trials=0;badge();greet();
     $('mAuth').classList.add('on');
-    $('acct').style.display='none';$('logout').style.display='none';
+    $('acct').style.display='none';authUI();
     if(u&&!d)authMsg(L2('تعذر قراءة بيانات الحساب — راجع قواعد Firestore','Could not read account data — check Firestore rules')+' ['+((err&&(err.code||err.message))||'?')+']');
     return}
   USER=u;trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
-  $('payMail').textContent=u.email||'';$('acctMail').textContent=u.email||u.displayName||'';$('acct').style.display='flex';$('logout').style.display='';$('mAuth').classList.remove('on');authMsg('');
-  badge();greet();run()};
+  $('payMail').textContent=u.email||'';$('acctMail').textContent=u.email||u.displayName||'';$('acct').style.display='flex';$('mAuth').classList.remove('on');authMsg('');
+  authUI();badge();greet();run()};
 
 // ===== قوام التربة (مثلث USDA — 12 قواماً) =====
 const L2=(a,e)=>lang==='ar'?a:e;
@@ -632,6 +633,8 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
+ 
+
 
   
  
