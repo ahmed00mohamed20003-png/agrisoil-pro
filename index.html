@@ -279,7 +279,7 @@ $('gov').onchange=()=>{const gv=$('gov').value;if(gv)$('et0').value=GOV[gv][1];f
 $('crop').onchange=()=>{fillVr();run()};
 
 // ===== الحساب والمحاولات (Firebase) =====
-let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login';
+let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login',AUTH_READY=false;
 function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
 function saveTrials(){if(window.NamaaAuth)NamaaAuth.setTrials(trials)}
 function authMsg(t,ok){$('aMsg').textContent=t||'';$('aMsg').style.color=ok?'var(--ok)':'var(--er)'}
@@ -309,6 +309,7 @@ $('payWa').onclick=()=>window.open('https://wa.me/'+WA+'?text='+encodeURICompone
 $('cPay').onclick=()=>$('mPay').classList.remove('on');
 // يستدعيها سكربت Firebase عند تغيّر حالة الدخول
 window.onUser=(u,d,err)=>{
+  AUTH_READY=true;
   if(!u||!d){USER=null;pro=false;trials=0;badge();greet();
     $('mAuth').classList.add('on');
     if(u&&!d)authMsg(L2('تعذر قراءة بيانات الحساب — راجع قواعد Firestore','Could not read account data — check Firestore rules'));
@@ -432,7 +433,7 @@ $('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement
 
 // ===== المحرك =====
 function run(click){
-  if(!USER){$('mAuth').classList.add('on');return}
+  if(!USER){if(AUTH_READY)$('mAuth').classList.add('on');return}
   if(!pro&&trials<=0){$('mPay').classList.add('on');return}
   const e=$('err'),bad=m=>{e.textContent='❌ '+m;e.style.display='block';show('res')};e.style.display='none';
   const v={};['area','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','prW','fNC','fNR','fPC','fPR','fKC','fKR','orN','orP','orK','orT','orR','bioR','caco3'].forEach(i=>v[i]=g(i));
@@ -584,6 +585,7 @@ function fnameLang(){const v=$('fname').value.trim();if(!v||v===FN0.ar||v===FN0.
 function setLang(l){lang=l;authUI();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run()}
 $('lang').value=lang;$('lang').onchange=e=>setLang(e.target.value);
 authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;run();
+setTimeout(()=>{if(!AUTH_READY){AUTH_READY=true;if(!USER)$('mAuth').classList.add('on')}},7000);
 
 </script>
 <script type="module">
@@ -626,7 +628,7 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
-
+   
 
  
   
