@@ -76,9 +76,34 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 .printHead{display:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{body{background:#fff!important;color:#000!important}.tiles,#runb,.noprint,.sun,.leaf{display:none!important}.pn{display:block!important}#p-hist,#p-ai,#p-ct,#p-crop,#p-soil,#p-water{display:none!important}.card{background:#fff!important;border:1px solid #aaa!important;color:#000!important;box-shadow:none}th,td{color:#000!important}.printHead{display:block;border-bottom:2px solid #14633f;margin-bottom:10px;font-weight:700;color:#14633f}}
+
+/* ===== شاشة الافتتاح ===== */
+#splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#10402d 0%,#06130d 70%);transition:opacity .7s ease,visibility .7s;cursor:pointer}
+#splash.out{opacity:0;visibility:hidden}
+.sp{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px}
+.sp svg{width:132px;height:132px;overflow:visible;animation:spglow 2.4s 1.2s ease-in-out infinite}
+.sp-soil{stroke-dasharray:30;stroke-dashoffset:30;animation:spdraw .6s .1s forwards}
+.sp-stem{stroke-dasharray:22;stroke-dashoffset:22;animation:spdraw .8s .4s forwards}
+.sp-g ellipse{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:sppop .55s cubic-bezier(.3,1.6,.5,1) forwards}
+.sp-g.a ellipse{animation-delay:1s}.sp-g.b ellipse{animation-delay:1.18s}.sp-g.c ellipse{animation-delay:1.36s}
+.sp-name{font-family:'Aref Ruqaa','Cairo',serif;font-weight:700;font-size:72px;line-height:1.25;color:#F5B83D;text-shadow:0 0 26px rgba(245,184,61,.35);clip-path:inset(0 0 0 100%);opacity:0;animation:spwrite 1s 1.6s ease-out forwards}
+.sp-tag{font-size:.7rem;letter-spacing:5px;color:#2BB673;font-weight:700;opacity:0;animation:spin .8s 2.4s forwards}
+@keyframes spdraw{to{stroke-dashoffset:0}}
+@keyframes sppop{to{transform:scale(1)}}
+@keyframes spwrite{from{clip-path:inset(0 0 0 100%);opacity:0}15%{opacity:1}to{clip-path:inset(0 0 0 0);opacity:1}}
+@keyframes spin{from{opacity:0;transform:translateY(6px)}to{opacity:.9;transform:none}}
+@keyframes spglow{0%,100%{filter:drop-shadow(0 0 4px rgba(245,184,61,.25))}50%{filter:drop-shadow(0 0 14px rgba(245,184,61,.6))}}
+@media (prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
 </style>
 </head>
 <body>
+<div id="splash" aria-hidden="true"><div class="sp">
+<svg viewBox="0 0 34 34"><path class="sp-soil" d="M5 31.5Q17 28.5 29 31.5" stroke="#2BB673" stroke-width="1.6" fill="none" stroke-linecap="round"/><path class="sp-stem" d="M17 31V13" stroke="#F5B83D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<g class="sp-g a"><g transform="rotate(-28 11 23)"><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#F5B83D"/></g><g transform="rotate(28 23 23)"><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#F5B83D"/></g></g>
+<g class="sp-g b"><g transform="rotate(-28 11 14)"><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#F5B83D"/></g><g transform="rotate(28 23 14)"><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#F5B83D"/></g></g>
+<g class="sp-g c"><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#F5B83D"/></g></svg>
+<div class="sp-name">قوت</div><div class="sp-tag">QOUT · SMART AGRI</div>
+</div></div>
 <div class="wrap">
 <section class="hero">
   <div class="sun"></div><span class="leaf" style="inset-inline-end:16px">🌿</span><span class="leaf" style="inset-inline-end:64px;animation-delay:-2s;font-size:2.2rem">🌱</span>
@@ -593,6 +618,11 @@ $('lang').value=lang;$('lang').onchange=e=>setLang(e.target.value);
 authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;run();
 setTimeout(()=>{if(!AUTH_READY){AUTH_READY=true;if(!USER)$('mAuth').classList.add('on')}},7000);
 
+</script>
+<script>
+(function(){var s=document.getElementById('splash');if(!s)return;var done=false;
+function hide(){if(done)return;done=true;s.classList.add('out');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},800)}
+s.onclick=hide;setTimeout(hide,3600)})();
 </script>
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
