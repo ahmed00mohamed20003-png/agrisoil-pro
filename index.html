@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#06130d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="قوت">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34' aria-hidden='true'%3E%3Cpath d='M17 31V13' stroke='%23E0A21A' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='17' cy='7' rx='3.5' ry='6' fill='%23E0A21A'/%3E%3Cellipse cx='11' cy='14' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(-28 11 14)'/%3E%3Cellipse cx='23' cy='14' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(28 23 14)'/%3E%3Cellipse cx='11' cy='23' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(-28 11 23)'/%3E%3Cellipse cx='23' cy='23' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(28 23 23)'/%3E%3C/svg%3E">
 <title>قوت | Qout — منصة التربة والمياه والأسمدة الذكية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&family=Aref+Ruqaa:wght@700&family=Noto+Sans+Egyptian+Hieroglyphs&display=swap" rel="stylesheet">
@@ -109,6 +116,14 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 .sp-cart::after{content:"";position:absolute;right:11px;top:18%;height:64%;width:2px;background:#F5B83D;border-radius:2px}
 @keyframes spcart{to{opacity:.95;transform:none}}
 .sp-tag{animation-delay:3s}
+
+/* ===== قائمة الأدوات ===== */
+.menu{position:fixed;z-index:8;top:70px;left:8px;min-width:240px;max-width:calc(100vw - 16px);display:none;padding:8px;border-radius:18px;background:var(--bg);border:1px solid var(--bd);box-shadow:0 18px 44px rgba(0,0,0,.35)}
+.menu.open{display:block;animation:menuin .16s ease-out}
+@keyframes menuin{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.mi{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:8px 12px;border:0;border-radius:12px;background:transparent;color:var(--fg);font:inherit;font-weight:700;font-size:.9rem;text-align:start;justify-content:flex-start;box-shadow:none;cursor:pointer}
+.mi:hover,.mi:focus-visible{background:rgba(52,184,124,.14)}
+.mi .ic-s{flex:none;margin:0;width:24px;height:24px}
 </style>
 </head>
 <body>
@@ -124,6 +139,12 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 <symbol id="i-hist" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><path d="M16 9.5V16l4.5 2.5"/><circle cx="16" cy="16" r="1.7" fill="url(#gY)" stroke="none"/></g></symbol>
 <symbol id="i-ai" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H15l-6 5v-5H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M16 9.5l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="url(#gY)" stroke="none"/></g></symbol>
 <symbol id="i-ct" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="24" height="18" rx="3.5"/><path d="M5.5 9.5L16 18l10.5-8.5" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-menu" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9h20"/><path d="M6 16h20" stroke="url(#gY)"/><path d="M6 23h20"/></g></symbol>
+<symbol id="i-lang" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><ellipse cx="16" cy="16" rx="4.5" ry="11" stroke="url(#gY)"/><path d="M5 16h22"/></g></symbol>
+<symbol id="i-theme" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10.5"/><path d="M16 5.5a10.5 10.5 0 0 1 0 21z" fill="url(#gY)" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-print" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12V5h14v7"/><rect x="4" y="12" width="24" height="12" rx="3"/><rect x="9" y="19" width="14" height="8" rx="1.5" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-user" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="11" r="5"/><path d="M5.5 27c.8-5.5 5-8.5 10.5-8.5S25.700 21.500 26.500 27" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-install" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5v14"/><path d="M10 14l6 6 6-6" stroke="url(#gY)"/><path d="M6 21v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4"/></g></symbol>
 </svg>
 <div id="splash" aria-hidden="true"><div class="sp">
 <svg viewBox="0 0 34 34"><path class="sp-soil" d="M5 31.5Q17 28.5 29 31.5" stroke="#2BB673" stroke-width="1.6" fill="none" stroke-linecap="round"/><path class="sp-stem" d="M17 31V13" stroke="#F5B83D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
@@ -136,10 +157,17 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 <section class="hero">
   <div class="sun"></div><span class="leaf" style="inset-inline-end:16px">🌿</span><span class="leaf" style="inset-inline-end:64px;animation-delay:-2s;font-size:2.2rem">🌱</span>
   <div class="top"><div class="brand"><div class="logo"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 31V13" stroke="#FFE29A" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#FFE29A"/><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 14)"/><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 14)"/><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 23)"/><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 23)"/></svg></div><div><b>قوت</b><small>QOUT · SMART AGRI</small></div></div>
-    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><select id="lang" style="width:auto;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select><button class="sec" id="theme" style="min-height:36px;padding:4px 12px">🌓</button><button class="sec" id="prt" style="min-height:36px;padding:4px 12px">🖨️</button><button class="sec" id="logout" style="min-height:36px;padding:4px 12px">👤</button></div></div>
+    <div class="noprint row"><span class="chip">المحاولات: <b id="tl"></b></span><button class="sec" id="menuB" aria-expanded="false" aria-haspopup="true" style="min-height:40px;min-width:44px;padding:4px 10px"><svg class="ic ic-s" style="margin:0;width:26px;height:26px" aria-hidden="true"><use href="#i-menu"/></svg></button></div></div>
+  <div class="menu noprint" id="menuP" role="menu">
+    <div class="mi" style="cursor:default"><svg class="ic ic-s" aria-hidden="true"><use href="#i-lang"/></svg><select id="lang" style="flex:1;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select></div>
+    <button class="mi" id="theme"><svg class="ic ic-s" aria-hidden="true"><use href="#i-theme"/></svg><span id="menuThemeT"></span></button>
+    <button class="mi" id="prt"><svg class="ic ic-s" aria-hidden="true"><use href="#i-print"/></svg><span id="menuPrtT"></span></button>
+    <button class="mi" id="installB"><svg class="ic ic-s" aria-hidden="true"><use href="#i-install"/></svg><span id="installT"></span></button>
+    <button class="mi" id="logout"></button>
+    <div id="acct" style="display:none;flex-direction:column;gap:6px;padding:6px 12px 8px;border-top:1px solid var(--bd);margin-top:4px"><span class="chip" id="acctMail" style="direction:ltr;text-align:center"></span><button class="mi" id="logout2" style="padding:8px 10px"></button></div>
+  </div>
   <div class="greet" id="greet"></div>
-  <div class="noprint row" id="acct" style="display:none;margin:6px 0;gap:8px"><span class="chip" id="acctMail" style="direction:ltr"></span><button class="sec" id="logout2" style="min-height:34px;padding:4px 12px"></button></div>
-  <h1>منصة التربة والمياه والملوحة والأسمدة</h1>
+    <h1>منصة التربة والمياه والملوحة والأسمدة</h1>
   <p class="sub">40 محصولاً بأصنافها حسب المحافظة · قوام التربة بمثلث USDA · تحليل ملوحة التربة والمياه · بنك الأسمدة المصري (معدني وعضوي وحيوي) · FAO-29 / FAO-56 / IPNI</p>
   <div class="who">م/ أحمد محمد سعيد عبد العال — كلية الزراعة · جامعة المنوفية · الأراضي والمياه</div>
 </section>
@@ -222,6 +250,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 
 <div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3>انتهت المحاولات المجانية</h3><p style="font-size:.85rem;color:var(--mut)">حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيله</p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px;margin:6px 0">01113276215</p><p style="font-size:.78rem;color:var(--mut);direction:ltr;margin:0 0 10px">حسابك: <b id="payMail"></b></p><div class="row" style="justify-content:center"><button id="payWa">📲 إرسال الإيصال</button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
 <div id="mHow" class="modal"><div class="card" style="max-width:540px;width:100%;max-height:86vh;overflow:auto"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="howH"></h3><button class="sec" id="howX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="howBody"></div></div></div>
+<div id="mInst" class="modal"><div class="card" style="max-width:420px;width:100%"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="instH"></h3><button class="sec" id="instX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="instBody"></div></div></div>
 <div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center;position:relative"><button class="sec" id="aX" style="position:absolute;top:10px;inset-inline-end:10px;min-height:32px;padding:2px 10px">✕</button><div class="logo" style="margin:0 auto 8px"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 31V13" stroke="#FFE29A" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#FFE29A"/><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 14)"/><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 14)"/><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 23)"/><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 23)"/></svg></div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
 <div id="toast"></div>
 
@@ -341,7 +370,7 @@ let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login',AUTH_READY=false,
 function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
 function saveTrials(){if(window.NamaaAuth)NamaaAuth.setTrials(trials)}
 function authMsg(t,ok){$('aMsg').textContent=t||'';$('aMsg').style.color=ok?'var(--ok)':'var(--er)'}
-function authUI(){const s=aMode==='signup';$('logout').textContent='👤 '+L2('دخول','Sign in');$('logout').style.display=USER?'none':'';$('logout2').textContent='🚪 '+L2('تسجيل الخروج','Sign out');
+function authUI(){const s=aMode==='signup';menuUI();$('logout').style.display=USER?'none':'';
   $('aTitle').textContent=s?L2('إنشاء حساب جديد','Create account'):L2('تسجيل الدخول','Sign in');
   $('aSub').textContent=s?L2('سجّل واحصل على 5 محاولات مجانية','Sign up and get 5 free trials'):L2('سجّل دخولك لاستخدام قوت','Sign in to use Qout');
   $('aNameW').style.display=s?'block':'none';
@@ -466,10 +495,10 @@ function updTex(){
   $('texLg').innerHTML=TEX.map(a=>`<i style="--c:${a[10]}">${a[3]} · ${L2(a[1],a[2])}</i>`).join('');
   drawTri(T0.n);return T0;
 }
-$('texPick').onchange=()=>{const t=TEX[TI[$('texPick').value]];if(!t)return;$('sand').value=t[4][0];$('silt').value=t[4][1];$('clay').value=t[4][2];fcManual=false;updTex();dirty()};
+$('texPick').onchange=()=>{const t=TEX[TI[$('texPick').value]];if(!t)return;$('sand').value=t[4][0];$('silt').value=t[4][1];$('clay').value=t[4][2];fcManual=false;dirty()};
 $('fc').addEventListener('input',()=>{fcManual=true});
-['sand','silt','clay'].forEach(id=>$(id).addEventListener('input',updTex));
-function triPick(e){const cv=$('tri'),r=cv.getBoundingClientRect(),sc=cv.width/r.width,px=(e.clientX-r.left)*sc,py=(e.clientY-r.top)*sc,Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)return;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)return;const a=Math.round(S*100),b=Math.round(Cl*100);$('sand').value=a;$('clay').value=b;$('silt').value=Math.max(0,100-a-b);fcManual=false;updTex();dirty()}
+['sand','silt','clay'].forEach(id=>$(id).addEventListener('input',dirty));
+function triPick(e){const cv=$('tri'),r=cv.getBoundingClientRect(),sc=cv.width/r.width,px=(e.clientX-r.left)*sc,py=(e.clientY-r.top)*sc,Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)return;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)return;const a=Math.round(S*100),b=Math.round(Cl*100);$('sand').value=a;$('clay').value=b;$('silt').value=Math.max(0,100-a-b);fcManual=false;dirty()}
 let tdown=false;
 $('tri').addEventListener('pointerdown',e=>{tdown=true;try{$('tri').setPointerCapture(e.pointerId)}catch(_){}triPick(e)});
 $('tri').addEventListener('pointermove',e=>{if(tdown)triPick(e)});
@@ -491,7 +520,7 @@ function vrChg(){$('vrC').style.display=$('vr').value==='__c'?'block':'none'}
 function vname(){return $('vr').value==='__c'?($('vrC').value.trim()||'—'):$('vr').value}
 $('vr').addEventListener('change',vrChg);
 function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<17?L2('نهارك سعيد','Good afternoon'):L2('مسائك خير','Good evening'))+' 👋 '+L2('أهلاً بك في قوت','Welcome to Qout')+(USER?' — '+(USER.displayName||(USER.email||'').split('@')[0]):'')}
-$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>{updTex();run(false,'refresh')},60)};
+$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>{if(RESULT_READY)updTex();run(false,'refresh')},60)};
 {const t=store('nmTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}
 
 // ===== المحرك =====
@@ -644,7 +673,7 @@ function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg
 
 // ===== ربط الأحداث =====
 document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>dirty())});
-document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;updTex();dirty();toast('تم تطبيق النموذج')});
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;dirty();toast('تم تطبيق النموذج')});
 $('runb').onclick=()=>{run(true);show('res')};
 document.querySelectorAll('.modal:not(#mAuth)').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
 
@@ -652,7 +681,7 @@ document.querySelectorAll('.modal:not(#mAuth)').forEach(m=>m.addEventListener('c
 const _run=run;run=function(c,m){_run(c,m);tr()};
 const FN0={ar:'حقل التميز النموذجي',en:'Model Excellence Field'};
 function fnameLang(){const v=$('fname').value.trim();if(!v||v===FN0.ar||v===FN0.en)$('fname').value=FN0[lang]}
-function setLang(l){lang=l;authUI();if(window.howLabel)howLabel();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}updTex();run(false,'refresh')}
+function setLang(l){lang=l;authUI();if(window.howLabel)howLabel();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}if(RESULT_READY)updTex();else{texPickInit();texLive()}run(false,'refresh')}
 $('lang').value=lang;$('lang').onchange=e=>setLang(e.target.value);
 
 // ===== كيف حُسبت النتائج =====
@@ -687,13 +716,62 @@ function showHow(){
   B.innerHTML=h;$('mHow').classList.add('on');
 }
 $('howBtn').onclick=showHow;$('howX').onclick=()=>$('mHow').classList.remove('on');
-function dirty(){DIRTY=true;staleUI()}
-function staleUI(){const el=$('stale');if(!el)return;
+function texPickInit(){const pk=$('texPick'),cur=pk.value;pk.innerHTML='<option value="">'+L2('— اختر —','— choose —')+'</option>'+TEX.map(a=>`<option value="${a[0]}">${L2(a[1],a[2])} (${a[3]})</option>`).join('');pk.value=cur||''}
+function texLive(){const sm=$('texSum'),T0=texInfo();
+  if(!T0){sm.className='badge er';sm.textContent=L2('⚠️ أدخل نسب الرمل والسلت والطين (قيم موجبة).','⚠️ Enter sand, silt and clay percentages (positive values).');return}
+  const ok=Math.abs(T0.sum-100)<=1;sm.className='badge '+(ok?'ok':'wn');
+  sm.textContent=ok?L2('✅ المجموع '+T0.sum.toFixed(0)+'%','✅ Total '+T0.sum.toFixed(0)+'%'):L2('⚠️ المجموع '+T0.sum.toFixed(1)+'% وليس 100% — سيتم تطبيع النسب تلقائياً عند التحليل','⚠️ Total is '+T0.sum.toFixed(1)+'%, not 100% — it will be normalized at analysis')}
+function dirty(){DIRTY=true;if(RESULT_READY)updTex();else texLive();staleUI()}
+function staleUI(){const tw=document.querySelector('.triW');if(tw)tw.style.display=RESULT_READY?'':'none';const el=$('stale');if(!el)return;
   if(!RESULT_READY){el.textContent=L2('اضغط «تشغيل التحليل الشامل» لعرض النتائج.','Press “Run full analysis” to see the results.');el.style.display='block'}
   else if(DIRTY){el.textContent=L2('عدّلت المُدخلات — اضغط «تشغيل التحليل الشامل» لتحديث النتائج.','Inputs changed — press “Run full analysis” to update the results.');el.style.display='block'}
   else el.style.display='none'}
 function howLabel(){$('howT').textContent=L2('كيف حُسبت النتائج؟','How were the results calculated?');staleUI()}
-howLabel();authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;updTex();tr();
+
+// ===== قائمة الأدوات + تثبيت التطبيق =====
+const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+function menuUI(){
+  $('menuThemeT').textContent=L2('تبديل المظهر (فاتح / داكن)','Switch theme (light / dark)');
+  $('menuPrtT').textContent=L2('طباعة / حفظ PDF','Print / Save PDF');
+  $('installT').textContent=L2('تثبيت التطبيق على الجهاز','Install app on device');
+  $('logout').innerHTML=ICO('user')+'<span>'+L2('تسجيل الدخول','Sign in')+'</span>';
+  $('logout2').innerHTML=ICO('user')+'<span>'+L2('تسجيل الخروج','Sign out')+'</span>';
+  $('menuB').setAttribute('aria-label',L2('القائمة','Menu'));
+  installUI();
+}
+function closeMenu(){$('menuP').classList.remove('open');$('menuB').setAttribute('aria-expanded','false')}
+function openMenu(){
+  const p=$('menuP'),r=$('menuB').getBoundingClientRect();
+  p.classList.add('open');$('menuB').setAttribute('aria-expanded','true');
+  p.style.top=(r.bottom+8)+'px';
+  const pw=p.offsetWidth,vw=document.documentElement.clientWidth;
+  let left=(r.left+r.width/2<vw/2)?r.left:r.right-pw;
+  p.style.left=Math.max(8,Math.min(left,vw-pw-8))+'px';
+}
+document.body.appendChild($('menuP'));
+$('menuB').onclick=e=>{e.stopPropagation();$('menuP').classList.contains('open')?closeMenu():openMenu()};
+document.addEventListener('click',e=>{if(!e.target.closest('#menuP'))closeMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+addEventListener('resize',closeMenu);
+['prt','logout','logout2','installB'].forEach(id=>$(id).addEventListener('click',closeMenu));
+
+let DP=null;
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function installUI(){const b=$('installB');if(b)b.style.display=isStandalone()?'none':''}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();DP=e;installUI()});
+addEventListener('appinstalled',()=>{DP=null;installUI();toast(L2('تم تثبيت التطبيق ✅','App installed ✅'))});
+$('installB').onclick=async()=>{
+  if(DP){DP.prompt();try{await DP.userChoice}catch(e){}DP=null;installUI();return}
+  $('instH').textContent=L2('تثبيت قوت على جهازك','Install Qout on your device');
+  $('instBody').innerHTML=isIOS()
+    ?'<p>'+L2('على الآيفون أو الآيباد (من متصفح Safari):','On iPhone / iPad (Safari):')+'</p><ol style="line-height:2;padding-inline-start:20px"><li>'+L2('اضغط زر المشاركة','Tap the Share button')+' ⬆️</li><li>'+L2('اختر «إضافة إلى الشاشة الرئيسية»','Choose “Add to Home Screen”')+'</li><li>'+L2('اضغط «إضافة»','Tap “Add”')+'</li></ol>'
+    :'<p>'+L2('من قائمة المتصفح:','From the browser menu:')+'</p><ol style="line-height:2;padding-inline-start:20px"><li>'+L2('اضغط ⋮ (أو ⋯) أعلى المتصفح','Tap ⋮ (or ⋯) in the browser')+'</li><li>'+L2('اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»','Choose “Install app” or “Add to Home screen”')+'</li></ol><p style="font-size:.78rem;color:var(--mut)">'+L2('لو الخيار مش ظاهر، افتح الرابط من Chrome مباشرة (مش من داخل تطبيق آخر).','If you don’t see it, open the link directly in Chrome (not inside another app).')+'</p>';
+  $('mInst').classList.add('on');
+};
+$('instX').onclick=()=>$('mInst').classList.remove('on');
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+howLabel();authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;texPickInit();texLive();staleUI();tr();
 setTimeout(()=>{if(!AUTH_READY){AUTH_READY=true;if(!USER)$('mAuth').classList.add('on')}},7000);
 
 </script>
@@ -743,6 +821,7 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
+
 
 
 
