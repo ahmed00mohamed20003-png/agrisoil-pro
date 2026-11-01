@@ -520,7 +520,7 @@ function vrChg(){$('vrC').style.display=$('vr').value==='__c'?'block':'none'}
 function vname(){return $('vr').value==='__c'?($('vrC').value.trim()||'—'):$('vr').value}
 $('vr').addEventListener('change',vrChg);
 function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<17?L2('نهارك سعيد','Good afternoon'):L2('مسائك خير','Good evening'))+' 👋 '+L2('أهلاً بك في قوت','Welcome to Qout')+(USER?' — '+(USER.displayName||(USER.email||'').split('@')[0]):'')}
-$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>{if(RESULT_READY)updTex();run(false,'refresh')},60)};
+$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>{if(RESULT_READY)updTex();else drawTri(null);run(false,'refresh')},60)};
 {const t=store('nmTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}
 
 // ===== المحرك =====
@@ -718,11 +718,12 @@ function showHow(){
 $('howBtn').onclick=showHow;$('howX').onclick=()=>$('mHow').classList.remove('on');
 function texPickInit(){const pk=$('texPick'),cur=pk.value;pk.innerHTML='<option value="">'+L2('— اختر —','— choose —')+'</option>'+TEX.map(a=>`<option value="${a[0]}">${L2(a[1],a[2])} (${a[3]})</option>`).join('');pk.value=cur||''}
 function texLive(){const sm=$('texSum'),T0=texInfo();
+  drawTri(null);
   if(!T0){sm.className='badge er';sm.textContent=L2('⚠️ أدخل نسب الرمل والسلت والطين (قيم موجبة).','⚠️ Enter sand, silt and clay percentages (positive values).');return}
   const ok=Math.abs(T0.sum-100)<=1;sm.className='badge '+(ok?'ok':'wn');
   sm.textContent=ok?L2('✅ المجموع '+T0.sum.toFixed(0)+'%','✅ Total '+T0.sum.toFixed(0)+'%'):L2('⚠️ المجموع '+T0.sum.toFixed(1)+'% وليس 100% — سيتم تطبيع النسب تلقائياً عند التحليل','⚠️ Total is '+T0.sum.toFixed(1)+'%, not 100% — it will be normalized at analysis')}
 function dirty(){DIRTY=true;if(RESULT_READY)updTex();else texLive();staleUI()}
-function staleUI(){const tw=document.querySelector('.triW');if(tw)tw.style.display=RESULT_READY?'':'none';const el=$('stale');if(!el)return;
+function staleUI(){const rc=$('texK')&&$('texK').parentNode;if(rc)rc.style.display=RESULT_READY?'':'none';const el=$('stale');if(!el)return;
   if(!RESULT_READY){el.textContent=L2('اضغط «تشغيل التحليل الشامل» لعرض النتائج.','Press “Run full analysis” to see the results.');el.style.display='block'}
   else if(DIRTY){el.textContent=L2('عدّلت المُدخلات — اضغط «تشغيل التحليل الشامل» لتحديث النتائج.','Inputs changed — press “Run full analysis” to update the results.');el.style.display='block'}
   else el.style.display='none'}
