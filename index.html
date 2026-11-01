@@ -94,9 +94,31 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 @keyframes spin{from{opacity:0;transform:translateY(6px)}to{opacity:.9;transform:none}}
 @keyframes spglow{0%,100%{filter:drop-shadow(0 0 4px rgba(245,184,61,.25))}50%{filter:drop-shadow(0 0 14px rgba(245,184,61,.6))}}
 @media (prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
+
+/* ===== أيقونات هندسية ===== */
+.tile .ic{width:36px;height:36px;display:block;margin:0 auto 3px;transition:.25s}
+.tile:hover .ic,.tile.on .ic{transform:scale(1.08);filter:drop-shadow(0 0 7px rgba(52,211,153,.5))}
+.ic-s{width:22px;height:22px;display:inline-block;vertical-align:-5px;margin-inline-end:8px}
+.hw{border-top:1px solid var(--bd);padding:11px 0}.hw:first-child{border:0;padding-top:0}
+.hw b{display:block;font-size:.92rem;margin-bottom:4px;color:var(--ac)}
+.fm{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;background:var(--in);border-radius:10px;padding:8px 10px;margin:6px 0;direction:ltr;text-align:left;overflow-x:auto;white-space:pre-wrap}
+.hw small{display:block;color:var(--mut);font-size:.72rem;line-height:1.6}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="gG" gradientUnits="userSpaceOnUse" x1="4" y1="4" x2="28" y2="28"><stop offset="0" stop-color="#34D399"/><stop offset="1" stop-color="#14B8A6"/></linearGradient>
+<linearGradient id="gY" gradientUnits="userSpaceOnUse" x1="4" y1="4" x2="28" y2="28"><stop offset="0" stop-color="#FBD36B"/><stop offset="1" stop-color="#E0A21A"/></linearGradient></defs>
+<symbol id="i-crop" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28V14"/><path d="M9 28h14"/><path d="M16 19L7 14.5 8.5 7.5 16 12z"/><path d="M16 14.5L25 10 23.5 3.5 16 8z" fill="url(#gY)" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-soil" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5L28 11 16 17 4 11z" fill="url(#gY)" stroke="url(#gY)"/><path d="M4 16l12 6 12-6"/><path d="M4 21l12 6 12-6"/></g></symbol>
+<symbol id="i-water" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l8 12a8 8 0 1 1-16 0z"/><path d="M12.5 19a4 4 0 0 0 3.5 4" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-salt" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4L26 10 16 16 6 10z" fill="url(#gY)" stroke="url(#gY)" fill-opacity=".9"/><path d="M6 10v12l10 6 10-6V10"/><path d="M6 10l10 6 10-6"/><path d="M16 16v12"/></g></symbol>
+<symbol id="i-fert" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="8" r="3.5"/><circle cx="7.5" cy="23" r="3.5"/><circle cx="24.5" cy="23" r="3.5"/><path d="M14.3 11l-4.9 9M17.7 11l4.9 9M11 23h10"/><circle cx="16" cy="18" r="2" fill="url(#gY)" stroke="none"/></g></symbol>
+<symbol id="i-res" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="17" width="5" height="9" rx="1.5"/><rect x="13.5" y="11" width="5" height="15" rx="1.5"/><rect x="22" y="5" width="5" height="21" rx="1.5" fill="url(#gY)" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-hist" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><path d="M16 9.5V16l4.5 2.5"/><circle cx="16" cy="16" r="1.7" fill="url(#gY)" stroke="none"/></g></symbol>
+<symbol id="i-ai" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H15l-6 5v-5H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M16 9.5l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="url(#gY)" stroke="none"/></g></symbol>
+<symbol id="i-ct" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="24" height="18" rx="3.5"/><path d="M5.5 9.5L16 18l10.5-8.5" stroke="url(#gY)"/></g></symbol>
+</svg>
 <div id="splash" aria-hidden="true"><div class="sp">
 <svg viewBox="0 0 34 34"><path class="sp-soil" d="M5 31.5Q17 28.5 29 31.5" stroke="#2BB673" stroke-width="1.6" fill="none" stroke-linecap="round"/><path class="sp-stem" d="M17 31V13" stroke="#F5B83D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 <g class="sp-g a"><g transform="rotate(-28 11 23)"><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#F5B83D"/></g><g transform="rotate(28 23 23)"><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#F5B83D"/></g></g>
@@ -118,7 +140,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 
 <div class="tiles" id="tiles"></div>
 
-<div class="pn on" id="p-crop"><div class="card"><h3>🌱 المحافظة والمحصول</h3><div class="g2">
+<div class="pn on" id="p-crop"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-crop"/></svg>المحافظة والمحصول</h3><div class="g2">
   <div class="f"><label>اسم الحقل / المالك</label><input id="fname" value="حقل التميز النموذجي"></div>
   <div class="f"><label>المحافظة (تحدد الأصناف المناسبة ومعدل ET₀)</label><select id="gov"></select></div>
   <div class="f"><label>المحصول (40 محصولاً)</label><select id="crop"></select></div>
@@ -127,37 +149,39 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
   <div><label>الوحدة</label><select id="unit"><option value="4200.83">فدان</option><option value="10000">هكتار</option><option value="4046.86">أكر</option></select></div>
 </div><p style="font-size:.72rem;color:var(--mut)" id="vnote"></p></div></div>
 
-<div class="pn" id="p-soil"><div class="card"><h3>🧱 قوام التربة — مثلث القوام الأمريكي (USDA)</h3>
+<div class="pn" id="p-soil"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-soil"/></svg>قوام التربة — مثلث القوام الأمريكي (USDA)</h3>
   <div class="g3"><div><label>الرمل Sand %</label><input id="sand" type="number" inputmode="decimal" value="40" step="1" min="0" max="100"></div><div><label>السلت Silt %</label><input id="silt" type="number" inputmode="decimal" value="40" step="1" min="0" max="100"></div><div><label>الطين Clay %</label><input id="clay" type="number" inputmode="decimal" value="20" step="1" min="0" max="100"></div></div>
   <div class="g2" style="margin-top:10px"><div class="f"><label>أو اختر قواماً نموذجياً لملء النسب</label><select id="texPick"></select></div></div>
   <div id="texSum" class="badge"></div>
   <div class="triW"><div><canvas id="tri" width="460" height="420"></canvas><div class="lg" id="texLg"></div></div>
   <div><div class="kpis" id="texK"></div><p style="font-size:.78rem;color:var(--mut);line-height:1.8" id="texNote"></p></div></div></div>
-<div class="card"><h3>🧪 تحليل التربة</h3>
+<div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-soil"/></svg>تحليل التربة</h3>
   <div class="row" style="margin-bottom:10px"><button class="sec" data-p="ideal">تربة مثالية</button><button class="sec" data-p="saline">تربة ملحية</button><button class="sec" data-p="calc">تربة جيرية</button><button class="sec" data-p="sodic">تربة صودية</button></div>
   <div class="g2" id="soilF"></div></div></div>
 
-<div class="pn" id="p-water"><div class="card"><h3>💧 مياه الري والرطوبة</h3><div class="g2" id="waterF"></div></div></div>
+<div class="pn" id="p-water"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-water"/></svg>مياه الري والرطوبة</h3><div class="g2" id="waterF"></div></div></div>
 
 <div class="pn" id="p-salt">
-  <div class="card"><h3>🧂 ملوحة التربة</h3><div class="kpis">
+  <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-salt"/></svg>ملوحة التربة</h3><div class="kpis">
     <div class="kpi"><span>EC التربة</span><b id="sEC">—</b></div><div class="kpi"><span>التصنيف</span><b id="sCls">—</b></div>
     <div class="kpi"><span>حد تحمل المحصول</span><b id="sTol">—</b></div><div class="kpi"><span>المحصول النسبي</span><b id="sYR">—</b></div>
     <div class="kpi"><span>ESP</span><b id="sESP">—</b></div><div class="kpi"><span>جبس مطلوب</span><b id="sGyp">—</b></div></div></div>
-  <div class="card"><h3>🚰 ملوحة مياه الري</h3><div class="kpis">
+  <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-water"/></svg>ملوحة مياه الري</h3><div class="kpis">
     <div class="kpi"><span>ECw</span><b id="wEC">—</b></div><div class="kpi"><span>الخطورة (FAO)</span><b id="wCls">—</b></div>
     <div class="kpi"><span>SAR</span><b id="wSAR">—</b></div><div class="kpi"><span>تصنيف USSL</span><b id="wUS">—</b></div>
     <div class="kpi"><span>خطر النفاذية</span><b id="wInf">—</b></div><div class="kpi"><span>احتياج الغسيل LR</span><b id="wLR">—</b></div></div>
     <div id="swarns"></div></div>
-  <div class="card"><h3>📊 مقارنة الملوحة</h3><canvas id="c2" height="150"></canvas></div>
+  <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-res"/></svg>مقارنة الملوحة</h3><canvas id="c2" height="150"></canvas></div>
 </div>
 
-<div class="pn" id="p-fert"><div class="card"><h3>🌾 بنك الأسمدة المصري — اختيار وتعديل يدوي</h3>
+<div class="pn" id="p-fert"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-fert"/></svg>بنك الأسمدة المصري — اختيار وتعديل يدوي</h3>
   <p style="font-size:.72rem;color:var(--mut);margin-top:0">اختر السماد من البنك ثم عدّل النسبة والسعر يدوياً (الأسعار افتراضية تقريبية — حدّثها حسب السوق).</p>
   <div class="g2" id="fertF"></div></div></div>
 
 <div class="pn" id="p-res">
   <div class="printHead" id="phd"></div>
+  <div id="stale" class="noprint" style="display:none;padding:10px 14px;margin-bottom:10px;border-radius:14px;border:1px dashed var(--gold);color:var(--gold);font-size:.82rem;text-align:center"></div>
+  <div class="card noprint" style="padding:10px"><button class="sec" id="howBtn" style="width:100%"><svg class="ic ic-s" aria-hidden="true"><use href="#i-res"/></svg><span id="howT"></span></button></div>
   <div class="card"><div id="sub" style="color:var(--gold);font-size:.85rem;margin-bottom:10px"></div><div class="gauge">
     <div class="gw"><svg width="140" height="140" viewBox="0 0 150 150"><circle cx="75" cy="75" r="62" fill="none" stroke="var(--bd)" stroke-width="12"/><circle id="ring" cx="75" cy="75" r="62" fill="none" stroke="var(--ok)" stroke-width="12" stroke-linecap="round" stroke-dasharray="390" stroke-dashoffset="390" style="transition:stroke-dashoffset 1s,stroke .5s"/></svg><div><b id="score">—</b><span id="hstat" style="font-size:.8rem"></span></div></div>
     <div class="kpis" style="flex:1;min-width:240px">
@@ -166,21 +190,21 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
       <div class="kpi"><span>فترة الري</span><b id="rINT">—</b></div><div class="kpi"><span>عجز الرطوبة</span><b id="rDF">—</b></div>
       <div class="kpi" style="border-color:var(--gold)"><span>إجمالي التكاليف</span><b id="rCOST" style="color:var(--gold)">—</b></div></div></div>
     <div id="warns"></div></div>
-  <div class="card"><h3>🌾 برنامج التسميد والتكلفة</h3><div class="tw"><table><thead><tr><th>العنصر</th><th>الحالي</th><th>الهدف</th><th>السماد</th><th>لكل وحدة</th><th>الإجمالي</th><th>التكلفة (ج)</th></tr></thead><tbody id="tb"></tbody></table></div></div>
-  <div class="card"><h3>📅 جدول التسميد المقسّم</h3><div class="tw"><table><thead><tr><th>المرحلة</th><th>N</th><th>P₂O₅</th><th>K₂O</th></tr></thead><tbody id="sch"></tbody></table></div></div>
-  <div class="card"><h3>📈 NPK: الحالي والهدف</h3><canvas id="c1" height="150"></canvas></div>
-  <div class="card"><h3>🌿 توصيات الإصلاح</h3><ul id="org"></ul>
+  <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-fert"/></svg>برنامج التسميد والتكلفة</h3><div class="tw"><table><thead><tr><th>العنصر</th><th>الحالي</th><th>الهدف</th><th>السماد</th><th>لكل وحدة</th><th>الإجمالي</th><th>التكلفة (ج)</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+  <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-hist"/></svg>جدول التسميد المقسّم</h3><div class="tw"><table><thead><tr><th>المرحلة</th><th>N</th><th>P₂O₅</th><th>K₂O</th></tr></thead><tbody id="sch"></tbody></table></div></div>
+  <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-res"/></svg>NPK: الحالي والهدف</h3><canvas id="c1" height="150"></canvas></div>
+  <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-crop"/></svg>توصيات الإصلاح</h3><ul id="org"></ul>
     <div class="row noprint" style="margin-top:12px"><button class="sec" id="save">💾 حفظ</button><button class="sec" id="csvB">📊 CSV</button><button class="sec" id="share">📤 مشاركة</button></div>
     <div id="err" class="badge er" style="display:none"></div></div>
 </div>
 
-<div class="pn" id="p-hist"><div class="card"><h3>🗂️ التقارير المحفوظة</h3><ul id="hl"></ul></div></div>
+<div class="pn" id="p-hist"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-hist"/></svg>التقارير المحفوظة</h3><ul id="hl"></ul></div></div>
 
-<div class="pn" id="p-ai"><div class="card"><h3>🤖 مساعد AgriSoil</h3><div id="msgs"></div>
+<div class="pn" id="p-ai"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-ai"/></svg>مساعد AgriSoil</h3><div id="msgs"></div>
   <div class="row" style="margin-bottom:8px"><button class="sec">حلل تربتي</button><button class="sec">اشرح الملوحة</button><button class="sec">جدول الري</button><button class="sec">نصيحة تسميد</button></div>
   <div class="row"><input id="aiIn" placeholder="اكتب سؤالك…" style="flex:1"><button id="aiSend">➤</button></div></div></div>
 
-<div class="pn" id="p-ct"><div class="card"><h3>📞 تواصل مع المهندس أحمد</h3><div style="display:grid;gap:10px">
+<div class="pn" id="p-ct"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-ct"/></svg>تواصل مع المهندس أحمد</h3><div style="display:grid;gap:10px">
   <select id="ctType"><option>شكوى</option><option>مشكلة فنية</option><option>اقتراح</option></select>
   <input id="ctName" placeholder="اسمك (اختياري)"><textarea id="ctMsg" rows="4" placeholder="اكتب رسالتك هنا…"></textarea>
   <a id="ctMail" class="btn" target="_blank" rel="noopener">📧 إرسال بالبريد</a><a id="ctWa" class="btn wa" target="_blank" rel="noopener">💬 إرسال واتساب</a>
@@ -191,6 +215,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 </div>
 
 <div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3>انتهت المحاولات المجانية</h3><p style="font-size:.85rem;color:var(--mut)">حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيله</p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px;margin:6px 0">01113276215</p><p style="font-size:.78rem;color:var(--mut);direction:ltr;margin:0 0 10px">حسابك: <b id="payMail"></b></p><div class="row" style="justify-content:center"><button id="payWa">📲 إرسال الإيصال</button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
+<div id="mHow" class="modal"><div class="card" style="max-width:540px;width:100%;max-height:86vh;overflow:auto"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="howH"></h3><button class="sec" id="howX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="howBody"></div></div></div>
 <div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center;position:relative"><button class="sec" id="aX" style="position:absolute;top:10px;inset-inline-end:10px;min-height:32px;padding:2px 10px">✕</button><div class="logo" style="margin:0 auto 8px"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 31V13" stroke="#FFE29A" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#FFE29A"/><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 14)"/><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 14)"/><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 23)"/><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 23)"/></svg></div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
 <div id="toast"></div>
 
@@ -280,7 +305,7 @@ const MAIL='ahmed00mohamed20003@gmail.com',WA='201113276215';
 
 // ===== بناء الواجهة =====
 const TL=[['crop','🌱','المحصول'],['soil','🧪','التربة'],['water','💧','المياه'],['salt','🧂','الملوحة'],['fert','🌾','الأسمدة'],['res','📊','النتائج'],['hist','🗂️','السجل'],['ai','🤖','المساعد'],['ct','📞','تواصل']];
-$('tiles').innerHTML=TL.map(t=>`<button class="tile${t[0]=='crop'?' on':''}" data-t="${t[0]}"><span>${t[1]}</span>${t[2]}</button>`).join('');
+$('tiles').innerHTML=TL.map(t=>`<button class="tile${t[0]=='crop'?' on':''}" data-t="${t[0]}"><span><svg class="ic" aria-hidden="true"><use href="#i-${t[0]}"/></svg></span>${t[2]}</button>`).join('');
 function show(id){document.querySelectorAll('.pn').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('on',t.dataset.t===id));if(id==='ct')mk();scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('.tile').forEach(t=>t.onclick=()=>show(t.dataset.t));
 
@@ -296,17 +321,17 @@ $('fertF').innerHTML=fr('N','⚗️ سماد النيتروجين (معدني)',
  `<div class="sep">🌿 السماد العضوي</div><div class="f"><select id="orS">${opts(OR)}<option value="-1">يدوي</option></select></div>`+
  inp('orN','% N',0,.1)+inp('orP','% P₂O₅',0,.1)+inp('orK','% K₂O',0,.1)+inp('orT','المعدل (طن/وحدة)',10,1)+inp('orR','سعر الطن (ج)',0,100,'f')+
  `<div class="sep">🦠 المخصبات الحيوية</div><div class="f"><select id="bioS">${opts(BIO)}</select></div>`+inp('bioR','تكلفة الجرعة لكل وحدة (ج)',350,25,'f');
-[['N',FN],['P',FP],['K',FK]].forEach(([k,a])=>$('f'+k+'S').onchange=()=>{const x=a[+$('f'+k+'S').value];if(x){$('f'+k+'C').value=x[1];$('f'+k+'R').value=x[2]}run()});
-$('orS').onchange=()=>{const x=OR[+$('orS').value];if(x){['orN','orP','orK','orR'].forEach((id,i)=>$(id).value=x[i+1])}run()};
-$('bioS').onchange=()=>{const x=BIO[+$('bioS').value];$('bioR').value=x[4];run()};
+[['N',FN],['P',FP],['K',FK]].forEach(([k,a])=>$('f'+k+'S').onchange=()=>{const x=a[+$('f'+k+'S').value];if(x){$('f'+k+'C').value=x[1];$('f'+k+'R').value=x[2]}dirty()});
+$('orS').onchange=()=>{const x=OR[+$('orS').value];if(x){['orN','orP','orK','orR'].forEach((id,i)=>$(id).value=x[i+1])}dirty()};
+$('bioS').onchange=()=>{const x=BIO[+$('bioS').value];$('bioR').value=x[4];dirty()};
 
 $('gov').innerHTML='<option value="">كل الأصناف (عام / عالمي)</option>'+Object.keys(GOV).map(x=>`<option value="${x}">${x}</option>`).join('');
 $('crop').innerHTML=Object.entries(G).map(([gk,gn])=>`<optgroup label="${gn}">${Object.keys(C).filter(k=>C[k][1]===gk).map(k=>`<option value="${k}">${C[k][0]}</option>`).join('')}</optgroup>`).join('');
-$('gov').onchange=()=>{const gv=$('gov').value;if(gv)$('et0').value=GOV[gv][1];fillVr();run()};
-$('crop').onchange=()=>{fillVr();run()};
+$('gov').onchange=()=>{const gv=$('gov').value;if(gv)$('et0').value=GOV[gv][1];fillVr();dirty()};
+$('crop').onchange=()=>{fillVr();dirty()};
 
 // ===== الحساب والمحاولات (Firebase) =====
-let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login',AUTH_READY=false;
+let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login',AUTH_READY=false,RESULT_READY=false,DIRTY=false;
 function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
 function saveTrials(){if(window.NamaaAuth)NamaaAuth.setTrials(trials)}
 function authMsg(t,ok){$('aMsg').textContent=t||'';$('aMsg').style.color=ok?'var(--ok)':'var(--er)'}
@@ -347,7 +372,7 @@ window.onUser=(u,d,err)=>{
     return}
   USER=u;trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
   $('payMail').textContent=u.email||'';$('acctMail').textContent=u.email||u.displayName||'';$('acct').style.display='flex';$('mAuth').classList.remove('on');authMsg('');
-  authUI();badge();greet();run()};
+  authUI();badge();greet();staleUI()};
 
 // ===== قوام التربة (مثلث USDA — 12 قواماً) =====
 const L2=(a,e)=>lang==='ar'?a:e;
@@ -435,9 +460,9 @@ function updTex(){
   $('texLg').innerHTML=TEX.map(a=>`<i style="--c:${a[10]}">${a[3]} · ${L2(a[1],a[2])}</i>`).join('');
   drawTri(T0.n);return T0;
 }
-$('texPick').onchange=()=>{const t=TEX[TI[$('texPick').value]];if(!t)return;$('sand').value=t[4][0];$('silt').value=t[4][1];$('clay').value=t[4][2];fcManual=false;run()};
+$('texPick').onchange=()=>{const t=TEX[TI[$('texPick').value]];if(!t)return;$('sand').value=t[4][0];$('silt').value=t[4][1];$('clay').value=t[4][2];fcManual=false;dirty()};
 $('fc').addEventListener('input',()=>{fcManual=true});
-function triPick(e){const cv=$('tri'),r=cv.getBoundingClientRect(),sc=cv.width/r.width,px=(e.clientX-r.left)*sc,py=(e.clientY-r.top)*sc,Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)return;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)return;const a=Math.round(S*100),b=Math.round(Cl*100);$('sand').value=a;$('clay').value=b;$('silt').value=Math.max(0,100-a-b);fcManual=false;run()}
+function triPick(e){const cv=$('tri'),r=cv.getBoundingClientRect(),sc=cv.width/r.width,px=(e.clientX-r.left)*sc,py=(e.clientY-r.top)*sc,Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)return;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)return;const a=Math.round(S*100),b=Math.round(Cl*100);$('sand').value=a;$('clay').value=b;$('silt').value=Math.max(0,100-a-b);fcManual=false;dirty()}
 let tdown=false;
 $('tri').addEventListener('pointerdown',e=>{tdown=true;try{$('tri').setPointerCapture(e.pointerId)}catch(_){}triPick(e)});
 $('tri').addEventListener('pointermove',e=>{if(tdown)triPick(e)});
@@ -459,13 +484,18 @@ function vrChg(){$('vrC').style.display=$('vr').value==='__c'?'block':'none'}
 function vname(){return $('vr').value==='__c'?($('vrC').value.trim()||'—'):$('vr').value}
 $('vr').addEventListener('change',vrChg);
 function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<17?L2('نهارك سعيد','Good afternoon'):L2('مسائك خير','Good evening'))+' 👋 '+L2('أهلاً بك في قوت','Welcome to Qout')+(USER?' — '+(USER.displayName||(USER.email||'').split('@')[0]):'')}
-$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>run(),60)};
+$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>run(false,'refresh'),60)};
 {const t=store('nmTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}
 
 // ===== المحرك =====
-function run(click){
+function run(click,mode){
   if(!USER){if(click&&AUTH_READY)$('mAuth').classList.add('on');return}
-  if(!pro&&trials<=0){$('mPay').classList.add('on');return}
+  if(!click){
+    if(mode==='load'){}                              // فتح تقرير محفوظ: بدون خصم محاولة
+    else if(mode==='refresh'){if(!RESULT_READY||DIRTY)return}  // تغيير اللغة/المظهر: يعيد رسم نتيجة موجودة فقط
+    else return                                      // أي تعديل مُدخلات: لا نتائج
+  }
+  if(click&&!pro&&trials<=0){$('mPay').classList.add('on');return}
   const e=$('err'),bad=m=>{e.textContent='❌ '+m;e.style.display='block';show('res')};e.style.display='none';
   const v={};['area','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','prW','fNC','fNR','fPC','fPR','fKC','fKR','orN','orP','orK','orT','orR','bioR','caco3'].forEach(i=>v[i]=g(i));
   if(!(v.area>0))return bad('المساحة يجب أن تكون أكبر من صفر');
@@ -474,6 +504,7 @@ function run(click){
   const tex=updTex();if(!tex)return bad('أدخل نسب الرمل والسلت والطين (قيم موجبة).');
   if(v.fNC<=0||v.fPC<=0||v.fKC<=0)return bad('نسبة العنصر في السماد يجب أن تكون أكبر من صفر');
   if(click&&!pro){trials--;saveTrials();badge()}
+  RESULT_READY=true;DIRTY=false;staleUI();
 
   const key=$('crop').value,c=C[key],tol=c[5],slope=c[6],kc=c[7],days=c[8],zr=ZR[c[1]];
   const A=parseFloat($('unit').value),uf=A/4200.83,un=$('unit').selectedOptions[0].textContent,BD=tex.t[5];
@@ -494,6 +525,7 @@ function run(click){
   const dmm=Math.round(Math.max(0,v.fc-v.sm)*10*zr),taw=Math.max(0,v.fc-v.fc*tex.t[7]/tex.t[6])*10*zr,intv=ea>=.9?1:Math.max(1,Math.floor(taw*.5/etc));
   // الجبس: meq Ca/100g × 0.86 جم/كجم تربة، نقاوة 80%
   const soilKg=A*.2*BD*1000,gyp=v.esp>v.espT?Math.round(v.cec*(v.esp-v.espT)/100*.86*soilKg/1000/.8):0;
+  window.LASTCALC={v:Object.assign({},v),cname:c[0],tol,slope,kc,ec,SC,yr,sar,cC,sS,inf:inf[0],LR,lrf,etc,gross,ea,gyp,soilKg,un,wC};
 
   // صحة التربة
   const mDef=(v.fe<4.5)+(v.zn<1)+(v.mn<1);let s=100;
@@ -577,7 +609,7 @@ const FIELDS=['fname','gov','crop','area','unit','sand','silt','clay','caco3','v
 const hist=()=>{try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h:[]}catch(e){return[]}};
 function renderHist(){const h=hist();$('hl').innerHTML=h.length?h.map((x,i)=>`<li><b>${(C[x.c]||[])[0]||''}</b> · ${x.s}/100 · ${new Date(x.d).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')} · <a data-l="${i}">فتح</a> · <a data-d="${i}">✕</a></li>`).join(''):'<li>لا توجد تقارير محفوظة</li>'}
 $('hl').onclick=e=>{const a=e.target.closest('a');if(!a)return;const h=hist();
-  if(a.dataset.l!==undefined){const x=h[a.dataset.l];if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=x.v[f]});fcManual=true;fillVr();if(x.v.vr)$('vr').value=x.v.vr;vrChg();run();show('res')}}
+  if(a.dataset.l!==undefined){const x=h[a.dataset.l];if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=x.v[f]});fcManual=true;fillVr();if(x.v.vr)$('vr').value=x.v.vr;vrChg();run(false,'load');show('res')}}
   else if(a.dataset.d!==undefined){h.splice(a.dataset.d,1);store('agriHist',JSON.stringify(h));renderHist()}};
 $('save').onclick=()=>{if(!LAST)return;const v={vr:$('vr').value};FIELDS.forEach(f=>v[f]=$(f).value);const h=hist();h.unshift({d:Date.now(),c:$('crop').value,s:LAST.healthScore,v});store('agriHist',JSON.stringify(h.slice(0,12)));renderHist();toast('تم حفظ التقرير ✅')};
 $('csvB').onclick=()=>{if(!LAST)return;const csv='\ufeffParameter,Value\n'+Object.entries(LAST).map(([k,x])=>`${k},"${tx(String(x))}"`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='AgriSoil_'+Date.now()+'.csv';a.click()};
@@ -604,18 +636,57 @@ function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg
 ['ctType','ctName','ctMsg'].forEach(i=>$(i).addEventListener('input',mk));
 
 // ===== ربط الأحداث =====
-document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>run())});
-document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;run();toast('تم تطبيق النموذج')});
+document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>dirty())});
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;dirty();toast('تم تطبيق النموذج')});
 $('runb').onclick=()=>{run(true);show('res')};
 document.querySelectorAll('.modal:not(#mAuth)').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
 
 // ===== ربط اللغة =====
-const _run=run;run=function(c){_run(c);tr()};
+const _run=run;run=function(c,m){_run(c,m);tr()};
 const FN0={ar:'حقل التميز النموذجي',en:'Model Excellence Field'};
 function fnameLang(){const v=$('fname').value.trim();if(!v||v===FN0.ar||v===FN0.en)$('fname').value=FN0[lang]}
-function setLang(l){lang=l;authUI();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run()}
+function setLang(l){lang=l;authUI();if(window.howLabel)howLabel();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run(false,'refresh')}
 $('lang').value=lang;$('lang').onchange=e=>setLang(e.target.value);
-authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;run();
+
+// ===== كيف حُسبت النتائج =====
+function showHow(){
+  const Q=window.LASTCALC,B=$('howBody');
+  $('howH').textContent=L2('كيف حُسبت النتائج؟','How were the results calculated?');
+  if(!Q){B.innerHTML='<p>'+L2('شغّل التحليل أولاً ثم افتح هذه النافذة.','Run the analysis first, then open this window.')+'</p>';$('mHow').classList.add('on');return}
+  const v=Q.v,f=(x,d)=>(+x).toFixed(d===undefined?2:d);
+  const sec=(t,fm,src)=>`<div class="hw"><b>${t}</b><div class="fm">${fm}</div><small>${src}</small></div>`;
+  let h='';
+  h+=sec(L2('المحصول النسبي (ملوحة التربة) — '+Q.cname,'Relative yield (soil salinity) — '+Q.cname),
+    'Yr = 100 − b × (ECe − a)\n'+(Q.ec>Q.tol?`Yr = 100 − ${Q.slope} × (${Q.ec} − ${Q.tol}) = ${f(Q.yr,1)} %`:`ECe (${Q.ec}) ≤ a (${Q.tol})  →  Yr = 100 %`),
+    L2('a = حد تحمل المحصول، b = ميل الانخفاض. المصدر: Maas & Hoffman (1977) كما في FAO-29 والملحق A1 لـ FAO.','a = crop threshold, b = slope. Source: Maas & Hoffman (1977), as in FAO-29 and FAO Annex A1.'));
+  h+=sec('SAR',`SAR = Na ÷ √((Ca + Mg) ÷ 2)\nSAR = ${v.wNa} ÷ √((${v.wCa} + ${v.wMg}) ÷ 2) = ${f(Q.sar)}`,
+    L2('التركيزات بوحدة meq/L. المصدر: USDA Handbook 60.','Concentrations in meq/L. Source: USDA Handbook 60.'));
+  h+=sec(L2('تصنيف مياه الري (USSL) وخطر النفاذية','Water class (USSL) & infiltration hazard'),
+    `ECw = ${v.ecw} dS/m, SAR = ${f(Q.sar,1)}  →  ${Q.cC}-${Q.sS}\n${L2('خطر النفاذية','Infiltration hazard')}: ${Q.inf}`,
+    L2('حدود C وS من USDA Handbook 60، وخطر النفاذية من جدول FAO-29 (SAR مقابل ECw).','C and S limits from USDA Handbook 60; infiltration hazard from the FAO-29 table (SAR vs ECw).'));
+  h+=sec(L2('احتياج الغسيل LR','Leaching requirement LR'),
+    `LR = ECw ÷ (5 × ECe − ECw)\nLR = ${v.ecw} ÷ (5 × ${Q.tol} − ${v.ecw}) = ${f(Q.lrf*100,1)} %`,
+    L2('ECe = حد تحمل المحصول (محصول 100%). إذا كانت المياه أملح من الحد يظهر 100%. المصدر: Ayers & Westcot (FAO-29, 1985).','ECe = crop threshold (100% yield). If water is saltier than the limit the result is capped at 100%. Source: Ayers & Westcot (FAO-29, 1985).'));
+  h+=sec(L2('الاحتياج المائي','Irrigation requirement'),
+    `ETc = ET₀ × Kc = ${v.et0} × ${Q.kc} = ${f(Q.etc)} mm/day\n${L2('الاحتياج الكلي','Gross')} = ETc ÷ (Ea × (1 − LR)) = ${f(Q.etc)} ÷ (${Q.ea} × (1 − ${f(Math.min(.5,Q.lrf))})) = ${f(Q.gross)} mm/day`,
+    L2('ET₀ قيمة مُدخلة (تقريبية حسب المحافظة) فعدّلها لو عندك قياس محطة أرصاد. Kc لمنتصف الموسم من FAO-56. Ea = كفاءة نظام الري.','ET₀ is an input (approximate per governorate); edit it if you have a weather-station value. Kc is the mid-season value from FAO-56. Ea = irrigation efficiency.'));
+  h+=sec(L2('الجبس اللازم للإصلاح','Gypsum requirement'),
+    `${L2('كتلة التربة','Soil mass')} = ${Math.round(Q.soilKg).toLocaleString()} kg  (${L2('عمق 20 سم','depth 20 cm')})\nCEC × (ESP − ESPt) ÷ 100 = ${v.cec} × (${v.esp} − ${v.espT}) ÷ 100\n× 0.86 g/kg ÷ 0.8 = ${Q.gyp?Q.gyp.toLocaleString():0} kg / ${Q.un}`,
+    L2('1 meq/100 جم من الصوديوم يحتاج 0.86 جم/كجم جبس نقي (الوزن المكافئ 86)، ونقاوة الجبس المفترضة 80%.','1 meq/100 g Na needs 0.86 g/kg pure gypsum (equivalent weight 86); assumed gypsum purity is 80%.'));
+  h+=sec(L2('قوام التربة','Soil texture'),
+    L2('تصنيف نسب الرمل والسلت والطين بمثلث USDA','Sand/silt/clay classified on the USDA texture triangle'),
+    L2('المصدر: USDA-NRCS.','Source: USDA-NRCS.'));
+  h+='<div class="hw"><small>'+L2('النتائج استرشادية، وللقرار النهائي راجع مهندساً زراعياً أو نتائج معمل معتمد.','Results are indicative; for final decisions consult an agronomist or an accredited lab.')+'</small></div>';
+  B.innerHTML=h;$('mHow').classList.add('on');
+}
+$('howBtn').onclick=showHow;$('howX').onclick=()=>$('mHow').classList.remove('on');
+function dirty(){DIRTY=true;staleUI()}
+function staleUI(){const el=$('stale');if(!el)return;
+  if(!RESULT_READY){el.textContent=L2('اضغط «تشغيل التحليل الشامل» لعرض النتائج.','Press “Run full analysis” to see the results.');el.style.display='block'}
+  else if(DIRTY){el.textContent=L2('عدّلت المُدخلات — اضغط «تشغيل التحليل الشامل» لتحديث النتائج.','Inputs changed — press “Run full analysis” to update the results.');el.style.display='block'}
+  else el.style.display='none'}
+function howLabel(){$('howT').textContent=L2('كيف حُسبت النتائج؟','How were the results calculated?');staleUI()}
+howLabel();authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;
 setTimeout(()=>{if(!AUTH_READY){AUTH_READY=true;if(!USER)$('mAuth').classList.add('on')}},7000);
 
 </script>
