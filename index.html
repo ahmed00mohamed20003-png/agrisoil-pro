@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34' aria-hidden='true'%3E%3Cpath d='M17 31V13' stroke='%23E0A21A' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='17' cy='7' rx='3.5' ry='6' fill='%23E0A21A'/%3E%3Cellipse cx='11' cy='14' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(-28 11 14)'/%3E%3Cellipse cx='23' cy='14' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(28 23 14)'/%3E%3Cellipse cx='11' cy='23' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(-28 11 23)'/%3E%3Cellipse cx='23' cy='23' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(28 23 23)'/%3E%3C/svg%3E">
 <title>قوت | Qout — منصة التربة والمياه والأسمدة الذكية</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&family=Aref+Ruqaa:wght@700&family=Noto+Sans+Egyptian+Hieroglyphs&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DN3N51944"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-2DN3N51944');</script>
@@ -103,6 +103,12 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 .hw b{display:block;font-size:.92rem;margin-bottom:4px;color:var(--ac)}
 .fm{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;background:var(--in);border-radius:10px;padding:8px 10px;margin:6px 0;direction:ltr;text-align:left;overflow-x:auto;white-space:pre-wrap}
 .hw small{display:block;color:var(--mut);font-size:.72rem;line-height:1.6}
+
+.sp-cart{position:relative;display:none;direction:ltr;margin-top:8px;padding:2px 26px 2px 20px;border:2px solid #F5B83D;border-radius:999px;font-family:'Noto Sans Egyptian Hieroglyphs',serif;font-size:30px;line-height:1.5;letter-spacing:6px;color:#F5B83D;opacity:0;transform:scale(.85);animation:spcart .9s 2.3s cubic-bezier(.3,1.4,.5,1) forwards}
+.sp-cart.ok{display:block}
+.sp-cart::after{content:"";position:absolute;right:11px;top:18%;height:64%;width:2px;background:#F5B83D;border-radius:2px}
+@keyframes spcart{to{opacity:.95;transform:none}}
+.sp-tag{animation-delay:3s}
 </style>
 </head>
 <body>
@@ -124,7 +130,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 <g class="sp-g a"><g transform="rotate(-28 11 23)"><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#F5B83D"/></g><g transform="rotate(28 23 23)"><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#F5B83D"/></g></g>
 <g class="sp-g b"><g transform="rotate(-28 11 14)"><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#F5B83D"/></g><g transform="rotate(28 23 14)"><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#F5B83D"/></g></g>
 <g class="sp-g c"><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#F5B83D"/></g></svg>
-<div class="sp-name">قوت</div><div class="sp-tag">QOUT · SMART AGRI</div>
+<div class="sp-name">قوت</div><div class="sp-cart" id="spCart" aria-hidden="true">&#x1320E;&#x13171;&#x133CF;</div><div class="sp-tag">QOUT · SMART AGRI</div>
 </div></div>
 <div class="wrap">
 <section class="hero">
@@ -460,9 +466,10 @@ function updTex(){
   $('texLg').innerHTML=TEX.map(a=>`<i style="--c:${a[10]}">${a[3]} · ${L2(a[1],a[2])}</i>`).join('');
   drawTri(T0.n);return T0;
 }
-$('texPick').onchange=()=>{const t=TEX[TI[$('texPick').value]];if(!t)return;$('sand').value=t[4][0];$('silt').value=t[4][1];$('clay').value=t[4][2];fcManual=false;dirty()};
+$('texPick').onchange=()=>{const t=TEX[TI[$('texPick').value]];if(!t)return;$('sand').value=t[4][0];$('silt').value=t[4][1];$('clay').value=t[4][2];fcManual=false;updTex();dirty()};
 $('fc').addEventListener('input',()=>{fcManual=true});
-function triPick(e){const cv=$('tri'),r=cv.getBoundingClientRect(),sc=cv.width/r.width,px=(e.clientX-r.left)*sc,py=(e.clientY-r.top)*sc,Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)return;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)return;const a=Math.round(S*100),b=Math.round(Cl*100);$('sand').value=a;$('clay').value=b;$('silt').value=Math.max(0,100-a-b);fcManual=false;dirty()}
+['sand','silt','clay'].forEach(id=>$(id).addEventListener('input',updTex));
+function triPick(e){const cv=$('tri'),r=cv.getBoundingClientRect(),sc=cv.width/r.width,px=(e.clientX-r.left)*sc,py=(e.clientY-r.top)*sc,Cl=1-(py-TG.top)/TG.H;if(Cl<0||Cl>1)return;const Si=(px-TG.x0-Cl*TG.L/2)/TG.L,S=1-Cl-Si;if(Si<0||S<0)return;const a=Math.round(S*100),b=Math.round(Cl*100);$('sand').value=a;$('clay').value=b;$('silt').value=Math.max(0,100-a-b);fcManual=false;updTex();dirty()}
 let tdown=false;
 $('tri').addEventListener('pointerdown',e=>{tdown=true;try{$('tri').setPointerCapture(e.pointerId)}catch(_){}triPick(e)});
 $('tri').addEventListener('pointermove',e=>{if(tdown)triPick(e)});
@@ -484,7 +491,7 @@ function vrChg(){$('vrC').style.display=$('vr').value==='__c'?'block':'none'}
 function vname(){return $('vr').value==='__c'?($('vrC').value.trim()||'—'):$('vr').value}
 $('vr').addEventListener('change',vrChg);
 function greet(){const h=new Date().getHours();$('greet').textContent=(h<12?L2('صباح الخير','Good morning'):h<17?L2('نهارك سعيد','Good afternoon'):L2('مسائك خير','Good evening'))+' 👋 '+L2('أهلاً بك في قوت','Welcome to Qout')+(USER?' — '+(USER.displayName||(USER.email||'').split('@')[0]):'')}
-$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>run(false,'refresh'),60)};
+$('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.setAttribute('data-theme',t);store('nmTheme',t);setTimeout(()=>{updTex();run(false,'refresh')},60)};
 {const t=store('nmTheme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}
 
 // ===== المحرك =====
@@ -637,7 +644,7 @@ function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg
 
 // ===== ربط الأحداث =====
 document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>dirty())});
-document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;dirty();toast('تم تطبيق النموذج')});
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;updTex();dirty();toast('تم تطبيق النموذج')});
 $('runb').onclick=()=>{run(true);show('res')};
 document.querySelectorAll('.modal:not(#mAuth)').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
 
@@ -645,7 +652,7 @@ document.querySelectorAll('.modal:not(#mAuth)').forEach(m=>m.addEventListener('c
 const _run=run;run=function(c,m){_run(c,m);tr()};
 const FN0={ar:'حقل التميز النموذجي',en:'Model Excellence Field'};
 function fnameLang(){const v=$('fname').value.trim();if(!v||v===FN0.ar||v===FN0.en)$('fname').value=FN0[lang]}
-function setLang(l){lang=l;authUI();if(window.howLabel)howLabel();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}run(false,'refresh')}
+function setLang(l){lang=l;authUI();if(window.howLabel)howLabel();greet();fnameLang();store('agriLang',l);tr.dirty=true;const vi=$('vr').selectedIndex;tr();renderHist();if(l==='ar'){fillVr();$('vr').selectedIndex=vi}updTex();run(false,'refresh')}
 $('lang').value=lang;$('lang').onchange=e=>setLang(e.target.value);
 
 // ===== كيف حُسبت النتائج =====
@@ -686,14 +693,15 @@ function staleUI(){const el=$('stale');if(!el)return;
   else if(DIRTY){el.textContent=L2('عدّلت المُدخلات — اضغط «تشغيل التحليل الشامل» لتحديث النتائج.','Inputs changed — press “Run full analysis” to update the results.');el.style.display='block'}
   else el.style.display='none'}
 function howLabel(){$('howT').textContent=L2('كيف حُسبت النتائج؟','How were the results calculated?');staleUI()}
-howLabel();authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;
+howLabel();authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;updTex();tr();
 setTimeout(()=>{if(!AUTH_READY){AUTH_READY=true;if(!USER)$('mAuth').classList.add('on')}},7000);
 
 </script>
 <script>
 (function(){var s=document.getElementById('splash');if(!s)return;var done=false;
 function hide(){if(done)return;done=true;s.classList.add('out');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},800)}
-s.onclick=hide;setTimeout(hide,3600)})();
+s.onclick=hide;setTimeout(hide,4600);
+ try{document.fonts.load('30px "Noto Sans Egyptian Hieroglyphs"','\u{1320E}\u{13171}\u{133CF}').then(function(f){if(f&&f.length){var c=document.getElementById('spCart');if(c)c.classList.add('ok')}})}catch(e){}})();
 </script>
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
@@ -735,6 +743,7 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
+
 
 
 
