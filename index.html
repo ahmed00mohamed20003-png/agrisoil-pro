@@ -953,6 +953,7 @@ async function revGeo(lat,lon){
   if(c&&c.k===k&&c.l===lang&&c.a)return c.a;
   let a=null;try{a=await revNom(lat,lon)}catch(e){}
   if(!a)try{a=await revBDC(lat,lon)}catch(e){}
+  else if(!a.markaz&&!a.place)try{const b=await revBDC(lat,lon);a.place=b.place||''}catch(e){}
   if(a)store('agriGeo',JSON.stringify({k,l:lang,a}));
   return a}
 async function getWx(lat,lon){
@@ -986,7 +987,9 @@ function locUI(){
     h+=ch(L2('الدولة','Country'),ad.country)+ch(L2('المحافظة / الولاية','Governorate / State'),gv)+ch(L2('المركز / القسم','District'),ad.markaz)+ch(L2('المدينة / القرية','City / Village'),ad.place);
   }
   h+=`<span class="chip" dir="ltr">${LOC.lat.toFixed(5)}, ${LOC.lon.toFixed(5)}${LOC.acc?' · ±'+Math.round(LOC.acc)+' m':''}</span><a class="chip" href="https://www.google.com/maps?q=${LOC.lat},${LOC.lon}" target="_blank" rel="noopener noreferrer">🗺️ ${L2('افتح في خرائط جوجل','Open in Google Maps')}</a>`;
+  if(LOC.alt)h+=`<button class="sec" id="locAlt" style="min-height:34px;padding:4px 12px;font-size:.78rem">🔁 ${L2('اختر '+gname(LOC.alt)+' بدلاً منها','Use '+gname(LOC.alt)+' instead')}</button>`;
   A.innerHTML=h;A.style.display='flex';
+  if(LOC.alt)$('locAlt').onclick=()=>{const o=LOC.gov;LOC.gov=LOC.alt;LOC.alt=o;$('gov').value=LOC.gov;$('gov').onchange();locMsg(L2('تم تبديل المحافظة إلى '+gname(LOC.gov)+'.','Governorate switched to '+gname(LOC.gov)+'.'),'ok');locUI()};
   wxRender()}
 function wxRender(){
   const B=$('wxBox');if(!WX){B.style.display='none';B.innerHTML='';return}
@@ -1001,8 +1004,26 @@ function wxRender(){
   h+=`<p class="wxAt">${L2('بيانات الطقس: ','Weather data: ')}<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo.com</a> (CC BY 4.0) · ${L2('رطوبة التربة وET₀ قيم نموذجية تقديرية وليست قياساً حقلياً. العناوين: ','Soil moisture and ET₀ are model estimates, not field measurements. Addresses: ')}© OpenStreetMap contributors</p>`;
   B.innerHTML=h;B.style.display='block';
   $('wxApply').onclick=()=>{if(WX.et0!=null)$('et0').value=WX.et0;if(WX.sm!=null)$('sm').value=WX.sm;dirty();toast(L2('تم تطبيق ET₀ ورطوبة التربة ✅','ET₀ and soil moisture applied ✅'))}}
-function applyGovLoc(){const A=LOC&&LOC.addr;LOC.gov='';if(!A)return;
-  if(A.cc==='EG'){const g=matchGov(A.cands);if(g){LOC.gov=g;$('gov').value=g;$('gov').onchange()}}
+// تحديد المحافظة من حدود الخريطة المدمجة (إسقاط خط الطول/العرض على إحداثيات الـSVG) للمقارنة مع خدمة العناوين
+let _PG=null;
+function polyG(lat,lon){
+  if(!_PG){_PG={};for(const g in MAPD)_PG[g]=MAPD[g].d.split('Z').map(sb=>{const r=[],re=/[ML]([-\d.]+),([-\d.]+)/g;let m;while((m=re.exec(sb)))r.push([+m[1],+m[2]]);return r}).filter(q=>q.length>2)}
+  const x=16.8+88.097*(lon-24.6),y=34.4+99.814*(31.67-lat);
+  const ins=q=>{let c=false;for(let i=0,j=q.length-1;i<q.length;j=i++){const a=q[i],b=q[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c}return c};
+  let hit=null;for(const g in _PG)if(_PG[g].some(ins)){hit=g;break}
+  if(!hit)return null;
+  let best=1e9,o=null;
+  for(const g in _PG){if(g===hit)continue;for(const q of _PG[g])for(let i=0,j=q.length-1;i<q.length;j=i++){
+    const a=q[i],b=q[j],dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1))),d=Math.hypot(x-(a[0]+t*dx),y-(a[1]+t*dy));
+    if(d<best){best=d;o=g}}}
+  return{g:hit,o,km:best*1.1}}
+function applyGovLoc(){const A=LOC&&LOC.addr;LOC.gov='';LOC.alt=null;LOC.near=null;
+  const pg=polyG(LOC.lat,LOC.lon),inEG=A?A.cc==='EG':!!pg;
+  if(inEG){
+    const gg=A?matchGov(A.cands):null;
+    if(pg&&gg&&pg.g!==gg){LOC.gov=pg.g;LOC.alt=gg;LOC.near=pg}
+    else{LOC.gov=gg||(pg&&pg.g)||'';if(pg&&LOC.gov===pg.g&&pg.km<3)LOC.near=pg}
+    if(LOC.gov){$('gov').value=LOC.gov;$('gov').onchange()}}
   else if($('gov').value){$('gov').value='';$('gov').onchange()}}
 async function locate(){
   if(LBUSY)return;
@@ -1020,7 +1041,8 @@ async function locate(){
     if(!LOC.addr&&!WX)locMsg(L2('تعذر جلب العنوان والطقس — تحقق من الإنترنت وحاول مرة أخرى.','Could not fetch address and weather — check your connection and retry.'),'er');
     else if(!WX)locMsg(L2('تم تحديد العنوان لكن تعذر جلب الطقس.','Address found but weather is unavailable.'),'wn');
     else if(!LOC.addr)locMsg(L2('تم جلب الطقس لكن تعذر تحديد العنوان.','Weather loaded but the address could not be determined.'),'wn');
-    else if(LOC.gov)locMsg(L2('تم اختيار محافظة '+gname(LOC.gov)+' تلقائياً وتحديث الأصناف.','Governorate '+gname(LOC.gov)+' selected automatically and varieties updated.'),'ok');
+    else if(LOC.alt)locMsg(L2('⚠️ اختلاف في المحافظة: حدود الخريطة تقول '+gname(LOC.gov)+' وخدمة العناوين تقول '+gname(LOC.alt)+' — أنت على بُعد ≈'+LOC.near.km.toFixed(1)+' كم من الحد. اخترت '+gname(LOC.gov)+'، ولو غير صحيحة اضغط الزر لتبديلها.','⚠️ Governorate mismatch: the map borders say '+gname(LOC.gov)+' and the address service says '+gname(LOC.alt)+' — you are ≈'+LOC.near.km.toFixed(1)+' km from the border. I selected '+gname(LOC.gov)+'; if wrong, tap the button to switch.'),'wn');
+    else if(LOC.gov)locMsg(L2('تم اختيار محافظة '+gname(LOC.gov)+' تلقائياً وتحديث الأصناف.'+(LOC.near?' ملحوظة: أنت على بُعد ≈'+LOC.near.km.toFixed(1)+' كم من حدود '+gname(LOC.near.o)+' — راجع المحافظة.':''),'Governorate '+gname(LOC.gov)+' selected automatically and varieties updated.'+(LOC.near?' Note: you are ≈'+LOC.near.km.toFixed(1)+' km from the '+gname(LOC.near.o)+' border — double-check.':'')),LOC.near?'wn':'ok');
     else if(LOC.addr.cc==='EG')locMsg(L2('لم أستطع مطابقة المحافظة بالقائمة — اخترها يدوياً.','Could not match the governorate to the list — please select it manually.'),'wn');
     else locMsg(L2('أنت خارج مصر: استُخدم الطقس وET₀ لموقعك، والأصناف عامة. ثبّت المحصول والتربة يدوياً.','You are outside Egypt: weather and ET₀ are for your location and varieties are general. Set crop and soil manually.'),'ok');
   }catch(e){
