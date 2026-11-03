@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://*.firebaseapp.com https://accounts.google.com https://*.google.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.open-meteo.com https://nominatim.openstreetmap.org https://api.bigdatacloud.net; frame-src https://*.firebaseapp.com https://accounts.google.com https://*.google.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>if(location.protocol==="http:"&&!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname))location.replace("https://"+location.host+location.pathname+location.search+location.hash)</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -16,7 +16,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34' aria-hidden='true'%3E%3Cpath d='M17 31V13' stroke='%23E0A21A' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='17' cy='7' rx='3.5' ry='6' fill='%23E0A21A'/%3E%3Cellipse cx='11' cy='14' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(-28 11 14)'/%3E%3Cellipse cx='23' cy='14' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(28 23 14)'/%3E%3Cellipse cx='11' cy='23' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(-28 11 23)'/%3E%3Cellipse cx='23' cy='23' rx='3' ry='5.5' fill='%23E0A21A' transform='rotate(28 23 23)'/%3E%3C/svg%3E">
 <title>قوت | Qout — منصة التربة والمياه والأسمدة الذكية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&family=Aref+Ruqaa:wght@700&family=Noto+Sans+Egyptian+Hieroglyphs&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8EEVCH7S2H"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-8EEVCH7S2H');</script>
 <style>
@@ -159,6 +159,9 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 .mrow .mn{color:var(--mut);font-size:.7rem}.mb{height:12px;background:var(--in);border-radius:6px;overflow:hidden;display:block}.mb i{display:block;height:100%;background:var(--c);border-radius:6px}.mv{font-weight:700;text-align:end}.mrow small{color:var(--mut);font-size:.68rem}
 @media(max-width:480px){.mrow{grid-template-columns:22px 1fr 1.1fr 36px}.mrow small{display:none}}
 .tile.wide{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:12px;min-height:62px}.tile.wide span{margin:0}.tile.wide .ic{margin:0}
+.locRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.locRow .chip small{color:var(--mut);margin-inline-end:4px}.locRow .chip b{color:var(--ac)}.locRow a.chip{color:var(--ac);text-decoration:none;font-weight:700}
+.wxHead{display:flex;align-items:center;gap:12px;margin:14px 0 8px}.wxHead .em{font-size:2.6rem;line-height:1}.wxHead b{font-size:1.6rem;display:block;line-height:1.1}.wxHead small{color:var(--mut);font-size:.78rem}
+.wxAt{font-size:.66rem;color:var(--mut);margin:10px 0 0;line-height:1.7}.wxAt a{color:var(--ac)}
 </style>
 </head>
 <body>
@@ -210,7 +213,9 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 
 <div class="tiles" id="tiles"></div>
 
-<div class="pn on" id="p-crop"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-crop"/></svg>المحافظة والمحصول</h3><div class="g2">
+<div class="pn on" id="p-crop"><div class="card" id="locCard"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-map"/></svg><span id="locT"></span></h3>
+  <button id="locBtn" style="width:100%"></button><div id="locMsg" class="badge" style="display:none"></div><div id="locAddr" class="locRow" style="display:none"></div><div id="wxBox" style="display:none"></div></div>
+<div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-crop"/></svg>المحافظة والمحصول</h3><div class="g2">
   <div class="f"><label>اسم الحقل / المالك</label><input id="fname" maxlength="80" value="حقل التميز النموذجي"></div>
   <div class="f"><label>المحافظة (تحدد الأصناف المناسبة ومعدل ET₀)</label><select id="gov"></select></div>
   <div class="f"><label>المحصول (40 محصولاً)</label><select id="crop"></select></div>
@@ -301,17 +306,17 @@ const ZR={cer:.9,leg:.7,ind:.9,fod:1,veg:.6,fru:1.2};
 // [الاسم, المجموعة, N, P, K (ppm مستهدف), تحمل EC, ميل الانخفاض, Kc, أيام الموسم, أصناف: الاسم:المناطق[:محافظات بعينها مفصولة بـ |]]
 // المناطق: N شمال الدلتا · M وسط وجنوب الدلتا · F مصر الوسطى · U الصعيد · R أراضٍ جديدة · C ساحل وسيناء
 const C={
-wheat:['القمح','cer',40,25,180,6,7.1,1.15,150,'مصر 3:NMFUR;مصر 4:NMFUR;مصر 5:NMFUR;جيزة 171:NMFUR;سخا 95:NMFUR;سخا 96:NMFUR;سخا 97:NMFUR;سدس 15:NMFUR;مصر 1:UR;سدس 12:U;سدس 14:U;بني سويف 5:F;بني سويف 7:F;سوهاج 5:FU;سوهاج 6:FU;جميزة 11:NMFU;جميزة 12:NMFUR'],
-barley:['الشعير','cer',40,25,170,8,5,1.15,140,'جيزة 123:NMFU;جيزة 124:NMFUC;جيزة 126:NMFUC;جيزة 130:CR;جيزة 131:NMFUR;جيزة 132:CR;جيزة 138:FUR;جيزة 2000:NMFUR'],
-maize:['الذرة الشامية','cer',55,30,200,1.7,12,1.2,120,'هجين فردي 128:NMFU;هجين فردي 130:NMFU;هجين فردي 162:NMFU;هجين فردي 168:NMFU;هجين فردي 176:NMFU;هجين ثلاثي 321:NMFUR;هجين ثلاثي 322:NMFUR;هجين ثلاثي 323:NMFUR;هجين ثلاثي 324:NMFUR;هجين ثلاثي 327:NMFUR;هجين ثلاثي 329:NMFUR'],
-rice:['الأرز','cer',50,25,150,3,12,1.2,135,'جيزة 177:NMC;جيزة 178:NMCR;جيزة 179:NMC;سخا 101:NMC;سخا 102:NMC;سخا 104:NMCR;سخا 105:NMC;سخا 106:NMC;سخا 107:NMC;سخا 108:NMCR;سخا 109:NR;سخا سوبر 300:NMCR;هجين مصري 1:NM;هجين مصري 2:R;هجين مصري 3:R'],
-sorghum:['الذرة الرفيعة','cer',45,25,170,6.8,16,1,120,'جيزة 15:FUR;دورادو:MFUR;بلدي:MFU'],
+wheat:['القمح','cer',40,25,180,6,7.1,1.15,150,'مصر 3::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;مصر 4::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;مصر 5::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;جيزة 171::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سخا 95::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سخا 96::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سخا 97::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سدس 15::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|الجيزة|القاهرة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;مصر 1::أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سدس 12::أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سدس 14::أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;بني سويف 5::الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;بني سويف 7::الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سوهاج 5::الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر;سوهاج 6::الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد|شمال سيناء|جنوب سيناء|مطروح|البحر الأحمر'],
+barley:['الشعير','cer',40,25,170,8,5,1.15,140,'جيزة 123:NMFUR;جيزة 124:FUR;جيزة 125:C;جيزة 126:C;جيزة 127:R;جيزة 128:R;جيزة 129:UR;جيزة 130:NMFURC;جيزة 131:NMFURC;جيزة 132:CR;جيزة 135:NMFURC;جيزة 136:NMFURC;جيزة 138:FUR;جيزة 2000:NMFURC'],
+maize:['الذرة الشامية','cer',55,30,200,1.7,12,1.2,120,'هجين فردي 122:NMFUR;هجين فردي 123:NMFUR;هجين فردي 124:NMFUR;هجين فردي 125:NMFUR;هجين فردي 126:NMFUR;هجين فردي 127:NMFUR;هجين فردي 128:NMFU;هجين فردي 129:NMFUR;هجين فردي 130:NMFU;هجين فردي 131:NMFUR;هجين فردي 132:NMFUR;هجين فردي 162:NMFU;هجين فردي 164:NMFUR;هجين فردي 166:NMFUR;هجين فردي 168:NMFU;هجين فردي 169:NMFUR;هجين فردي 173:NMFUR;هجين فردي 176:NMFU;هجين فردي 183:NMFUR;هجين ثلاثي 310:NMFUR;هجين ثلاثي 311:NMFUR;هجين ثلاثي 314:NMFUR;هجين ثلاثي 320:NMFUR;هجين ثلاثي 321:NMFUR;هجين ثلاثي 322:NMFUR;هجين ثلاثي 323:NMFUR;هجين ثلاثي 324:NMFUR;هجين ثلاثي 325:NMFUR;هجين ثلاثي 327:NMFUR;هجين ثلاثي 329:NMFUR;هجين ثلاثي 351:NMFUR;هجين ثلاثي 352:NMFUR;هجين ثلاثي 354:NMFUR;هجين ثلاثي 360:NMFUR;هجين ثلاثي 368:NMFUR;هجين ثلاثي 370:NMFUR;هجين ثلاثي 378:NMFUR;سوبر سويت 110:NMFUR;ماستر سويت 111:NMFUR;إكسترا بوب 101:NMFUR;إكسترا بوب 102:NMFUR'],
+rice:['الأرز','cer',50,25,150,3,12,1.2,135,'جيزة 177:NMC;جيزة 178:NMCR;جيزة 179:NMC;جيزة 181:NMC;جيزة 182:NMC;ياسمين المصري:NMC;سخا 101:NMC;سخا 102:NMC;سخا 103:NMC;سخا 104:NMCR;سخا 105:NMC;سخا 106:NMC;سخا 107:NMC;سخا 108:NMCR;سخا 109:NR;سخا سوبر 300:NMCR;سخا سوبر 301:NMCR;سخا سوبر 302:NMCR;سخا سوبر 303:NMCR;هجين مصري 1:NM;هجين مصري 2:R;هجين مصري 3:R'],
+sorghum:['الذرة الرفيعة','cer',45,25,170,6.8,16,1,120,'جيزة 15:FUR;جيزة 113:FUR;دورادو:MFUR;هجين شندويل 1:FUR;هجين شندويل 2:FUR;هجين شندويل 6:FUR;بلدي:MFU'],
 oat:['الشوفان','cer',40,20,160,6,8.6,1.15,130,'صنف علفي قياسي:NMFUR'],
-faba:['الفول البلدي','leg',20,25,170,1.6,9.6,1.15,150,'سخا 1:NMF;جيزة 716:NM;جيزة 843:NMF;مصر 1:MFU;جيزة بلانكا:NMFR;نوبارية 1:R;نوبارية 2:R;نوبارية 3:R'],
+faba:['الفول البلدي','leg',20,25,170,1.6,9.6,1.15,150,'جيزة 716::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة|الجيزة|الفيوم|بني سويف|المنيا|أسيوط;جيزة 843::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة|الجيزة|الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد;سخا 1::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة|الفيوم;سخا 4::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة;نوبارية 1::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة;نوبارية 2::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة;نوبارية 3::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة;نوبارية 4::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة;نوبارية 5::بورسعيد|الإسماعيلية|السويس|دمياط|الدقهلية|الشرقية|الغربية|كفر الشيخ|البحيرة|الإسكندرية|المنوفية|القليوبية|القاهرة;مصر 1::الفيوم|بني سويف|المنيا|أسيوط|سوهاج|قنا|الأقصر|أسوان|الوادي الجديد;وادي 1::سوهاج|قنا|الأقصر|أسوان|الوادي الجديد'],
 soybean:['فول الصويا','leg',30,30,180,5,20,1.15,125,'جيزة 35:NMFU;جيزة 82:NMFU;جيزة 111:NMFU;كريمسون:FUR'],
 peanut:['الفول السوداني','leg',25,30,170,3.2,29,1.15,120,'جيزة 6:NMR;جيزة 5:R'],
-lentil:['العدس','leg',20,25,160,1.5,12,1.1,130,'سخا 1:FU;جيزة 4:FU;جيزة 9:FU;جيزة 51:FU'],
-chickpea:['الحمص','leg',20,25,160,1.7,12,1,130,'جيزة 195:FU;جيزة 3:FUR'],
+lentil:['العدس','leg',20,25,160,1.5,12,1.1,130,'سخا 1:FU;جيزة 4:FU;جيزة 9:NMFU;جيزة 51:NMFU;جيزة 370:NM;سيناء 1:CR;بريكوز:C'],
+chickpea:['الحمص','leg',20,25,160,1.7,12,1,130,'جيزة 1:FU;جيزة 2:FU;جيزة 3:FUR;جيزة 4:FUR;جيزة 88:FUR;جيزة 195:FUR;جيزة 531:FUR'],
 cotton:['القطن','ind',50,30,200,7.7,5.2,1.15,200,'إكسترا جيزة 92:N:دمياط;إكسترا جيزة 96:N:كفر الشيخ;سوبر جيزة 86:NR:البحيرة|الإسكندرية;سوبر جيزة 94:NM:الدقهلية|الشرقية|بورسعيد|الإسماعيلية|كفر الشيخ|الغربية;سوبر جيزة 97:M:القليوبية|المنوفية|البحيرة|الغربية;جيزة 95:F:بني سويف;جيزة 98:FUR:الفيوم|المنيا|أسيوط|سوهاج|الوادي الجديد|قنا|الأقصر'],
 sugarbeet:['بنجر السكر','ind',60,30,220,7,5.9,1.2,190,'صنف متعدد الأجنة مستورد:NMCR'],
 sugarcane:['قصب السكر','ind',70,35,250,1.7,5.9,1.25,330,'GT 54-9:FUR;G 2003-47:FUR;G 2004-27:FUR;G 99-103:FUR;G 98-28:FUR'],
@@ -552,6 +557,8 @@ function fillVr(){
   else if(gv)note='أصناف منطقة: '+[...rg].map(ch=>REG[ch]).join(' + ');
   if(cr==='cotton')note+=(note?' · ':'')+'القطن: الأصناف حسب القرار الوزاري لكل محافظة.';
   if(cr==='rice')note+=(note?' · ':'')+'زراعة الأرز مقصورة على المناطق المصرح بها من وزارة الري.';
+  if(cr==='wheat')note+=(note?' · ':'')+'المصدر: السياسة الصنفية لمحصول القمح موسم 2026/2027 (معهد بحوث المحاصيل الحقلية). سخا 96 مبكر النضج ويفضّل زراعته متأخراً بعد الخضر وقصب السكر.';
+  if(cr==='faba')note+=(note?' · ':'')+'أنسب ميعاد للزراعة: الدلتا 10–20 نوفمبر، الجيزة والفيوم 30 أكتوبر–20 نوفمبر، مصر الوسطى 15 أكتوبر–10 نوفمبر، الصعيد 10–30 أكتوبر.';
   $('vr').innerHTML=list.map(x=>`<option value="${x.n}">${x.n}</option>`).join('')+'<option value="__c">صنف آخر (اكتبه)</option>';
   $('vnote').textContent=note;vrChg();
 }
@@ -912,6 +919,125 @@ function staleUI(){const rc=$('texK')&&$('texK').parentNode;if(rc)rc.style.displ
   else el.style.display='none'}
 function howLabel(){$('howT').textContent=L2('كيف حُسبت النتائج؟','How were the results calculated?');staleUI()}
 
+// ===== الموقع الجغرافي والطقس (Open-Meteo + عنوان من OpenStreetMap/BigDataCloud) =====
+// ملاحظة ترخيص: واجهة Open-Meteo المجانية للاستخدام غير التجاري فقط — للتطبيق المدفوع اشترك في خطتهم التجارية (نفس الصيغة + مفتاح).
+const escH=x=>String(x).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const nz=x=>String(x||'').toLowerCase().replace(/[ً-ْـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/محافظه/g,' ').replace(/governorate|province|muhafazat|muhafazah/g,' ').replace(/[^a-z؀-ۿ ]/g,' ').replace(/\s+/g,' ').trim();
+const GALIAS={'cairo':'القاهرة','giza':'الجيزة','al jizah':'الجيزة','qalyubia':'القليوبية','qalyubiyya':'القليوبية','kalyoubia':'القليوبية','al qalyubiyah':'القليوبية','alexandria':'الإسكندرية','al iskandariyah':'الإسكندرية','beheira':'البحيرة','buhayrah':'البحيرة','al buhayrah':'البحيرة','gharbia':'الغربية','gharbiyya':'الغربية','al gharbiyah':'الغربية','kafr el sheikh':'كفر الشيخ','kafr ash shaykh':'كفر الشيخ','dakahlia':'الدقهلية','daqahliyya':'الدقهلية','ad daqahliyah':'الدقهلية','damietta':'دمياط','dumyat':'دمياط','sharqia':'الشرقية','ash sharqiyah':'الشرقية','sharkia':'الشرقية','monufia':'المنوفية','menofia':'المنوفية','minufiyah':'المنوفية','al minufiyah':'المنوفية','port said':'بورسعيد','bur said':'بورسعيد','ismailia':'الإسماعيلية','al isma iliyah':'الإسماعيلية','al ismailiyah':'الإسماعيلية','suez':'السويس','as suways':'السويس','north sinai':'شمال سيناء','shamal sina':'شمال سيناء','south sinai':'جنوب سيناء','janub sina':'جنوب سيناء','matrouh':'مطروح','matruh':'مطروح','faiyum':'الفيوم','fayoum':'الفيوم','al fayyum':'الفيوم','beni suef':'بني سويف','bani suwayf':'بني سويف','minya':'المنيا','menia':'المنيا','al minya':'المنيا','asyut':'أسيوط','assiut':'أسيوط','sohag':'سوهاج','suhag':'سوهاج','qena':'قنا','luxor':'الأقصر','al uqsur':'الأقصر','aswan':'أسوان','red sea':'البحر الأحمر','al bahr al ahmar':'البحر الأحمر','new valley':'الوادي الجديد','al wadi al jadid':'الوادي الجديد'};
+const GN={};Object.keys(GOV).forEach(k=>GN[nz(k)]=k);Object.keys(GALIAS).forEach(k=>GN[nz(k)]=GALIAS[k]);
+function matchGov(list){
+  const keys=Object.keys(GN).sort((a,b)=>b.length-a.length);
+  for(const raw of list){const n=nz(raw);if(!n)continue;
+    if(GN[n])return GN[n];
+    const n2=n.replace(/^al /,'');if(GN[n2])return GN[n2];}
+  for(const raw of list){const n=nz(raw);if(n.length<4)continue;const k=keys.find(x=>x.length>=4&&n.includes(x));if(k)return GN[k]}
+  return null}
+function wxInfo(c){c=+c;
+  if(c===0)return['☀️','صافٍ','Clear'];if(c<=2)return['⛅','غائم جزئياً','Partly cloudy'];if(c===3)return['☁️','غائم','Overcast'];
+  if(c<=48)return['🌫️','ضباب','Fog'];if(c<=57)return['🌦️','رذاذ','Drizzle'];if(c<=67)return['🌧️','مطر','Rain'];
+  if(c<=77)return['❄️','ثلج','Snow'];if(c<=82)return['🌧️','زخات مطر','Showers'];if(c<=86)return['🌨️','زخات ثلج','Snow showers'];
+  return['⛈️','عاصفة رعدية','Thunderstorm']}
+async function jf(url,ms){const ac=new AbortController(),t=setTimeout(()=>ac.abort(),ms||10000);
+  try{const r=await fetch(url,{signal:ac.signal,headers:{Accept:'application/json'}});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(t)}}
+const rdJ=k=>{try{return JSON.parse(store(k)||'null')}catch(e){return null}};
+async function revNom(lat,lon){
+  const r=await jf('https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=14&lat='+lat+'&lon='+lon+'&accept-language='+(lang==='ar'?'ar,en':'en'));
+  const a=r.address;if(!a)return null;
+  return{cc:(a.country_code||'').toUpperCase(),country:a.country||'',state:a.state||a.region||'',markaz:a.county||a.state_district||a.city_district||'',place:a.village||a.town||a.city||a.suburb||a.hamlet||a.neighbourhood||'',cands:[a.state,a.region,a.state_district,a.county]}}
+async function revBDC(lat,lon){
+  const r=await jf('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lon+'&localityLanguage='+(lang==='ar'?'ar':'en'));
+  const adm=((r.localityInfo&&r.localityInfo.administrative)||[]).map(x=>x.name);
+  return{cc:(r.countryCode||'').toUpperCase(),country:r.countryName||'',state:r.principalSubdivision||'',markaz:'',place:r.city||r.locality||'',cands:[r.principalSubdivision].concat(adm)}}
+async function revGeo(lat,lon){
+  const k=lat.toFixed(3)+','+lon.toFixed(3),c=rdJ('agriGeo');
+  if(c&&c.k===k&&c.l===lang&&c.a)return c.a;
+  let a=null;try{a=await revNom(lat,lon)}catch(e){}
+  if(!a)try{a=await revBDC(lat,lon)}catch(e){}
+  if(a)store('agriGeo',JSON.stringify({k,l:lang,a}));
+  return a}
+async function getWx(lat,lon){
+  const r=await jf('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&hourly=soil_moisture_9_to_27cm&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,et0_fao_evapotranspiration&timezone=auto&forecast_days=7&wind_speed_unit=kmh');
+  if(!r||!r.current||!r.daily)throw new Error('no data');
+  let sm=null;
+  try{const pre=String(r.current.time).slice(0,13),i=r.hourly.time.findIndex(t=>t.startsWith(pre)),v=r.hourly.soil_moisture_9_to_27cm[i];if(v!=null&&isFinite(v))sm=+(v*100).toFixed(1)}catch(e){}
+  const e0=r.daily.et0_fao_evapotranspiration&&r.daily.et0_fao_evapotranspiration[0];
+  return{cur:r.current,daily:r.daily,sm,et0:(e0!=null&&isFinite(e0))?+(+e0).toFixed(1):null}}
+let WX=null,LOC=null,LBUSY=false,LMSG=null;
+function locMsg(t,cl){LMSG=t?[t,cl||'wn']:null;const m=$('locMsg');if(!t){m.style.display='none';return}m.className='badge '+(cl||'wn');m.textContent=t;m.style.display='block'}
+function wxTips(W){const t=[],d=W.daily,c=W.cur,n=a=>(a&&a[0]!=null?+a[0]:null);
+  const r0=n(d.precipitation_sum)||0,r1=(d.precipitation_sum&&+d.precipitation_sum[1])||0,p1=(d.precipitation_probability_max&&+d.precipitation_probability_max[1])||0;
+  if(r0>=2||(r1>=2&&p1>=50))t.push(['wn',L2('🌧️ مطر متوقع اليوم أو غداً — أجّل الري أو قلّل الجرعة.','🌧️ Rain expected today or tomorrow — postpone or reduce irrigation.')]);
+  if((n(d.temperature_2m_max)||0)>=40)t.push(['wn',L2('🔥 حرارة شديدة اليوم — اروِ ليلاً أو فجراً وتجنب الظهيرة.','🔥 Extreme heat today — irrigate at night or dawn, avoid midday.')]);
+  const tm=n(d.temperature_2m_min);if(tm!==null&&tm<=2)t.push(['er',L2('🥶 خطر صقيع الليلة — احمِ الشتلات الحساسة.','🥶 Frost risk tonight — protect sensitive seedlings.')]);
+  if((+c.wind_speed_10m||0)>=30)t.push(['wn',L2('💨 رياح قوية — تجنب الري بالرش والرش الورقي.','💨 Strong wind — avoid sprinkler irrigation and foliar spraying.')]);
+  if(!t.length)t.push(['ok',L2('✅ لا توصيات طقس خاصة اليوم.','✅ No special weather advice today.')]);
+  return t}
+function locUI(){
+  $('locT').textContent=L2('موقعك والطقس الآن','Your location & weather now');
+  $('locBtn').textContent=LBUSY?L2('⏳ جارٍ التحديد…','⏳ Locating…'):LOC?L2('🔄 تحديث موقعي','🔄 Update my location'):L2('📍 حدد موقعي','📍 Detect my location');
+  $('locBtn').disabled=LBUSY;
+  if(LMSG)locMsg(LMSG[0],LMSG[1]);
+  const A=$('locAddr');
+  if(!LOC){A.style.display='none';A.innerHTML='';$('wxBox').style.display='none';return}
+  const ad=LOC.addr,ch=(lb,v)=>v?`<span class="chip"><small>${lb}</small><b>${escH(v)}</b></span>`:'';
+  let h='';
+  if(ad){
+    const gv=LOC.gov?gname(LOC.gov):ad.state;
+    h+=ch(L2('الدولة','Country'),ad.country)+ch(L2('المحافظة / الولاية','Governorate / State'),gv)+ch(L2('المركز / القسم','District'),ad.markaz)+ch(L2('المدينة / القرية','City / Village'),ad.place);
+  }
+  h+=`<span class="chip" dir="ltr">${LOC.lat.toFixed(5)}, ${LOC.lon.toFixed(5)}${LOC.acc?' · ±'+Math.round(LOC.acc)+' m':''}</span><a class="chip" href="https://www.google.com/maps?q=${LOC.lat},${LOC.lon}" target="_blank" rel="noopener noreferrer">🗺️ ${L2('افتح في خرائط جوجل','Open in Google Maps')}</a>`;
+  A.innerHTML=h;A.style.display='flex';
+  wxRender()}
+function wxRender(){
+  const B=$('wxBox');if(!WX){B.style.display='none';B.innerHTML='';return}
+  const c=WX.cur,d=WX.daily,w=wxInfo(c.weather_code),loc=lang==='ar'?'ar-EG':'en-GB',f1=x=>x==null?'—':(+x).toFixed(1);
+  const kp=(a,b)=>`<div class="kpi"><span>${a}</span><b dir="ltr">${b}</b></div>`;
+  let h=`<div class="wxHead"><span class="em">${w[0]}</span><div><b dir="ltr">${f1(c.temperature_2m)}°C</b><small>${L2(w[1],w[2])}</small></div></div>
+  <div class="kpis">${kp(L2('الرطوبة الجوية','Air humidity'),Math.round(c.relative_humidity_2m)+' %')}${kp(L2('الرياح','Wind'),Math.round(c.wind_speed_10m)+' km/h')}${kp(L2('مطر الآن','Rain now'),f1(c.precipitation)+' mm')}${kp('ET₀ '+L2('اليوم','today'),WX.et0==null?'—':WX.et0+' mm')}${kp(L2('رطوبة التربة (تقديرية)','Soil moisture (est.)'),WX.sm==null?'—':WX.sm+' %')}</div>`;
+  h+=wxTips(WX).map(x=>`<div class="badge ${x[0]}">${x[1]}</div>`).join('');
+  h+=`<div class="row" style="margin-top:10px"><button id="wxApply" style="flex:1">📥 ${L2('استخدم ET₀ ورطوبة التربة في التحليل','Use ET₀ & soil moisture in the analysis')}</button></div>`;
+  h+=`<div class="tw" style="margin-top:12px"><table><thead><tr><th>${L2('اليوم','Day')}</th><th></th><th>°C</th><th>${L2('مطر','Rain')} mm</th><th>ET₀</th></tr></thead><tbody>`+
+    d.time.map((t,i)=>{const wi=wxInfo(d.weather_code[i]);return `<tr><td>${escH(new Date(t+'T12:00:00').toLocaleDateString(loc,{weekday:'short',day:'numeric'}))}</td><td>${wi[0]}</td><td dir="ltr">${Math.round(d.temperature_2m_max[i])}/${Math.round(d.temperature_2m_min[i])}</td><td dir="ltr">${f1(d.precipitation_sum[i])}</td><td dir="ltr">${f1(d.et0_fao_evapotranspiration[i])}</td></tr>`}).join('')+`</tbody></table></div>`;
+  h+=`<p class="wxAt">${L2('بيانات الطقس: ','Weather data: ')}<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo.com</a> (CC BY 4.0) · ${L2('رطوبة التربة وET₀ قيم نموذجية تقديرية وليست قياساً حقلياً. العناوين: ','Soil moisture and ET₀ are model estimates, not field measurements. Addresses: ')}© OpenStreetMap contributors</p>`;
+  B.innerHTML=h;B.style.display='block';
+  $('wxApply').onclick=()=>{if(WX.et0!=null)$('et0').value=WX.et0;if(WX.sm!=null)$('sm').value=WX.sm;dirty();toast(L2('تم تطبيق ET₀ ورطوبة التربة ✅','ET₀ and soil moisture applied ✅'))}}
+function applyGovLoc(){const A=LOC&&LOC.addr;LOC.gov='';if(!A)return;
+  if(A.cc==='EG'){const g=matchGov(A.cands);if(g){LOC.gov=g;$('gov').value=g;$('gov').onchange()}}
+  else if($('gov').value){$('gov').value='';$('gov').onchange()}}
+async function locate(){
+  if(LBUSY)return;
+  if(!navigator.geolocation){locMsg(L2('المتصفح لا يدعم تحديد الموقع.','This browser does not support geolocation.'),'er');return}
+  LBUSY=true;locMsg('');locUI();
+  try{
+    const p=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:15000,maximumAge:60000}));
+    const lat=p.coords.latitude,lon=p.coords.longitude;
+    LOC={lat,lon,acc:p.coords.accuracy,addr:null,gov:''};
+    locMsg(L2('جارٍ تحديد العنوان وجلب الطقس…','Finding your address and fetching weather…'),'wn');
+    const [a,w]=await Promise.allSettled([revGeo(lat,lon),getWx(lat,lon)]);
+    LOC.addr=a.status==='fulfilled'?a.value:null;WX=w.status==='fulfilled'?w.value:null;
+    store('agriLoc',JSON.stringify({lat,lon,acc:LOC.acc}));
+    applyGovLoc();
+    if(!LOC.addr&&!WX)locMsg(L2('تعذر جلب العنوان والطقس — تحقق من الإنترنت وحاول مرة أخرى.','Could not fetch address and weather — check your connection and retry.'),'er');
+    else if(!WX)locMsg(L2('تم تحديد العنوان لكن تعذر جلب الطقس.','Address found but weather is unavailable.'),'wn');
+    else if(!LOC.addr)locMsg(L2('تم جلب الطقس لكن تعذر تحديد العنوان.','Weather loaded but the address could not be determined.'),'wn');
+    else if(LOC.gov)locMsg(L2('تم اختيار محافظة '+gname(LOC.gov)+' تلقائياً وتحديث الأصناف.','Governorate '+gname(LOC.gov)+' selected automatically and varieties updated.'),'ok');
+    else if(LOC.addr.cc==='EG')locMsg(L2('لم أستطع مطابقة المحافظة بالقائمة — اخترها يدوياً.','Could not match the governorate to the list — please select it manually.'),'wn');
+    else locMsg(L2('أنت خارج مصر: استُخدم الطقس وET₀ لموقعك، والأصناف عامة. ثبّت المحصول والتربة يدوياً.','You are outside Egypt: weather and ET₀ are for your location and varieties are general. Set crop and soil manually.'),'ok');
+  }catch(e){
+    const c=e&&e.code;
+    locMsg(c===1?L2('تم رفض إذن الموقع — اسمح به من إعدادات المتصفح ثم أعد المحاولة.','Location permission denied — allow it in your browser settings and retry.'):c===3?L2('انتهت مهلة تحديد الموقع — حاول في مكان مكشوف.','Location request timed out — try somewhere with a clearer signal.'):L2('تعذر تحديد الموقع.','Could not determine your location.'),'er');
+  }
+  LBUSY=false;locUI()}
+$('locBtn').onclick=locate;
+async function relangLoc(){locUI();if(!LOC)return;try{LOC.addr=await revGeo(LOC.lat,LOC.lon)}catch(e){}locUI()}
+{const _s2=setLang;setLang=function(l){_s2(l);relangLoc()}}
+// استرجاع آخر موقع محفوظ (طقس فقط بدون تغيير مُدخلاتك)
+{const sv=rdJ('agriLoc');
+ if(sv&&isFinite(sv.lat)&&isFinite(sv.lon)){LOC={lat:+sv.lat,lon:+sv.lon,acc:+sv.acc||0,addr:null,gov:''};
+  const c=rdJ('agriGeo');if(c&&c.k===(+sv.lat).toFixed(3)+','+(+sv.lon).toFixed(3)&&c.l===lang)LOC.addr=c.a;
+  getWx(LOC.lat,LOC.lon).then(w=>{WX=w;locUI()}).catch(()=>{})}}
+locUI();
+
 // ===== قائمة الأدوات + تثبيت التطبيق =====
 const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 function menuUI(){
@@ -1005,7 +1131,6 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
-
 
 
 
