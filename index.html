@@ -162,6 +162,12 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 .locRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.locRow .chip small{color:var(--mut);margin-inline-end:4px}.locRow .chip b{color:var(--ac)}.locRow a.chip{color:var(--ac);text-decoration:none;font-weight:700}
 .wxHead{display:flex;align-items:center;gap:12px;margin:14px 0 8px}.wxHead .em{font-size:2.6rem;line-height:1}.wxHead b{font-size:1.6rem;display:block;line-height:1.1}.wxHead small{color:var(--mut);font-size:.78rem}
 .wxAt{font-size:.66rem;color:var(--mut);margin:10px 0 0;line-height:1.7}.wxAt a{color:var(--ac)}
+#sysB{position:fixed;inset-inline:0;top:0;z-index:30;display:flex;flex-direction:column;gap:6px;padding:calc(6px + env(safe-area-inset-top,0px)) 10px 0;pointer-events:none}
+#sysB .sb{pointer-events:auto;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;border-radius:14px;padding:8px 12px;font-size:.8rem;font-weight:700;box-shadow:var(--sh);border:1px solid var(--bd);text-align:center;line-height:1.7}
+#sysB .net{background:var(--wn);color:var(--onac)}
+#sysB .upd,#sysB .ann{background:var(--bg);color:var(--fg);border-color:var(--ac)}
+#sysB .sb button{min-height:32px;padding:3px 12px;font-size:.78rem}
+@media print{#sysB{display:none!important}}
 </style>
 </head>
 <body>
@@ -295,6 +301,7 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 <div id="mHow" class="modal"><div class="card" style="max-width:540px;width:100%;max-height:86vh;overflow:auto"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="howH"></h3><button class="sec" id="howX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="howBody"></div></div></div>
 <div id="mInst" class="modal"><div class="card" style="max-width:420px;width:100%"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="instH"></h3><button class="sec" id="instX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="instBody"></div></div></div>
 <div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center;position:relative"><button class="sec" id="aX" style="position:absolute;top:10px;inset-inline-end:10px;min-height:32px;padding:2px 10px">✕</button><div class="logo" style="margin:0 auto 8px"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 31V13" stroke="#FFE29A" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#FFE29A"/><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 14)"/><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 14)"/><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 23)"/><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 23)"/></svg></div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
+<div id="sysB" class="noprint" role="status" aria-live="polite"></div>
 <div id="toast"></div>
 
 <script>
@@ -447,11 +454,12 @@ window.onUser=(u,d,err)=>{
   if(!u||!d){USER=null;pro=false;trials=0;badge();greet();
     $('mAuth').classList.add('on');
     $('acct').style.display='none';authUI();
-    if(u&&!d)authMsg(L2('تعذر قراءة بيانات الحساب — راجع قواعد Firestore','Could not read account data — check Firestore rules')+' ['+((err&&(err.code||err.message))||'?')+']');
+    if(u&&!d){const off=!navigator.onLine||(err&&(err.code==='unavailable'||/offline|network|unavailable/i.test(err.message||'')));
+      authMsg(off?L2('📡 لا يوجد اتصال بالإنترنت — تحقق من الشبكة، وسيُعاد الدخول تلقائياً عند عودة الاتصال.','📡 No internet connection — check your network; sign-in will retry automatically when you are back online.'):L2('تعذر قراءة بيانات الحساب — راجع قواعد Firestore','Could not read account data — check Firestore rules')+' ['+((err&&(err.code||err.message))||'?')+']')}
     return}
   USER=u;trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
   $('payMail').textContent=u.email||'';$('acctMail').textContent=u.email||u.displayName||'';$('acct').style.display='flex';$('mAuth').classList.remove('on');authMsg('');
-  authUI();badge();greet();staleUI()};
+  authUI();badge();greet();staleUI();annCheck()};
 
 // ===== قوام التربة (مثلث USDA — 12 قواماً) =====
 const L2=(a,e)=>lang==='ar'?a:e;
@@ -1060,6 +1068,44 @@ async function relangLoc(){locUI();if(!LOC)return;try{LOC.addr=await revGeo(LOC.
   getWx(LOC.lat,LOC.lon).then(w=>{WX=w;locUI()}).catch(()=>{})}}
 locUI();
 
+// ===== إشعارات: الاتصال والتحديثات والإعلانات =====
+// ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
+const APP_VER='2026.11.03-1';
+const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
+const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
+function netUI(){
+  if(navigator.onLine){sysDel('netB');return}
+  sysAdd('netB',e=>{e.className='sb net';e.textContent=L2('📡 لا يوجد اتصال بالإنترنت — الطقس والعنوان وتسجيل الدخول لن تعمل حتى يعود الاتصال.','📡 You are offline — weather, address and sign-in will not work until you reconnect.')})}
+let UPD_SHOWN=false,UPD_T=0;
+function updUI(){
+  if(!UPD_SHOWN)return;
+  sysAdd('updB',e=>{e.className='sb upd';e.innerHTML=`<span>🔔 ${L2('يوجد تحديث جديد للتطبيق','A new app update is available')}</span><button id="updGo">${L2('تحديث الآن','Update now')}</button><button class="sec" id="updX" aria-label="close">✕</button>`;
+    $('updGo').onclick=applyUpdate;$('updX').onclick=()=>sysDel('updB')})}
+async function applyUpdate(){
+  try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}
+    if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
+  location.reload()}
+async function updCheck(force){
+  if(!navigator.onLine||UPD_SHOWN||!/^https?:$/.test(location.protocol))return;
+  const now=Date.now();if(!force&&now-UPD_T<600000)return;UPD_T=now;
+  try{const r=await fetch(location.pathname+'?_v='+now,{cache:'no-store'});if(!r.ok)return;
+    const t=await r.text(),m=t.match(new RegExp("const APP_VER"+"='([0-9.\\-]+)'"));
+    if(m&&m[1]!==APP_VER){UPD_SHOWN=true;updUI()}}catch(e){}}
+// إعلانات من المطوّر: وثيقة config/app في Firestore بحقول: id, msg, msgEn, until (اختياري)
+async function annCheck(){
+  if(!USER||!window.NamaaAuth||!NamaaAuth.config)return;
+  try{const c=await NamaaAuth.config();if(!c)return;
+    const m=(lang==='en'&&c.msgEn)?c.msgEn:c.msg;if(!m)return;
+    if(c.until&&Date.now()>Date.parse(c.until))return;
+    const id=String(c.id||m).slice(0,80);if(store('agriAnn')===id)return;
+    sysAdd('annB',e=>{e.className='sb ann';e.innerHTML='<span>📢 <span id="annT"></span></span><button id="annX">'+L2('حسناً','OK')+'</button>';
+      $('annT').textContent=String(m).slice(0,300);$('annX').onclick=()=>{store('agriAnn',id);sysDel('annB')}})}catch(e){}}
+addEventListener('offline',netUI);
+addEventListener('online',()=>{netUI();if(!USER&&window.NamaaAuth&&NamaaAuth.retry)NamaaAuth.retry();updCheck(true)});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){netUI();updCheck()}});
+{const _s3=setLang;setLang=function(l){_s3(l);netUI();updUI()}}
+setInterval(()=>updCheck(),30*60*1000);setTimeout(()=>updCheck(true),4000);netUI();
+
 // ===== قائمة الأدوات + تثبيت التطبيق =====
 const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 function menuUI(){
@@ -1116,7 +1162,7 @@ s.onclick=hide;setTimeout(hide,4600);
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,signOut,sendPasswordResetEmail,updateProfile} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import {getFirestore,doc,getDoc,setDoc,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import {getFirestore,initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,getDoc,setDoc,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // >>> الصق هنا إعدادات Firebase بتاعتك (Project settings > Your apps > Web app) <<<
 const firebaseConfig={
@@ -1129,18 +1175,20 @@ const firebaseConfig={
 };
 
 if(!firebaseConfig.apiKey.startsWith('PASTE')){
-  const auth=getAuth(initializeApp(firebaseConfig)),db=getFirestore();
-  let ref=null;
+  const app=initializeApp(firebaseConfig),auth=getAuth(app);
+  let db;try{db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})})}catch(e){db=getFirestore(app)}
+  let ref=null,cur=null;
   window.NamaaAuth={
     login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
     signup:async(n,e,p)=>{const c=await createUserWithEmailAndPassword(auth,e,p);if(n)await updateProfile(c.user,{displayName:n});return c},
     google:()=>signInWithPopup(auth,new GoogleAuthProvider()),
     reset:e=>sendPasswordResetEmail(auth,e),
     out:()=>signOut(auth),
-    setTrials:n=>{if(ref)updateDoc(ref,{trials:n}).catch(()=>{})}
+    setTrials:n=>{if(ref)updateDoc(ref,{trials:n}).catch(()=>{})},
+    retry:()=>{if(cur)load(cur)},
+    config:async()=>{const s=await getDoc(doc(db,'config','app'));return s.exists()?s.data():null}
   };
-  onAuthStateChanged(auth,async u=>{
-    if(!u){ref=null;window.onUser(null);return}
+  async function load(u){
     ref=doc(db,'users',u.uid);
     try{
       const s=await getDoc(ref);let d;
@@ -1148,6 +1196,11 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
       else{d={email:u.email,trials:5,pro:false};await setDoc(ref,{...d,createdAt:serverTimestamp()})}
       window.onUser(u,d);
     }catch(e){console.error(e);window.onUser(u,null,e)}
+  }
+  onAuthStateChanged(auth,u=>{
+    cur=u;
+    if(!u){ref=null;window.onUser(null);return}
+    load(u);
   });
 }
 </script>
