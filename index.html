@@ -167,7 +167,11 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 #sysB .net{background:var(--wn);color:var(--onac)}
 #sysB .upd,#sysB .ann{background:var(--bg);color:var(--fg);border-color:var(--ac)}
 #sysB .sb button{min-height:32px;padding:3px 12px;font-size:.78rem}
-@media print{#sysB{display:none!important}}
+@media print{#sysB,#offG{display:none!important}}
+#offG{position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;padding:24px;background:var(--bg);text-align:center}
+#offG.on{display:flex}#offG .ob{max-width:380px;display:flex;flex-direction:column;align-items:center;gap:14px}
+#offG .oi{font-size:3.4rem;line-height:1}#offG h2{margin:0;font-size:1.25rem;color:var(--ac)}#offG p{margin:0;color:var(--mut);font-size:.9rem;line-height:1.9}
+#offG button{min-width:180px}
 </style>
 </head>
 <body>
@@ -302,6 +306,7 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 <div id="mInst" class="modal"><div class="card" style="max-width:420px;width:100%"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="instH"></h3><button class="sec" id="instX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="instBody"></div></div></div>
 <div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center;position:relative"><button class="sec" id="aX" style="position:absolute;top:10px;inset-inline-end:10px;min-height:32px;padding:2px 10px">✕</button><div class="logo" style="margin:0 auto 8px"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 31V13" stroke="#FFE29A" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#FFE29A"/><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 14)"/><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 14)"/><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 23)"/><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 23)"/></svg></div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
 <div id="sysB" class="noprint" role="status" aria-live="polite"></div>
+<div id="offG" class="noprint" role="alertdialog" aria-modal="true" aria-live="assertive"></div>
 <div id="toast"></div>
 
 <script>
@@ -579,6 +584,7 @@ $('theme').onclick=()=>{const t=isDark()?'light':'dark';document.documentElement
 
 // ===== المحرك =====
 function run(click,mode){
+  if(!NET_OK){gateUI();return}
   if(!USER){if(click&&AUTH_READY)$('mAuth').classList.add('on');return}
   if(!click){
     if(mode==='load'){}                              // فتح تقرير محفوظ: بدون خصم محاولة
@@ -1070,12 +1076,30 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.03-1';
+const APP_VER='2026.11.04-1';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
-function netUI(){
-  if(navigator.onLine){sysDel('netB');return}
-  sysAdd('netB',e=>{e.className='sb net';e.textContent=L2('📡 لا يوجد اتصال بالإنترنت — الطقس والعنوان وتسجيل الدخول لن تعمل حتى يعود الاتصال.','📡 You are offline — weather, address and sign-in will not work until you reconnect.')})}
+// ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
+var NET_OK=true,NET_BUSY=false;
+async function netProbe(){
+  if(!navigator.onLine)return false;
+  const ac=new AbortController(),t=setTimeout(()=>ac.abort(),6000);
+  try{await fetch('https://www.gstatic.com/generate_204?_='+Date.now(),{mode:'no-cors',cache:'no-store',signal:ac.signal});return true}
+  catch(e){return false}finally{clearTimeout(t)}}
+function gateUI(){
+  const g=$('offG');
+  [...document.body.children].forEach(e=>{if(e.id==='offG'||e.id==='sysB'||e.id==='splash'||e.tagName==='SCRIPT')return;e.inert=!NET_OK});
+  if(NET_OK){g.classList.remove('on');g.innerHTML='';return}
+  g.innerHTML=`<div class="ob"><div class="oi">📡</div><h2>${L2('التطبيق متوقف — لا يوجد إنترنت','App paused — no internet')}</h2><p>${L2('التطبيق يحتاج اتصالاً بالإنترنت ليعمل. اتصل بالشبكة وسيعود للعمل تلقائياً بمجرد عودة الاتصال.','This app needs an internet connection to work. Reconnect and it will resume automatically.')}</p><button id="offRetry">${NET_BUSY?L2('⏳ جارٍ الفحص…','⏳ Checking…'):L2('🔄 إعادة المحاولة','🔄 Try again')}</button></div>`;
+  g.classList.add('on');$('offRetry').onclick=()=>netCheck()}
+const netUI=gateUI;
+async function netCheck(){
+  if(NET_BUSY)return;NET_BUSY=true;if(!NET_OK)gateUI();
+  const ok=await netProbe(),was=NET_OK;NET_BUSY=false;NET_OK=ok;
+  if(ok!==was||!ok)gateUI();
+  if(ok&&!was){if(!USER&&window.NamaaAuth&&NamaaAuth.retry)NamaaAuth.retry();updCheck(true)}}
+var NET_LAST=Date.now();
+setInterval(()=>{if(document.visibilityState!=='visible')return;if(!NET_OK||Date.now()-NET_LAST>=30000){NET_LAST=Date.now();netCheck()}},4000);
 let UPD_SHOWN=false,UPD_T=0;
 function updUI(){
   if(!UPD_SHOWN)return;
@@ -1100,11 +1124,11 @@ async function annCheck(){
     const id=String(c.id||m).slice(0,80);if(store('agriAnn')===id)return;
     sysAdd('annB',e=>{e.className='sb ann';e.innerHTML='<span>📢 <span id="annT"></span></span><button id="annX">'+L2('حسناً','OK')+'</button>';
       $('annT').textContent=String(m).slice(0,300);$('annX').onclick=()=>{store('agriAnn',id);sysDel('annB')}})}catch(e){}}
-addEventListener('offline',netUI);
-addEventListener('online',()=>{netUI();if(!USER&&window.NamaaAuth&&NamaaAuth.retry)NamaaAuth.retry();updCheck(true)});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){netUI();updCheck()}});
+addEventListener('offline',()=>{NET_OK=false;gateUI()});
+addEventListener('online',()=>netCheck());
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){netCheck();updCheck()}});
 {const _s3=setLang;setLang=function(l){_s3(l);netUI();updUI()}}
-setInterval(()=>updCheck(),30*60*1000);setTimeout(()=>updCheck(true),4000);netUI();
+setInterval(()=>updCheck(),30*60*1000);setTimeout(()=>updCheck(true),4000);if(!navigator.onLine)NET_OK=false;gateUI();netCheck();
 
 // ===== قائمة الأدوات + تثبيت التطبيق =====
 const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg>`;
