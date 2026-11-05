@@ -167,12 +167,19 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 #sysB .net{background:var(--wn);color:var(--onac)}
 #sysB .upd,#sysB .ann{background:var(--bg);color:var(--fg);border-color:var(--ac)}
 #sysB .sb button{min-height:32px;padding:3px 12px;font-size:.78rem}
-@media print{#sysB,#offG{display:none!important}}
+@media print{#sysB,#offG,#dtS{display:none!important}}
+.nosp #splash{display:none!important}
+.dtS{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0}
+.dtS .d1{font-weight:800;font-size:.95rem}.dtS .d2{color:var(--mut);font-size:.76rem;margin-top:3px}
+.dtS .tm{font-weight:900;font-size:1.55rem;direction:ltr;color:var(--ac);line-height:1.1;text-align:end}
+.dtS .tr{display:flex;align-items:center;gap:10px}
+#cmpDial text{font-weight:800;font-family:inherit}
 #offG{position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;padding:24px;background:var(--bg);text-align:center}
 #offG.on{display:flex}#offG .ob{max-width:380px;display:flex;flex-direction:column;align-items:center;gap:14px}
 #offG .oi{font-size:3.4rem;line-height:1}#offG h2{margin:0;font-size:1.25rem;color:var(--ac)}#offG p{margin:0;color:var(--mut);font-size:.9rem;line-height:1.9}
 #offG button{min-width:180px}
 </style>
+<script>try{if(sessionStorage.getItem('qSp')==='1')document.documentElement.className+=' nosp'}catch(e){}</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -220,6 +227,8 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
   <p class="sub">40 محصولاً بأصنافها حسب المحافظة · قوام التربة بمثلث USDA · تحليل ملوحة التربة والمياه · بنك الأسمدة المصري (معدني وعضوي وحيوي) · FAO-29 / FAO-56 / IPNI</p>
   <div class="who">م/ أحمد محمد سعيد عبد العال — كلية الزراعة · جامعة المنوفية · الأراضي والمياه</div>
 </section>
+
+<div class="card dtS noprint" id="dtS"><div><div class="d1" id="dtD1"></div><div class="d2" id="dtD2"></div></div><div class="tr"><button class="sec" id="cmpB" style="min-height:44px;padding:6px 12px"></button><div class="tm" id="dtTm"></div></div></div>
 
 <div class="tiles" id="tiles"></div>
 
@@ -303,6 +312,10 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 
 <div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3>انتهت المحاولات المجانية</h3><p style="font-size:.85rem;color:var(--mut)">حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيله</p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px;margin:6px 0">01113276215</p><p style="font-size:.78rem;color:var(--mut);direction:ltr;margin:0 0 10px">حسابك: <b id="payMail"></b></p><div class="row" style="justify-content:center"><button id="payWa">📲 إرسال الإيصال</button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
 <div id="mHow" class="modal"><div class="card" style="max-width:540px;width:100%;max-height:86vh;overflow:auto"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="howH"></h3><button class="sec" id="howX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="howBody"></div></div></div>
+<div id="mRun" class="modal"><div class="card" role="alertdialog" aria-modal="true" style="max-width:380px;width:100%;text-align:center"><div style="font-size:2.4rem;line-height:1">🚀</div><h3 id="rT" style="margin:8px 0"></h3><p id="rB" style="color:var(--mut);line-height:1.9;margin:0"></p><div id="rBal" class="badge wn" style="margin:10px 0"></div><div class="row" style="justify-content:center"><button id="rOk" style="font-size:.9rem;padding:10px 18px"></button><button class="sec" id="rNo" style="font-size:.9rem;padding:10px 18px"></button></div></div></div>
+<div id="mCmp" class="modal"><div class="card" role="dialog" aria-modal="true" style="max-width:360px;width:100%;text-align:center"><div class="row" style="justify-content:space-between;align-items:center"><h3 id="cmpT" style="margin:0"></h3><button class="sec" id="cmpX" style="min-height:34px;padding:2px 12px">✕</button></div>
+<svg id="cmpSvg" viewBox="-100 -100 200 200" width="250" height="250" style="display:block;margin:12px auto" aria-hidden="true"><g id="cmpDial"></g><path d="M0 -99 L9 -81 L-9 -81Z" fill="#E0A21A"/><circle r="3" fill="var(--ac)"/></svg>
+<div id="cmpDeg" style="font-size:2rem;font-weight:900;direction:ltr;line-height:1.2">--°</div><div class="chip" id="cmpDir" style="margin:6px auto">—</div><div class="chip" id="cmpQi" style="margin:4px auto;display:none"></div><button class="sec" id="cmpLoc" style="margin:6px auto;display:none"></button><div id="cmpMsg" class="badge wn" style="margin-top:8px;display:none"></div><p id="cmpHint" class="wxAt"></p></div></div>
 <div id="mInst" class="modal"><div class="card" style="max-width:420px;width:100%"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="instH"></h3><button class="sec" id="instX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="instBody"></div></div></div>
 <div id="mAuth" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center;position:relative"><button class="sec" id="aX" style="position:absolute;top:10px;inset-inline-end:10px;min-height:32px;padding:2px 10px">✕</button><div class="logo" style="margin:0 auto 8px"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 31V13" stroke="#FFE29A" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#FFE29A"/><ellipse cx="11" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 14)"/><ellipse cx="23" cy="14" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 14)"/><ellipse cx="11" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(-28 11 23)"/><ellipse cx="23" cy="23" rx="3" ry="5.5" fill="#FFE29A" transform="rotate(28 23 23)"/></svg></div><h3 id="aTitle"></h3><p id="aSub" style="font-size:.82rem;color:var(--mut);margin:0 0 10px"></p><div id="aNameW" style="margin-bottom:6px"><input id="aName" type="text" autocomplete="name"></div><input id="aEmail" type="email" autocomplete="email" dir="ltr" style="margin-bottom:6px"><input id="aPass" type="password" dir="ltr"><div id="aMsg" style="color:var(--er);font-size:.78rem;min-height:20px;margin:6px 0"></div><button id="aGo" style="width:100%"></button><button class="sec" id="aG" style="width:100%;margin-top:8px"></button><div class="row" style="justify-content:center;gap:18px;margin-top:12px;font-size:.78rem"><a href="#" id="aSw" style="color:var(--ac)"></a><a href="#" id="aFor" style="color:var(--ac)"></a></div></div></div>
 <div id="sysB" class="noprint" role="status" aria-live="polite"></div>
@@ -735,7 +748,25 @@ function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg
 // ===== ربط الأحداث =====
 document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>dirty())});
 document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;dirty();toast('تم تطبيق النموذج')});
-$('runb').onclick=()=>{run(true);show('res')};
+// ===== تأكيد قبل التحليل الشامل (لمنع الضغط بالخطأ وخصم محاولة) =====
+let RUN_T=0;
+function runClose(){$('mRun').classList.remove('on')}
+function askRun(){
+  if(!NET_OK){gateUI();return}
+  if(!USER||(!pro&&trials<=0)){run(true);show('res');return}   // تسجيل الدخول / انتهاء المحاولات: نفس السلوك القديم
+  const cr=C[$('crop').value],gv=$('gov').value,u=$('unit').selectedOptions[0].textContent,ar=$('area').value;
+  $('rT').textContent=L2('تأكيد التحليل الشامل','Confirm full analysis');
+  $('rB').innerHTML=escH(tx(cr[0]))+(gv?' · '+escH(gname(gv)):'')+'<br>'+L2('المساحة: ','Area: ')+escH(ar)+' '+escH(tx(u))+'<br>'+L2('هل أنت متأكد أنك تريد تشغيل التحليل الشامل؟','Are you sure you want to run the full analysis?');
+  const b=$('rBal');b.className='badge '+(pro?'ok':'wn');
+  b.textContent=pro?L2('حسابك Pro — لا تُخصم محاولات','Pro account — no trials are deducted'):L2('ستُخصم محاولة واحدة من رصيدك (المتبقي: '+trials+')','One trial will be deducted from your balance (remaining: '+trials+')');
+  $('rOk').textContent=L2('✅ موافق، ابدأ التحليل','✅ Yes, run it');$('rNo').textContent=L2('إلغاء','Cancel');
+  RUN_T=Date.now();$('mRun').classList.add('on')}
+$('runb').onclick=askRun;
+$('rOk').onclick=()=>{if(Date.now()-RUN_T<500)return;runClose();run(true);show('res')};   // تجاهل الضغطة المزدوجة السريعة
+$('rNo').onclick=runClose;
+$('mRun').addEventListener('click',e=>{if(e.target===$('mRun'))runClose()});
+addEventListener('keydown',e=>{if(e.key==='Escape'){runClose();cmpClose()}});
+
 document.querySelectorAll('.modal:not(#mAuth)').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on')}));
 
 // ===== ربط اللغة =====
@@ -1076,7 +1107,7 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.04-1';
+const APP_VER='2026.11.05-1';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1130,6 +1161,85 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 {const _s3=setLang;setLang=function(l){_s3(l);netUI();updUI()}}
 setInterval(()=>updCheck(),30*60*1000);setTimeout(()=>updCheck(true),4000);if(!navigator.onLine)NET_OK=false;gateUI();netCheck();
 
+// ===== التاريخ والوقت =====
+let DT_DAY='';
+function dtRender(full){
+  const now=new Date(),loc=lang==='ar'?'ar-EG-u-nu-latn':'en-GB';
+  $('dtTm').textContent=now.toLocaleTimeString(loc,{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const k=now.toDateString()+lang;
+  if(full||k!==DT_DAY){DT_DAY=k;
+    $('dtD1').textContent=now.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    let h='';try{h=now.toLocaleDateString(lang==='ar'?'ar-SA-u-ca-islamic-umalqura-nu-latn':'en-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'})}catch(e){}
+    $('dtD2').textContent=h?'🌙 '+h:'';
+    $('cmpB').textContent='🧭 '+L2('البوصلة','Compass')}}
+setInterval(()=>{if(!document.hidden)dtRender()},1000);dtRender(true);
+
+// ===== البوصلة (مستشعر اتجاه الجهاز) =====
+const CMP={sm:null,got:false,t:0,on:false,pos:null,q:null};
+(function(){let h='<circle r="92" fill="none" stroke="var(--bd)" stroke-width="2"/><circle r="64" fill="none" stroke="var(--bd)" stroke-width=".8"/>';
+  for(let a=0;a<360;a+=15){const m=a%90===0,r1=m?78:86,r2=92,d=a*Math.PI/180;h+=`<line x1="${(Math.sin(d)*r1).toFixed(1)}" y1="${(-Math.cos(d)*r1).toFixed(1)}" x2="${(Math.sin(d)*r2).toFixed(1)}" y2="${(-Math.cos(d)*r2).toFixed(1)}" stroke="var(--mut)" stroke-width="${m?2:1}"/>`}
+  [['N',0,-60,'#E5484D'],['E',60,0,'var(--fg)'],['S',0,60,'var(--fg)'],['W',-60,0,'var(--fg)']].forEach(x=>h+=`<text x="${x[1]}" y="${x[2]}" fill="${x[3]}" font-size="20" text-anchor="middle" dominant-baseline="central">${x[0]}</text>`);
+  h+='<path d="M0 -50 L7 0 L-7 0Z" fill="#E5484D" opacity=".85"/><path d="M0 50 L7 0 L-7 0Z" fill="var(--mut)" opacity=".5"/>';
+  h+='<g id="cmpQ" display="none"><line x1="0" y1="-6" x2="0" y2="-68" stroke="#1F9D55" stroke-width="2.5" stroke-dasharray="4 3" stroke-linecap="round"/><rect x="-9" y="-87" width="18" height="18" rx="3" fill="#111"/><rect x="-9" y="-82" width="18" height="3.5" fill="#E0A21A"/></g>';
+  $('cmpDial').innerHTML=h})();
+function cmpDir(h){return (lang==='ar'?['شمال','شمال شرق','شرق','جنوب شرق','جنوب','جنوب غرب','غرب','شمال غرب']:['North','North-East','East','South-East','South','South-West','West','North-West'])[Math.round(h/45)%8]}
+function cmpHeading(ev){
+  if(typeof ev.webkitCompassHeading==='number'&&isFinite(ev.webkitCompassHeading))return ev.webkitCompassHeading;   // iOS
+  if(ev.alpha==null||!(ev.absolute||ev.type==='deviceorientationabsolute'))return null;                              // Android: قيمة مرتبطة بالشمال فقط
+  const d=Math.PI/180,a=ev.alpha*d,b=(ev.beta||0)*d,g=(ev.gamma||0)*d,sa=Math.sin(a),ca=Math.cos(a),sb=Math.sin(b),cb=Math.cos(b),sg=Math.sin(g),cg=Math.cos(g);
+  let e,n;
+  if(Math.abs(ev.beta||0)<60){e=-sa*cb;n=ca*cb}                    // الجهاز شبه أفقي: اتجاه الحافة العلوية
+  else{e=-ca*sg-sa*sb*cg;n=-sa*sg+ca*sb*cg}                         // الجهاز شبه رأسي: اتجاه الكاميرا الخلفية
+  return (Math.atan2(e,n)*180/Math.PI+360)%360}
+// ===== القبلة: اتجاه الكعبة (21.4225N, 39.8262E) من موقعك =====
+function qibla(lat,lon){const d=Math.PI/180,f1=lat*d,f2=21.4225*d,dl=(39.8262-lon)*d;
+  const b=(Math.atan2(Math.sin(dl)*Math.cos(f2),Math.cos(f1)*Math.sin(f2)-Math.sin(f1)*Math.cos(f2)*Math.cos(dl))/d+360)%360;
+  const a=Math.sin((f2-f1)/2)**2+Math.cos(f1)*Math.cos(f2)*Math.sin(dl/2)**2;
+  return{b,km:2*6371*Math.asin(Math.min(1,Math.sqrt(a)))}}
+function cmpPos(){const o=(typeof LOC!=='undefined'&&LOC)||CMP.pos||rdJ('agriLoc');return o&&isFinite(o.lat)&&isFinite(o.lon)?{lat:+o.lat,lon:+o.lon}:null}
+function cmpQUpdate(){
+  const q=$('cmpQ'),i=$('cmpQi'),lb=$('cmpLoc'),p=cmpPos();
+  if(!p){q.setAttribute('display','none');i.style.display='none';lb.style.display='';lb.textContent=L2('📍 حدد موقعي لإظهار القبلة','📍 Use my location to show Qibla');CMP.q=null;return}
+  lb.style.display='none';const r=qibla(p.lat,p.lon);CMP.q=r;
+  if(r.km<0.5){q.setAttribute('display','none');i.textContent=L2('🕋 أنت عند الكعبة','🕋 You are at the Kaaba');i.style.display='';return}
+  q.setAttribute('transform','rotate('+r.b.toFixed(1)+')');q.setAttribute('display','inline');
+  i.style.display='';cmpQInfo()}
+function cmpQInfo(){const r=CMP.q;if(!r||r.km<0.5)return;
+  let t='🕋 '+L2('القبلة ','Qibla ')+Math.round(r.b)+'° · '+Math.round(r.km).toLocaleString('en-US')+L2(' كم',' km');
+  if(CMP.sm!=null){const d=((r.b-CMP.sm+540)%360)-180;t+=Math.abs(d)<=4?'  ✅ '+L2('أنت تواجه القبلة','Facing Qibla'):'  '+(d>0?'↻ ':'↺ ')+Math.round(Math.abs(d))+'°'}
+  $('cmpQi').textContent=t}
+$('cmpLoc').onclick=()=>{
+  if(!navigator.geolocation){cmpMsg(L2('المتصفح لا يدعم تحديد الموقع.','This browser does not support geolocation.'));return}
+  $('cmpLoc').disabled=true;
+  navigator.geolocation.getCurrentPosition(p=>{CMP.pos={lat:p.coords.latitude,lon:p.coords.longitude};$('cmpLoc').disabled=false;cmpQUpdate()},
+    e=>{$('cmpLoc').disabled=false;cmpMsg(e&&e.code===1?L2('تم رفض إذن الموقع — اسمح به من إعدادات المتصفح.','Location permission denied — allow it in your browser settings.'):L2('تعذر تحديد الموقع.','Could not determine your location.'))},
+    {enableHighAccuracy:false,timeout:12000,maximumAge:600000})};
+function cmpMsg(t){const m=$('cmpMsg');if(!t){m.style.display='none';return}m.textContent=t;m.style.display='block'}
+function cmpPaint(){const h=CMP.sm;$('cmpDial').setAttribute('transform','rotate('+(-h).toFixed(1)+')');$('cmpDeg').textContent=Math.round(h)%360+'°';$('cmpDir').textContent=cmpDir(h);cmpQInfo()}
+function onOri(ev){const h=cmpHeading(ev);if(h==null||!isFinite(h))return;
+  if(!CMP.got){CMP.got=true;cmpMsg('')}
+  if(CMP.sm==null)CMP.sm=h;else{const d=((h-CMP.sm+540)%360)-180;CMP.sm=(CMP.sm+d*.25+360)%360}
+  cmpPaint()}
+function cmpTexts(){$('cmpT').textContent='🧭 '+L2('البوصلة','Compass');
+  $('cmpHint').textContent=L2('ضع الموبايل أفقياً ومستوياً بعيداً عن المعادن والمغناطيس. للمعايرة حرّكه على شكل رقم 8. الدقة تقريبية.','Hold the phone flat, away from metal and magnets. Move it in a figure-8 to calibrate. Accuracy is approximate.');
+  cmpQUpdate();if(CMP.sm!=null)cmpPaint()}
+async function cmpStart(){
+  CMP.got=false;CMP.sm=null;$('cmpDeg').textContent='--°';$('cmpDir').textContent='—';cmpTexts();cmpQUpdate();
+  cmpMsg(L2('جارٍ تشغيل المستشعر…','Starting sensor…'));
+  let perm='granted';
+  try{if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function')perm=await DeviceOrientationEvent.requestPermission()}catch(e){perm='error'}
+  if(!$('mCmp').classList.contains('on'))return;
+  // نسمع للمستشعر دائماً (بعض المتصفحات ترجع قيمة غير granted رغم أن القراءة تعمل)، ونحكم من وصول القراءات فعلاً
+  addEventListener('deviceorientationabsolute',onOri,true);addEventListener('deviceorientation',onOri,true);CMP.on=true;
+  clearTimeout(CMP.t);CMP.t=setTimeout(()=>{if(CMP.got)return;
+    cmpMsg(perm==='denied'?L2('تم رفض إذن المستشعر — فعّله من إعدادات المتصفح ثم أعد فتح البوصلة.','Sensor permission denied — enable it in your browser settings and reopen the compass.')
+      :L2('لا توجد قراءة من المستشعر — الجهاز لا يدعم البوصلة (الحاسوب غالباً لا يحتوي مستشعراً)، أو الصفحة غير مفتوحة عبر HTTPS.','No sensor reading — this device has no compass sensor (most computers do not), or the page is not served over HTTPS.'))},2500)}
+function cmpClose(){$('mCmp').classList.remove('on');removeEventListener('deviceorientationabsolute',onOri,true);removeEventListener('deviceorientation',onOri,true);CMP.on=false;clearTimeout(CMP.t)}
+$('cmpB').onclick=()=>{$('mCmp').classList.add('on');cmpStart()};
+$('cmpX').onclick=cmpClose;
+$('mCmp').addEventListener('click',e=>{if(e.target===$('mCmp'))cmpClose()});
+{const _s4=setLang;setLang=function(l){_s4(l);dtRender(true);cmpTexts()}}
+
 // ===== قائمة الأدوات + تثبيت التطبيق =====
 const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 function menuUI(){
@@ -1179,6 +1289,9 @@ setTimeout(()=>{if(!AUTH_READY){AUTH_READY=true;if(!USER)$('mAuth').classList.ad
 </script>
 <script>
 (function(){var s=document.getElementById('splash');if(!s)return;var done=false;
+var seen=false;try{seen=sessionStorage.getItem('qSp')==='1'}catch(e){}
+if(seen){if(s.parentNode)s.parentNode.removeChild(s);return}
+try{sessionStorage.setItem('qSp','1')}catch(e){}
 function hide(){if(done)return;done=true;s.classList.add('out');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},800)}
 s.onclick=hide;setTimeout(hide,4600);
  try{document.fonts.load('30px "Noto Sans Egyptian Hieroglyphs"','\u{1320E}\u{13171}\u{133CF}').then(function(f){if(f&&f.length){var c=document.getElementById('spCart');if(c)c.classList.add('ok')}})}catch(e){}})();
@@ -1230,7 +1343,6 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
 </script>
 </body>
 </html>
-
 
 
 
