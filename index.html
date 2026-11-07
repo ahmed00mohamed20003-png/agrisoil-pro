@@ -1148,7 +1148,7 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.07-2';
+const APP_VER='2026.11.07-3';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1434,7 +1434,7 @@ $('gov').addEventListener('change',()=>{if($('p-cal').classList.contains('on'))c
 
 // ===== الأقمار الصناعية (NDVI عبر وسيط Cloudflare) =====
 const SAT_URL='https://orange-grass-97ad.ahmed00mohamed20003.workers.dev';
-const SATS={mode:'map',lat:'',lon:'',fed:5,days:90};let SATB=false,SATR=null,SATE=null;
+const SATS={mode:'map',lat:'',lon:'',fed:'5',days:'90'};let SATB=false,SATR=null,SATE=null;
 function satBands(v){return v<.2?{c:'#b5651d',ar:'غطاء نباتي شبه معدوم (تربة جرداء أو بداية الإنبات)',en:'Almost no vegetation (bare soil or just emerging)'}
  :v<.4?{c:'#d4a017',ar:'غطاء ضعيف / نمو مبكر',en:'Sparse cover / early growth'}
  :v<.6?{c:'#9acd32',ar:'غطاء متوسط',en:'Moderate cover'}
@@ -1487,72 +1487,99 @@ function smBind(m){
   if(SM.ptr.size===0)SM.pinch=false};
  m.addEventListener('pointerup',up);m.addEventListener('pointercancel',up);
  m.addEventListener('wheel',e=>{e.preventDefault();const t=Date.now();if(t-(SM.wt||0)>180){SM.wt=t;smZoom(e.deltaY<0?1:-1)}},{passive:false})}
+function smSquare(){const fed=parseFloat(satNum(SATS.fed).replace(',','.'));if(!isFinite(fed)||fed<=0){satInfoErr(L2('اكتب مساحة صحيحة بالفدان أولاً.','Type a valid area in feddan first.'));return}
+ const g=satPoly(SM.lat,SM.lon,fed);SATS.poly=g.coordinates[0].slice(0,4);SATR=null;SATE=null;const so=$('satOut');if(so)so.innerHTML='';
+ const side=Math.sqrt(fed*4200.83),mpp=156543.03*Math.cos(SM.lat*Math.PI/180)/Math.pow(2,SM.z),w=SM.el.clientWidth;if(side/mpp>w*.7||side/mpp<40){let z=SM.z;while(z<18&&side/(156543.03*Math.cos(SM.lat*Math.PI/180)/Math.pow(2,z+1))<w*.6)z++;while(z>3&&side/(156543.03*Math.cos(SM.lat*Math.PI/180)/Math.pow(2,z))>w*.7)z--;SM.z=z}
+ smDraw();smInfo()}
+function satInfoErr(m){const e=$('satInfo');if(e){e.className='smI er';e.textContent=m}}
+async function smSearch(){const q=($('smQ').value||'').trim();if(!q)return;const n=satLL(q);
+ if(n.length>=2){const[la,lo]=satFix(n[0],n[1]);if(la<21||la>32.5||lo<24||lo>37){satInfoErr(L2('الإحداثيات خارج حدود مصر. اكتب خط العرض أولاً ثم الطول.','Outside Egypt. Type latitude first, then longitude.'));return}smCenter(la,lo,17);return}
+ if(!NET_OK){gateUI();return}
+ try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=eg&accept-language='+(lang==='en'?'en':'ar')+'&q='+encodeURIComponent(q));const d=await r.json();
+  if(!d||!d.length){satInfoErr(L2('لم أجد هذا المكان. جرّب اسماً آخر أو اكتب الإحداثيات.','Place not found. Try another name or type coordinates.'));return}
+  const p=d[0],la=+p.lat,lo=+p.lon;let z=15;if(p.boundingbox){const sp=Math.max(Math.abs(p.boundingbox[1]-p.boundingbox[0]),Math.abs(p.boundingbox[3]-p.boundingbox[2]));z=sp>1?8:sp>.3?10:sp>.1?12:sp>.03?14:16}
+  smCenter(la,lo,z)}catch(e){satInfoErr(L2('تعذّر البحث الآن. اكتب الإحداثيات مباشرة.','Search failed. Type coordinates instead.'))}}
 async function smLocate(){try{const p=await satPos(true);smCenter(p.lat,p.lon,17)}catch(e){satErr(e.message)}}
+function satNum(s){return String(s==null?'':s).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/٫/g,'.')}
+function satLL(s){const m=satNum(s).match(/-?\d+(?:[.,]\d+)?/g);return m?m.map(x=>parseFloat(x.replace(',','.'))):[]}
+function satFix(lat,lon){const okLat=v=>v>=21&&v<=32.5,okLon=v=>v>=24&&v<=37;if(okLat(lat)&&okLon(lon))return[lat,lon];if(okLat(lon)&&okLon(lat))return[lon,lat];return[lat,lon]}
+const SATT={t:''};
 function satUI(){
  const box=$('satBox');if(!box)return;$('satT').textContent=L2('الأقمار الصناعية — صحة الغطاء النباتي (NDVI)','Satellite — vegetation health (NDVI)');
  const o=(v,t,sel)=>`<option value="${v}"${String(sel)===String(v)?' selected':''}>${t}</option>`;
  box.innerHTML=`<p class="mut" style="font-size:.85rem;margin:0 0 6px">${L2('صور Sentinel-2 المجانية (دقة 10 م، كل ~5 أيام). ارسم حدود حقلك على الخريطة ليحسب التطبيق متوسط NDVI داخلها.','Free Sentinel-2 imagery (10 m, every ~5 days). Draw your field boundary on the map and the app computes mean NDVI inside it.')}</p>
  <div class="satF">
  <div class="full"><label>${L2('تحديد الحقل','Field selection')}</label><select id="satMode">${o('map',L2('🗺️ أرسم حدود الحقل على الخريطة','🗺️ Draw the field on the map'),SATS.mode)}${o('gps',L2('📍 مربع حول موقعي (GPS)','📍 Square around my location (GPS)'),SATS.mode)}${o('man',L2('✍️ مربع حول إحداثيات أكتبها','✍️ Square around typed coordinates'),SATS.mode)}</select></div>
- <div id="satMan" class="full" style="display:${SATS.mode==='man'?'grid':'none'};grid-template-columns:1fr 1fr;gap:8px"><div><label>${L2('خط العرض (مثال 30.55)','Latitude (e.g. 30.55)')}</label><input id="satLat" inputmode="decimal" value="${escH(SATS.lat)}"></div><div><label>${L2('خط الطول (مثال 31.00)','Longitude (e.g. 31.00)')}</label><input id="satLon" inputmode="decimal" value="${escH(SATS.lon)}"></div></div>
- <div id="satFedW" style="display:${SATS.mode==='map'?'none':'block'}"><label>${L2('مساحة الحقل (فدان)','Field area (feddan)')}</label><select id="satFed">${[1,2,5,10,25,50].map(v=>o(v,v+' '+L2('فدان','fed'),SATS.fed)).join('')}</select></div>
- <div id="satDaysW" ${SATS.mode==='map'?'class="full"':''}><label>${L2('الفترة','Period')}</label><select id="satDays">${[30,60,90,180].map(v=>o(v,v+' '+L2('يوم','days'),SATS.days)).join('')}</select></div>
+ <div id="satMan" class="full" style="display:${SATS.mode==='man'?'grid':'none'};grid-template-columns:1fr 1fr;gap:8px"><div><label>${L2('خط العرض (مثال 30.55) — أو الاثنين معاً','Latitude (e.g. 30.55) — or both together')}</label><input id="satLat" inputmode="text" value="${escH(SATS.lat)}" placeholder="30.55, 31.00"></div><div><label>${L2('خط الطول (مثال 31.00)','Longitude (e.g. 31.00)')}</label><input id="satLon" inputmode="text" value="${escH(SATS.lon)}"></div></div>
+ <div id="satFedW"><label>${L2(SATS.mode==='map'?'مساحة المربع السريع (فدان)':'مساحة الحقل (فدان) — اكتب أي رقم','Field area (feddan) — type any number')}</label><input id="satFed" type="number" inputmode="decimal" min="0.12" max="4700" step="any" list="satFedL" value="${escH(SATS.fed)}"><datalist id="satFedL">${[1,2,5,10,25,50,100,250,500].map(v=>`<option value="${v}">`).join('')}</datalist></div>
+ <div id="satDaysW"><label>${L2('الفترة (يوم) — من 10 إلى 365','Period (days) — 10 to 365')}</label><input id="satDays" type="number" inputmode="numeric" min="10" max="365" step="1" list="satDaysL" value="${escH(SATS.days)}"><datalist id="satDaysL">${[30,45,60,90,120,180,270,365].map(v=>`<option value="${v}">`).join('')}</datalist></div>
+ </div>
  </div>
  <div id="satMapW" class="smW" style="display:${SATS.mode==='map'?'block':'none'}">
   <div class="sm" id="satMap"><div class="tl"></div><svg class="ov" aria-hidden="true"></svg><div class="zc"><button type="button" id="smP" aria-label="zoom in">+</button><button type="button" id="smM" aria-label="zoom out">−</button></div><div class="at" id="smAt"></div></div>
-  <div class="smB"><button type="button" id="smU">↩ ${L2('تراجع','Undo')}</button><button type="button" id="smC">🗑 ${L2('مسح','Clear')}</button><button type="button" id="smL">📍 ${L2('موقعي','Me')}</button><button type="button" id="smT">${SM.layer==='sat'?'🗺️ '+L2('خريطة','Map'):'🛰️ '+L2('قمر','Sat')}</button></div>
+  <div class="smB"><button type="button" id="smU">↩ ${L2('تراجع','Undo')}</button><button type="button" id="smC">🗑 ${L2('مسح','Clear')}</button><button type="button" id="smL">📍 ${L2('موقعي','Me')}</button><button type="button" id="smT">${SM.layer==='sat'?'🗺️ '+L2('خريطة','Map'):'🛰️ '+L2('قمر','Sat')}</button><button type="button" id="smS" style="grid-column:span 2">▢ ${L2('مربع بالمساحة المكتوبة حول مركز الخريطة','Square of typed area at map center')}</button></div>
+  <div style="display:flex;gap:6px;margin:0 0 8px"><input id="smQ" style="flex:1;min-width:0" placeholder="${L2('ابحث عن مكان (مثال: أشمون) أو اكتب إحداثيات 30.55, 31.00','Search a place or type coordinates 30.55, 31.00')}"><button type="button" id="smQb" style="width:52px">🔎</button></div>
   <div class="smI" id="satInfo"></div>
   <p class="mut" style="font-size:.76rem;margin:6px 0 0">${L2('اسحب لتحريك الخريطة، قرّب بإصبعين أو بزرّي + / −، واضغط لتحديد كل ركن بالترتيب حول الحقل.','Drag to pan, pinch or use + / − to zoom, and tap each corner in order around the field.')}</p>
  </div>
  <button id="satGo" style="width:100%;margin-top:8px">${L2('🛰️ احسب NDVI','🛰️ Compute NDVI')}</button>
  <div id="satOut"></div>`;
  $('satMode').onchange=()=>{SATS.mode=$('satMode').value;satUI()};
- $('satFed').onchange=()=>SATS.fed=+$('satFed').value;$('satDays').onchange=()=>SATS.days=+$('satDays').value;
+ $('satFed').oninput=()=>SATS.fed=$('satFed').value;$('satDays').oninput=()=>SATS.days=$('satDays').value;
  const la=$('satLat'),lo=$('satLon');la.oninput=()=>SATS.lat=la.value;lo.oninput=()=>SATS.lon=lo.value;
  $('satGo').onclick=satRun;
  if(SATS.mode==='map'){SM.el=$('satMap');SM.ptr.clear();SM.tiles.clear();smBind(SM.el);
   $('smAt').textContent=SM.layer==='sat'?'Tiles © Esri — Maxar, Earthstar Geographics':'© OpenStreetMap contributors';
   $('smP').onclick=()=>smZoom(1);$('smM').onclick=()=>smZoom(-1);
   $('smU').onclick=()=>{SATS.poly.pop();SATR=null;smDraw();smInfo()};$('smC').onclick=()=>{SATS.poly=[];SATR=null;SATE=null;$('satOut').innerHTML='';smDraw();smInfo()};
-  $('smL').onclick=smLocate;$('smT').onclick=()=>{SM.layer=SM.layer==='sat'?'map':'sat';satUI()};
+  $('smL').onclick=smLocate;$('smS').onclick=smSquare;$('smQb').onclick=smSearch;$('smQ').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();smSearch()}};$('smT').onclick=()=>{SM.layer=SM.layer==='sat'?'map':'sat';satUI()};
   if(!SM.init){SM.init=true;if(typeof LOC!=='undefined'&&LOC&&isFinite(LOC.lat)&&isFinite(LOC.lon)){SM.lat=LOC.lat;SM.lon=LOC.lon;SM.z=16}else{SM.lat=27;SM.lon=30.5;SM.z=6}}
   requestAnimationFrame(()=>{smDraw();smInfo()});
   if(window.ResizeObserver){if(SM.ro)SM.ro.disconnect();SM.ro=new ResizeObserver(()=>smDraw());SM.ro.observe(SM.el)}}
  if(SATR)satShow();else if(SATE)satErr(SATE)}
-function satErr(m){SATE=m;const e=$('satOut');if(e)e.innerHTML=`<div class="satMsg er">${escH(m)}</div>`}
+function satErr(m){SATE=m;const e=$('satOut');if(e)e.innerHTML=`<div class="satMsg er">${escH(m)}${SATT.t?`<div dir="ltr" style="font-size:.72rem;opacity:.75;margin-top:6px;word-break:break-all">${escH(SATT.t)}</div>`:''}</div>`}
 async function satPos(force){
- if(SATS.mode==='man'&&!force){const lat=parseFloat(String(SATS.lat).replace(',','.')),lon=parseFloat(String(SATS.lon).replace(',','.'));
-  if(!isFinite(lat)||!isFinite(lon))throw new Error(L2('اكتب خط العرض والطول كأرقام.','Enter latitude and longitude as numbers.'));
-  if(lat<21||lat>32.5||lon<24||lon>37)throw new Error(L2('الإحداثيات خارج حدود مصر.','Coordinates are outside Egypt.'));return{lat,lon}}
+ if(SATS.mode==='man'&&!force){let n=satLL(SATS.lat);if(n.length<2)n=n.concat(satLL(SATS.lon));
+  if(n.length<2)throw new Error(L2('اكتب خط العرض وخط الطول (مثال: 30.55 و 31.00).','Enter latitude and longitude (e.g. 30.55 and 31.00).'));
+  const[lat,lon]=satFix(n[0],n[1]);
+  if(lat<21||lat>32.5||lon<24||lon>37)throw new Error(L2(`الإحداثيات (${n[0]}, ${n[1]}) خارج حدود مصر. خط العرض يكون بين 21 و32.5، وخط الطول بين 24 و37.`,`Coordinates (${n[0]}, ${n[1]}) are outside Egypt. Latitude must be 21–32.5 and longitude 24–37.`));return{lat,lon}}
  if(typeof LOC!=='undefined'&&LOC&&isFinite(LOC.lat)&&isFinite(LOC.lon))return{lat:LOC.lat,lon:LOC.lon};
  if(!navigator.geolocation)throw new Error(L2('المتصفح لا يدعم تحديد الموقع. اختر «إحداثيات أكتبها».','Geolocation unsupported. Choose “Coordinates I type”.'));
  const p=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:15000,maximumAge:60000})).catch(()=>{throw new Error(L2('لم يتم السماح بالموقع. اسمح به أو اختر «إحداثيات أكتبها».','Location was not allowed. Allow it or choose “Coordinates I type”.'))});
  return{lat:p.coords.latitude,lon:p.coords.longitude}}
 async function satRun(){
  if(SATB)return;if(!NET_OK){gateUI();return}
- const btn=$('satGo');SATB=true;btn.disabled=true;SATR=null;SATE=null;
+ const btn=$('satGo');SATB=true;btn.disabled=true;SATR=null;SATE=null;SATT.t='';
  $('satOut').innerHTML=`<div class="satMsg">${L2('⏳ جارٍ جلب صور القمر الصناعي… قد يستغرق حتى 30 ثانية.','⏳ Fetching satellite data… may take up to 30 seconds.')}</div>`;
  try{
+  const days=Math.round(parseFloat(satNum(SATS.days).replace(',','.')));
+  if(!(days>=10&&days<=365))throw new Error(L2('الفترة لازم تكون من 10 إلى 365 يوماً.','Period must be 10 to 365 days.'));
   let pos,geometry;
   if(SATS.mode==='map'){const P=SATS.poly;if(P.length<3)throw new Error(L2('حدّد 3 نقاط على الأقل على الخريطة.','Mark at least 3 points on the map.'));
    if(smCross(P))throw new Error(L2('الحدود متقاطعة. امسح وأعد الرسم.','Boundary crosses itself. Clear and redraw.'));
    if(P.some(p=>p[1]<21||p[1]>32.5||p[0]<24||p[0]>37))throw new Error(L2('الحقل خارج حدود مصر.','Field is outside Egypt.'));
    const ha=smArea(P)/10000;if(ha<.05||ha>2000)throw new Error(L2('مساحة الحقل غير مناسبة (من 0.05 إلى 2000 هكتار).','Field area not suitable (0.05–2000 ha).'));
    const r=P.concat([P[0]]);geometry={type:'Polygon',coordinates:[r.map(p=>[p[0],p[1]])]};pos={lat:P.reduce((s,p)=>s+p[1],0)/P.length,lon:P.reduce((s,p)=>s+p[0],0)/P.length}}
-  else{pos=await satPos();geometry=satPoly(pos.lat,pos.lon,SATS.fed)}
+  else{const fed=parseFloat(satNum(SATS.fed).replace(',','.'));
+   if(!isFinite(fed)||fed<=0)throw new Error(L2('اكتب مساحة الحقل بالفدان (رقم أكبر من صفر).','Type the field area in feddan (number > 0).'));
+   if(fed<.12||fed>4700)throw new Error(L2('المساحة المسموحة من 0.12 إلى 4700 فدان.','Allowed area is 0.12 to 4700 feddan.'));
+   pos=await satPos();geometry=satPoly(pos.lat,pos.lon,fed)}
   const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),45000);
-  let r;try{r=await fetch(SAT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({geometry,days:SATS.days}),signal:ctl.signal})}finally{clearTimeout(to)}
+  let r;try{r=await fetch(SAT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({geometry,days}),signal:ctl.signal})}finally{clearTimeout(to)}
   let d=null;try{d=await r.json()}catch(e){}
-  if(!r.ok||!d||!d.ok){const er=(d&&d.error)||('HTTP '+r.status);
-   let m=L2('تعذّر جلب البيانات الآن. حاول لاحقاً.','Could not fetch data now. Try again later.');
+  if(!r.ok||!d||!d.ok){const er=(d&&d.error)||('HTTP '+r.status),det=(d&&d.detail&&d.detail!==er)?(' — '+d.detail):'';SATT.t=er+det;
+   let m=L2('رجّع الخادم خطأً غير متوقع. التفاصيل بالأسفل.','The server returned an unexpected error. Details below.');
    if(/outside Egypt/.test(er))m=L2('الموقع خارج حدود مصر.','Location is outside Egypt.');
-   else if(/area too (large|small)/.test(er))m=L2('مساحة الحقل غير مناسبة.','Field area not suitable.');
-   else if(/not configured/.test(er))m=L2('الخدمة غير مهيأة بعد (مفاتيح Copernicus).','Service not configured yet (Copernicus keys).');
-   else if(/upstream (401|403)/.test(er))m=L2('رُفضت المصادقة مع Copernicus. راجع المفاتيح في Cloudflare.','Copernicus rejected authentication. Check keys in Cloudflare.');
-   else if(/upstream 429/.test(er))m=L2('تم تجاوز الحصة المجانية مؤقتاً. حاول لاحقاً.','Free quota temporarily exceeded. Try later.');
+   else if(/area too (large|small)/.test(er))m=L2('مساحة الحقل غير مناسبة (من 0.05 إلى 2000 هكتار).','Field area not suitable (0.05–2000 ha).');
+   else if(/days must/.test(er))m=L2('الفترة لازم تكون من 10 إلى 365 يوماً.','Period must be 10 to 365 days.');
+   else if(/not configured/.test(er))m=L2('الخدمة غير مهيأة بعد (مفاتيح Copernicus ناقصة في Cloudflare).','Service not configured yet (Copernicus keys missing in Cloudflare).');
+   else if(/^auth failed|upstream (401|403)/.test(er))m=L2('رفض Copernicus المفتاح أو السر. أعد إنشاء OAuth client وحدّث السرّين في Cloudflare.','Copernicus rejected the client id/secret. Recreate the OAuth client and update both secrets in Cloudflare.');
+   else if(/upstream 429/.test(er))m=L2('تجاوزت الحصة المجانية مؤقتاً. حاول لاحقاً.','Free quota temporarily exceeded. Try later.');
+   else if(/upstream 400/.test(er))m=L2('رفض Copernicus الطلب (صيغة غير مقبولة). التفاصيل بالأسفل.','Copernicus rejected the request. Details below.');
+   else if(/upstream unreachable/.test(er))m=L2('تعذّر وصول الخادم إلى Copernicus الآن. حاول بعد قليل.','The server could not reach Copernicus now. Try again shortly.');
    throw new Error(m)}
-  SATR={pos,fed:SATS.fed,days:SATS.days,d};satShow()
- }catch(e){const m=(e&&e.name==='AbortError')?L2('انتهت مهلة الاتصال. حاول مرة أخرى.','Request timed out. Try again.'):(e&&e.message&&!/Failed to fetch|NetworkError|Load failed/i.test(e.message)?e.message:L2('تعذّر الاتصال بخدمة الأقمار الصناعية.','Could not reach the satellite service.'));satErr(m)}
+  SATR={pos,days,d};satShow()
+ }catch(e){const m=(e&&e.name==='AbortError')?L2('انتهت مهلة الاتصال. حاول مرة أخرى.','Request timed out. Try again.'):(e&&e.message&&!/Failed to fetch|NetworkError|Load failed/i.test(e.message)?e.message:(SATT.t=String((e&&e.message)||e).slice(0,160),L2('تعذّر الاتصال بخدمة الأقمار الصناعية (تأكد من الإنترنت ومن عنوان الخدمة).','Could not reach the satellite service (check internet and service URL).')));satErr(m)}
  finally{SATB=false;const b=$('satGo');if(b)b.disabled=false}}
 function satChart(P){
  const W=340,H=200,L=32,R=10,T=10,B=28,iw=W-L-R,ih=H-T-B;
