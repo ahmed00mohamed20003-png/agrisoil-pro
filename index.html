@@ -186,6 +186,12 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 .sm .at{position:absolute;bottom:2px;left:4px;font-size:9px;background:rgba(255,255,255,.75);color:#222;padding:1px 4px;border-radius:4px;pointer-events:none}
 .smB{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}.smB button{padding:8px 2px;font-size:.78rem}
 .smI{font-size:.88rem;padding:8px 10px;border:1px solid var(--bd);border-radius:10px;background:var(--card)}.smI.er{border-color:#d9534f}.smI.ok{border-color:#2e9e4f}
+.tile{position:relative}.tile.lk::after{content:"🔒 PRO";position:absolute;top:6px;inset-inline-start:8px;font-size:.62rem;font-weight:800;color:var(--gold,#c8962a);background:var(--card);border:1px solid var(--gold,#c8962a);border-radius:8px;padding:1px 5px}
+.satLock{text-align:center;padding:10px 4px}.satLock .big{font-size:2.6rem;line-height:1}.satLock ul{text-align:start;margin:10px auto;max-width:340px;padding-inline-start:20px;font-size:.88rem;line-height:1.9}
+.satX{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.satX .full{grid-column:1/-1}
+.satLg{display:flex;flex-wrap:wrap;gap:10px;font-size:.74rem;color:var(--mut);margin:2px 0 4px}.satLg i{display:inline-block;width:18px;height:0;border-top:2.5px solid;vertical-align:middle;margin-inline-end:4px}
+.satPh{margin:12px 0;padding:12px;border:1px solid var(--bd);border-radius:14px;background:var(--card)}.satCy{font-size:.82rem;line-height:1.7;margin:6px 0;padding:8px 10px;border-radius:10px;border:1px dashed var(--bd)}
+.satBar{display:grid;grid-template-columns:92px 1fr 40px;align-items:center;gap:8px;margin:5px 0;font-size:.84rem}.satBar div{height:10px;border-radius:6px;background:var(--bd);overflow:hidden;direction:ltr}.satBar i{display:block;height:100%;background:#2e9e4f;border-radius:6px}.satBar b{text-align:end}
 .calSea{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
 .calMs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none}.calMs::-webkit-scrollbar{display:none}
 .calMs button,.calGs button{flex:0 0 auto;min-height:36px;padding:4px 12px;font-size:.76rem}
@@ -477,7 +483,7 @@ $('crop').onchange=()=>{fillVr();dirty()};
 
 // ===== الحساب والمحاولات (Firebase) =====
 let trials=0,pro=false,LAST=null,c1,c2,USER=null,aMode='login',AUTH_READY=false,RESULT_READY=false,DIRTY=false;
-function badge(){$('tl').textContent=pro?'♾️ Pro':trials}
+function badge(){$('tl').textContent=pro?'♾️ Pro':trials;document.querySelectorAll('.tile[data-t=sat]').forEach(e=>e.classList.toggle('lk',!pro))}
 function saveTrials(){if(window.NamaaAuth)NamaaAuth.setTrials(trials)}
 function authMsg(t,ok){$('aMsg').textContent=t||'';$('aMsg').style.color=ok?'var(--ok)':'var(--er)'}
 function authUI(){const s=aMode==='signup';menuUI();$('logout').style.display=USER?'none':'';
@@ -506,7 +512,9 @@ function doLogout(){if(!USER){authMsg('');$('mAuth').classList.add('on');return}
 $('aX').onclick=()=>$('mAuth').classList.remove('on');
 $('logout').onclick=doLogout;$('logout2').onclick=doLogout;
 $('payWa').onclick=()=>window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('تفعيل Pro — حسابي: '+(USER?USER.email:'')),'_blank','noopener,noreferrer');
-$('cPay').onclick=()=>$('mPay').classList.remove('on');
+const PAYH=$('mPay').querySelector('h3'),PAYP=PAYH.nextElementSibling,PAYH0=PAYH.textContent,PAYP0=PAYP.textContent;
+function payOpen(proFeature){PAYH.textContent=proFeature?L2('ميزة الأقمار الصناعية لمشتركي Pro','Satellite is a Pro feature'):PAYH0;PAYP.textContent=proFeature?L2('حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيل Pro','Pay via InstaPay then send the receipt with your account email to activate Pro'):PAYP0;$('mPay').classList.add('on')}
+$('cPay').onclick=()=>{$('mPay').classList.remove('on');setTimeout(()=>{PAYH.textContent=PAYH0;PAYP.textContent=PAYP0},200)};
 // يستدعيها سكربت Firebase عند تغيّر حالة الدخول
 window.onUser=(u,d,err)=>{
   AUTH_READY=true;
@@ -624,7 +632,7 @@ function fillVr(){
   else if(gv)note='أصناف منطقة: '+[...rg].map(ch=>REG[ch]).join(' + ');
   if(cr==='cotton')note+=(note?' · ':'')+'القطن: الأصناف حسب القرار الوزاري لكل محافظة.';
   if(cr==='rice')note+=(note?' · ':'')+'زراعة الأرز مقصورة على المناطق المصرح بها من وزارة الري.';
-  if(cr==='wheat')note+=(note?' · ':'')+'المصدر: السياسة الصنفية لمحصول القمح موسم 2026/2027 (معهد بحوث المحاصيل الحقلية). سخا 96 مبكر النضج ويفضّل زراعته متأخراً بعد الخضر وقصب السكر.';
+  if(cr==='wheat')note+=(note?' · ':'')+L2('المصدر: السياسة الصنفية لمحصول القمح موسم 2026/2027 (معهد بحوث المحاصيل الحقلية). سخا 96 مبكر النضج ويفضّل زراعته متأخراً بعد الخضر وقصب السكر.','Source: 2026/2027 wheat variety policy (Field Crops Research Institute). Sakha 96 is early-maturing and is best planted late, after vegetables and sugarcane.');
   if(cr==='faba')note+=(note?' · ':'')+'أنسب ميعاد للزراعة: الدلتا 10–20 نوفمبر، الجيزة والفيوم 30 أكتوبر–20 نوفمبر، مصر الوسطى 15 أكتوبر–10 نوفمبر، الصعيد 10–30 أكتوبر.';
   $('vr').innerHTML=list.map(x=>`<option value="${x.n}">${x.n}</option>`).join('')+'<option value="__c">صنف آخر (اكتبه)</option>';
   $('vnote').textContent=note;vrChg();
@@ -1148,7 +1156,7 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.07-3';
+const APP_VER='2026.11.08-2';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1504,8 +1512,14 @@ function satNum(s){return String(s==null?'':s).replace(/[٠-٩]/g,d=>'٠١٢٣٤
 function satLL(s){const m=satNum(s).match(/-?\d+(?:[.,]\d+)?/g);return m?m.map(x=>parseFloat(x.replace(',','.'))):[]}
 function satFix(lat,lon){const okLat=v=>v>=21&&v<=32.5,okLon=v=>v>=24&&v<=37;if(okLat(lat)&&okLon(lon))return[lat,lon];if(okLat(lon)&&okLon(lat))return[lon,lat];return[lat,lon]}
 const SATT={t:''};
+function satLockUI(){const box=$('satBox');box.innerHTML=`<div class="satLock"><div class="big">🛰️🔒</div><h3 style="margin:8px 0">${L2('الأقمار الصناعية ميزة Pro','Satellite is a Pro feature')}</h3>
+ <p class="mut" style="font-size:.88rem;margin:0">${L2('تابع صحة محصولك من الفضاء، ارسم حدود حقلك على الخريطة واحصل على منحنى NDVI من صور Sentinel-2.','Monitor crop health from space: draw your field on the map and get an NDVI curve from Sentinel-2 imagery.')}</p>
+ <ul><li>${L2('منحنى NDVI بدقة 10 م كل ~5 أيام','NDVI curve at 10 m every ~5 days')}</li><li>${L2('مقارنة بالمنحنى المتوقع للمحصول حسب تاريخ الزراعة','Compared to the expected crop curve by planting date')}</li><li>${L2('تنبيهات عن التراجع والتباين داخل الحقل','Alerts on decline and within-field variation')}</li></ul>
+ <button id="satPay" style="width:100%;max-width:340px">⭐ ${L2('تفعيل Pro','Activate Pro')}</button></div>`;$('satPay').onclick=()=>payOpen(true)}
 function satUI(){
  const box=$('satBox');if(!box)return;$('satT').textContent=L2('الأقمار الصناعية — صحة الغطاء النباتي (NDVI)','Satellite — vegetation health (NDVI)');
+ if(!pro){satLockUI();return}
+ if(SATS.crop===undefined){SATS.crop=($('crop')&&$('crop').value)||'';try{SATS.pd=localStorage.getItem('qSatPd')||''}catch(e){SATS.pd=''}}
  const o=(v,t,sel)=>`<option value="${v}"${String(sel)===String(v)?' selected':''}>${t}</option>`;
  box.innerHTML=`<p class="mut" style="font-size:.85rem;margin:0 0 6px">${L2('صور Sentinel-2 المجانية (دقة 10 م، كل ~5 أيام). ارسم حدود حقلك على الخريطة ليحسب التطبيق متوسط NDVI داخلها.','Free Sentinel-2 imagery (10 m, every ~5 days). Draw your field boundary on the map and the app computes mean NDVI inside it.')}</p>
  <div class="satF">
@@ -1515,6 +1529,7 @@ function satUI(){
  <div id="satDaysW"><label>${L2('الفترة (يوم) — من 10 إلى 365','Period (days) — 10 to 365')}</label><input id="satDays" type="number" inputmode="numeric" min="10" max="365" step="1" list="satDaysL" value="${escH(SATS.days)}"><datalist id="satDaysL">${[30,45,60,90,120,180,270,365].map(v=>`<option value="${v}">`).join('')}</datalist></div>
  </div>
  </div>
+ <div class="satX"><div><label>${L2('المحصول (اختياري)','Crop (optional)')}</label><select id="satCrop"><option value="">—</option>${Object.entries(G).map(([gk,gn])=>`<optgroup label="${tx(gn)}">${Object.keys(C).filter(k=>C[k][1]===gk).map(k=>o(k,tx(C[k][0]),SATS.crop)).join('')}</optgroup>`).join('')}</select></div><div><label>${L2('تاريخ الزراعة (اختياري)','Planting date (optional)')}</label><input id="satPd" type="date" value="${escH(SATS.pd||'')}" max="${new Date().toISOString().slice(0,10)}"></div></div>
  <div id="satMapW" class="smW" style="display:${SATS.mode==='map'?'block':'none'}">
   <div class="sm" id="satMap"><div class="tl"></div><svg class="ov" aria-hidden="true"></svg><div class="zc"><button type="button" id="smP" aria-label="zoom in">+</button><button type="button" id="smM" aria-label="zoom out">−</button></div><div class="at" id="smAt"></div></div>
   <div class="smB"><button type="button" id="smU">↩ ${L2('تراجع','Undo')}</button><button type="button" id="smC">🗑 ${L2('مسح','Clear')}</button><button type="button" id="smL">📍 ${L2('موقعي','Me')}</button><button type="button" id="smT">${SM.layer==='sat'?'🗺️ '+L2('خريطة','Map'):'🛰️ '+L2('قمر','Sat')}</button><button type="button" id="smS" style="grid-column:span 2">▢ ${L2('مربع بالمساحة المكتوبة حول مركز الخريطة','Square of typed area at map center')}</button></div>
@@ -1528,6 +1543,7 @@ function satUI(){
  $('satFed').oninput=()=>SATS.fed=$('satFed').value;$('satDays').oninput=()=>SATS.days=$('satDays').value;
  const la=$('satLat'),lo=$('satLon');la.oninput=()=>SATS.lat=la.value;lo.oninput=()=>SATS.lon=lo.value;
  $('satGo').onclick=satRun;
+ $('satCrop').onchange=()=>{SATS.crop=$('satCrop').value;if(SATR)satShow()};$('satPd').onchange=()=>{SATS.pd=$('satPd').value;try{localStorage.setItem('qSatPd',SATS.pd)}catch(e){}if(SATR)satShow()};
  if(SATS.mode==='map'){SM.el=$('satMap');SM.ptr.clear();SM.tiles.clear();smBind(SM.el);
   $('smAt').textContent=SM.layer==='sat'?'Tiles © Esri — Maxar, Earthstar Geographics':'© OpenStreetMap contributors';
   $('smP').onclick=()=>smZoom(1);$('smM').onclick=()=>smZoom(-1);
@@ -1548,7 +1564,7 @@ async function satPos(force){
  const p=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:15000,maximumAge:60000})).catch(()=>{throw new Error(L2('لم يتم السماح بالموقع. اسمح به أو اختر «إحداثيات أكتبها».','Location was not allowed. Allow it or choose “Coordinates I type”.'))});
  return{lat:p.coords.latitude,lon:p.coords.longitude}}
 async function satRun(){
- if(SATB)return;if(!NET_OK){gateUI();return}
+ if(SATB)return;if(!pro){satLockUI();payOpen(true);return}if(!NET_OK){gateUI();return}
  const btn=$('satGo');SATB=true;btn.disabled=true;SATR=null;SATE=null;SATT.t='';
  $('satOut').innerHTML=`<div class="satMsg">${L2('⏳ جارٍ جلب صور القمر الصناعي… قد يستغرق حتى 30 ثانية.','⏳ Fetching satellite data… may take up to 30 seconds.')}</div>`;
  try{
@@ -1565,11 +1581,16 @@ async function satRun(){
    if(fed<.12||fed>4700)throw new Error(L2('المساحة المسموحة من 0.12 إلى 4700 فدان.','Allowed area is 0.12 to 4700 feddan.'));
    pos=await satPos();geometry=satPoly(pos.lat,pos.lon,fed)}
   const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),45000);
-  let r;try{r=await fetch(SAT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({geometry,days}),signal:ctl.signal})}finally{clearTimeout(to)}
+  const tk=(window.NamaaAuth&&NamaaAuth.token)?await NamaaAuth.token().catch(()=>null):null;
+  if(!tk)throw new Error(L2('سجّل الدخول من جديد ثم حاول مرة أخرى.','Please sign in again and retry.'));
+  let r;try{r=await fetch(SAT_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tk},body:JSON.stringify({geometry,days}),signal:ctl.signal})}finally{clearTimeout(to)}
   let d=null;try{d=await r.json()}catch(e){}
   if(!r.ok||!d||!d.ok){const er=(d&&d.error)||('HTTP '+r.status),det=(d&&d.detail&&d.detail!==er)?(' — '+d.detail):'';SATT.t=er+det;
    let m=L2('رجّع الخادم خطأً غير متوقع. التفاصيل بالأسفل.','The server returned an unexpected error. Details below.');
-   if(/outside Egypt/.test(er))m=L2('الموقع خارج حدود مصر.','Location is outside Egypt.');
+   if(r.status===403&&/pro required/.test(er)){satLockUI();payOpen(true);throw new Error(L2('هذه الميزة لمشتركي Pro فقط.','This feature is for Pro subscribers only.'))}
+   if(/login required/.test(er))m=L2('انتهت جلسة الدخول. سجّل الدخول من جديد.','Your session expired. Please sign in again.');
+   else if(/pro check failed/.test(er))m=L2('تعذّر التحقق من اشتراك Pro الآن. حاول بعد قليل.','Could not verify your Pro subscription now. Try again shortly.');
+   else if(/outside Egypt/.test(er))m=L2('الموقع خارج حدود مصر.','Location is outside Egypt.');
    else if(/area too (large|small)/.test(er))m=L2('مساحة الحقل غير مناسبة (من 0.05 إلى 2000 هكتار).','Field area not suitable (0.05–2000 ha).');
    else if(/days must/.test(er))m=L2('الفترة لازم تكون من 10 إلى 365 يوماً.','Period must be 10 to 365 days.');
    else if(/not configured/.test(er))m=L2('الخدمة غير مهيأة بعد (مفاتيح Copernicus ناقصة في Cloudflare).','Service not configured yet (Copernicus keys missing in Cloudflare).');
@@ -1581,43 +1602,165 @@ async function satRun(){
   SATR={pos,days,d};satShow()
  }catch(e){const m=(e&&e.name==='AbortError')?L2('انتهت مهلة الاتصال. حاول مرة أخرى.','Request timed out. Try again.'):(e&&e.message&&!/Failed to fetch|NetworkError|Load failed/i.test(e.message)?e.message:(SATT.t=String((e&&e.message)||e).slice(0,160),L2('تعذّر الاتصال بخدمة الأقمار الصناعية (تأكد من الإنترنت ومن عنوان الخدمة).','Could not reach the satellite service (check internet and service URL).')));satErr(m)}
  finally{SATB=false;const b=$('satGo');if(b)b.disabled=false}}
-function satChart(P){
- const W=340,H=200,L=32,R=10,T=10,B=28,iw=W-L-R,ih=H-T-B;
+const NDVI_G={cer:[.82,.55,.25],leg:[.78,.55,.3],ind:[.78,.6,.3],veg:[.75,.5,.3]};
+const NDVI_X={potato:[.8,.55,.25],onion:[.7,.55,.25],rice:[.85,.55,.25],cotton:[.75,.6,.3],sugarbeet:[.82,.65,.4],sugarcane:[.85,.6,.4],maize:[.85,.55,.25],tomato:[.78,.55,.3],garlic:[.68,.55,.25],carrot:[.75,.55,.3],sweetpotato:[.8,.6,.35]};
+function satRef(key){const c=C[key];if(!c)return null;
+ if(c[1]==='fru')return{kind:'band',lo:.4,hi:.8,ar:'محاصيل الأشجار: NDVI شبه ثابت طوال العام (حوالي 0.4–0.8 حسب الكثافة)',en:'Tree crops: NDVI stays fairly steady all year (about 0.4–0.8 depending on canopy)'};
+ if(key==='alfalfa'||key==='berseem')return{kind:'band',lo:.3,hi:.85,ar:'محاصيل العلف المتعددة الحشّات: NDVI يرتفع وينخفض مع كل حشّة (0.3–0.85)',en:'Multi-cut forage: NDVI rises and falls with every cut (0.3–0.85)'};
+ const p=NDVI_X[key]||NDVI_G[c[1]];if(!p)return null;return{kind:'curve',D:c[8],P:p[0],fp:p[1],e:p[2]}}
+function satExp(r,dap){const t=dap/r.D;if(t<0||t>1.15)return null;const b0=.18;if(t<.08)return b0;
+ if(t<r.fp){const u=(t-.08)/(r.fp-.08);return b0+(r.P-b0)*(.5-.5*Math.cos(Math.PI*u))}
+ const h=r.fp+.12;if(t<h)return r.P;const u=Math.min(1,(t-h)/(1-h));return r.P+(r.e-r.P)*(.5-.5*Math.cos(Math.PI*u))}
+function satStage(r,dap){const t=dap/r.D;return t<.08?L2('إنبات وبداية النمو','Emergence'):t<r.fp*.6?L2('نمو خضري مبكر','Early vegetative'):t<r.fp?L2('نمو خضري سريع','Rapid vegetative growth'):t<r.fp+.12?L2('قمة النمو','Peak growth'):t<=1?L2('نضج وبداية الشيخوخة','Maturity / senescence'):L2('انتهاء الموسم المتوقع','Expected season end')}
+const sv=p=>p.med!=null?p.med:p.mean,slo=p=>p.p10!=null?p.p10:p.min,shi=p=>p.p90!=null?p.p90:p.max;
+function satN(n){return lang==='en'?n+(n===1?' reading':' readings'):(n===1?'قراءة واحدة':n===2?'قراءتان':n<=10?n+' قراءات':n+' قراءة')}
+function satRefCtx(P){const key=SATS.crop;if(!key||!C[key])return null;const r=satRef(key);if(!r)return null;
+ const pd=SATS.pd?Date.parse(SATS.pd+'T00:00:00Z'):NaN;if(r.kind==='curve'&&!isFinite(pd))return{key,r,need:'pd'};return{key,r,pd}}
+function satChart(P,rc){
+ const W=340,H=210,L=32,R=10,T=10,B=28,iw=W-L-R,ih=H-T-B;
  const ts=P.map(p=>Date.parse(p.from)+(Date.parse(p.to)-Date.parse(p.from))/2);const t0=ts[0],t1=ts[ts.length-1];
- const X=i=>L+(t1===t0?iw/2:(ts[i]-t0)/(t1-t0)*iw),Y=v=>T+(1-Math.max(0,Math.min(1,v)))*ih;
+ const X=i=>L+(t1===t0?iw/2:(ts[i]-t0)/(t1-t0)*iw),XT=t=>L+(t1===t0?iw/2:(t-t0)/(t1-t0)*iw),Y=v=>T+(1-Math.max(0,Math.min(1,v)))*ih;
  let s=`<svg class="satCh" viewBox="0 0 ${W} ${H}" role="img" aria-label="NDVI">`;
  [0,.2,.4,.6,.8,1].forEach(g=>{s+=`<line x1="${L}" x2="${W-R}" y1="${Y(g).toFixed(1)}" y2="${Y(g).toFixed(1)}" stroke="currentColor" opacity=".13"/><text x="${L-4}" y="${(Y(g)+3).toFixed(1)}" font-size="9" text-anchor="end" fill="currentColor" opacity=".6">${g}</text>`});
- if(P.length>1){const up=P.map((p,i)=>`${X(i).toFixed(1)},${Y(p.max==null?p.mean:p.max).toFixed(1)}`),dn=P.map((p,i)=>`${X(i).toFixed(1)},${Y(p.min==null?p.mean:p.min).toFixed(1)}`).reverse();
+ // المنحنى المتوقع للمحصول
+ let expLeg=false;
+ if(rc&&rc.r.kind==='band'){s+=`<rect x="${L}" y="${Y(rc.r.hi).toFixed(1)}" width="${iw}" height="${(Y(rc.r.lo)-Y(rc.r.hi)).toFixed(1)}" fill="#3b82f6" opacity=".12"/>`;expLeg=true}
+ else if(rc&&rc.r.kind==='curve'&&isFinite(rc.pd)){const pts=[];for(let k=0;k<=30;k++){const t=t0+(t1-t0)*k/30,e=satExp(rc.r,(t-rc.pd)/86400000);if(e!=null)pts.push([XT(t),e])}
+  if(pts.length>1){const up=pts.map(p=>`${p[0].toFixed(1)},${Y(p[1]+.12).toFixed(1)}`),dn=pts.map(p=>`${p[0].toFixed(1)},${Y(p[1]-.12).toFixed(1)}`).reverse();
+   s+=`<polygon points="${up.concat(dn).join(' ')}" fill="#3b82f6" opacity=".12"/><polyline points="${pts.map(p=>p[0].toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-dasharray="5 4"/>`;expLeg=true}}
+ if(P.length>1){const up=P.map((p,i)=>`${X(i).toFixed(1)},${Y(shi(p)==null?sv(p):shi(p)).toFixed(1)}`),dn=P.map((p,i)=>`${X(i).toFixed(1)},${Y(slo(p)==null?sv(p):slo(p)).toFixed(1)}`).reverse();
   s+=`<polygon points="${up.concat(dn).join(' ')}" fill="#2e9e4f" opacity=".16"/>`;
-  s+=`<polyline points="${P.map((p,i)=>X(i).toFixed(1)+','+Y(p.mean).toFixed(1)).join(' ')}" fill="none" stroke="#2e9e4f" stroke-width="2"/>`}
- P.forEach((p,i)=>{s+=`<circle cx="${X(i).toFixed(1)}" cy="${Y(p.mean).toFixed(1)}" r="4" fill="${satBands(p.mean).c}" stroke="#fff" stroke-width="1"/>`});
+  s+=`<polyline points="${P.map((p,i)=>X(i).toFixed(1)+','+Y(sv(p)).toFixed(1)).join(' ')}" fill="none" stroke="#2e9e4f" stroke-width="2"/>`}
+ P.forEach((p,i)=>{const sp=p.__sus;s+=`<circle cx="${X(i).toFixed(1)}" cy="${Y(sv(p)).toFixed(1)}" r="${sp?5:4}" fill="${sp?'none':satBands(sv(p)).c}" stroke="${sp?'#e0a21a':'#fff'}" stroke-width="${sp?2:1}"/>`});
  const fd=P[0].from.slice(5),ld=P[P.length-1].to.slice(5);
- s+=`<text x="${L}" y="${H-8}" font-size="9" fill="currentColor" opacity=".7">${fd}</text><text x="${W-R}" y="${H-8}" font-size="9" text-anchor="end" fill="currentColor" opacity=".7">${ld}</text></svg>`;return s}
+ s+=`<text x="${L}" y="${H-8}" font-size="9" fill="currentColor" opacity=".7">${fd}</text><text x="${W-R}" y="${H-8}" font-size="9" text-anchor="end" fill="currentColor" opacity=".7">${ld}</text></svg>`;
+ s+=`<div class="satLg"><span><i style="border-color:#2e9e4f"></i>${L2('NDVI المقاس (الوسيط)','Measured NDVI (median)')}</span><span><i style="border-color:#2e9e4f;opacity:.3"></i>${L2('المدى داخل الحقل','Range inside field')}</span>${expLeg?`<span><i style="border-color:#3b82f6;border-top-style:dashed"></i>${L2('المتوقع للمحصول','Expected for crop')}</span>`:''}${P.some(p=>p.__sus)?`<span><b style="color:#e0a21a">○</b> ${L2('قراءة مشكوك فيها','Suspect reading')}</span>`:''}</div>`;return s}
+
+// ===== تحليل الموسم: دورات + تواريخ + اقتراح المحصول =====
+const SEA={wheat:'w',barley:'w',oat:'w',faba:'w',lentil:'w',chickpea:'w',sugarbeet:'w',garlic:'w',onion:'w',cabbage:'w',strawberry:'w',carrot:'b',potato:'b',tomato:'b',pepper:'b',eggplant:'b',cucumber:'b',squash:'b',sunflower:'b',maize:'s',rice:'s',sorghum:'s',cotton:'s',soybean:'s',peanut:'s',sesame:'s',watermelon:'s',cantaloupe:'s',okra:'s',sweetpotato:'s',sugarcane:'y'};
+const DAY=864e5;
+function satDaily(P,w){ // سلسلة يومية: وسيط ثلاثي لإزالة القفزات المنفردة، ثم استيفاء خطي، ثم متوسط متحرك
+ const pts=P.map(p=>[(Date.parse(p.from)+Date.parse(p.to))/2,sv(p)]);
+ const m=pts.map((q,i)=>{const a=[pts[i-1],q,pts[i+1]].filter(Boolean).map(x=>x[1]).sort((x,y)=>x-y);return[q[0],a[Math.floor(a.length/2)]]});
+ if(m.length<2)return[];const t0=Math.floor(m[0][0]/DAY),t1=Math.floor(m[m.length-1][0]/DAY),raw=[];let j=0;
+ for(let d=t0;d<=t1;d++){const tt=d*DAY;while(j<m.length-2&&m[j+1][0]<tt)j++;const a=m[j],b=m[j+1]||a,f=b[0]===a[0]?0:Math.max(0,Math.min(1,(tt-a[0])/(b[0]-a[0])));raw.push([tt,a[1]+(b[1]-a[1])*f])}
+ const n=raw.length,pre=[0];raw.forEach(r=>pre.push(pre[pre.length-1]+r[1]));
+ return raw.map((r,i)=>{const a=Math.max(0,i-w),b=Math.min(n-1,i+w);return[r[0],(pre[b+1]-pre[a])/(b-a+1)]})}
+function satPeaks(y,minProm,minV,win,sep){const n=y.length,pk=[];
+ for(let i=0;i<n;i++){const v=y[i][1];if(v<minV)continue;let mx=true;for(let k=Math.max(0,i-win);k<=Math.min(n-1,i+win);k++)if(y[k][1]>v||(y[k][1]===v&&k<i)){mx=false;break}if(!mx)continue;
+  let l=i,lm=v;for(let k=i-1;k>=0;k--){if(y[k][1]>v)break;if(y[k][1]<lm){lm=y[k][1];l=k}}
+  let r=i,rm=v;for(let k=i+1;k<n;k++){if(y[k][1]>v)break;if(y[k][1]<rm){rm=y[k][1];r=k}}
+  const prom=v-Math.max(lm,rm);if(prom<minProm)continue;pk.push({i,v,l,lm,r,rm,prom})}
+ const out=[];pk.forEach(p=>{const q=out[out.length-1];if(q&&p.i-q.i<sep){if(p.v>q.v)out[out.length-1]=p}else out.push(p)});return out}
+function satCycles(P){const y=satDaily(P,7);if(y.length<60)return{y,cyc:[]};const n=y.length;
+ const cyc=satPeaks(y,.2,.4,20,45).map(p=>{const partialL=p.l<=3&&y[0][1]>p.v-.25,partialR=p.r>=n-4&&y[n-1][1]>p.v-.25;
+  let sos=null,eos=null;
+  if(!partialL){const th=p.lm+.2*(p.v-p.lm);for(let k=p.l;k<=p.i;k++)if(y[k][1]>=th){sos=k;break}}
+  if(!partialR){const th=p.rm+.25*(p.v-p.rm);for(let k=p.r;k>=p.i;k--)if(y[k][1]>=th){eos=k;break}}
+  const plant=sos!=null?y[sos][0]-10*DAY:null,end=eos!=null?y[eos][0]:null;
+  return{peakT:y[p.i][0],peakV:p.v,plant,end,partialL,partialR,dur:(plant&&end)?Math.round((end-plant)/DAY):null,i:p.i,l:p.l,r:p.r}});
+ return{y,cyc}}
+function satSeasonOf(ts){const m=new Date(ts).getUTCMonth()+1;return(m>=10||m<=2)?'w':(m>=3&&m<=6)?'s':'n'}
+function satForage(P){const y=satDaily(P,3);if(y.length<120)return null;const pk=satPeaks(y,.1,.45,9,18);if(pk.length<3)return null;
+ const gaps=[];for(let i=1;i<pk.length;i++)gaps.push((y[pk[i].i][0]-y[pk[i-1].i][0])/DAY);const sorted=gaps.slice().sort((a,b)=>a-b),med=sorted[Math.floor(sorted.length/2)];
+ const a0=pk[0].i,b0=pk[pk.length-1].i;let sm=0;for(let i=a0;i<=b0;i++)sm+=y[i][1];const mean=sm/(b0-a0+1);if(med<20||med>70||mean<.45)return null;
+ const summer=pk.some(p=>{const m=new Date(y[p.i][0]).getUTCMonth()+1;return m>=6&&m<=9});
+ return{cuts:pk.length,gap:Math.round(med),dates:pk.map(p=>new Date(y[p.i][0]).toISOString().slice(0,10)),summer}}
+const PMON={wheat:[10,11,12,1],barley:[10,11,12,1],oat:[10,11,12,1],faba:[9,10,11,12],lentil:[10,11,12],chickpea:[10,11,12],sugarbeet:[9,10,11,12],garlic:[9,10,11,12],onion:[9,10,11,12,1],cabbage:[8,9,10,11,12],strawberry:[9,10,11],maize:[3,4,5,6,7],rice:[4,5,6],sorghum:[3,4,5,6,7],cotton:[3,4],soybean:[4,5,6],peanut:[3,4,5],sesame:[4,5,6],watermelon:[2,3,4,5,6],cantaloupe:[2,3,4,5,6],okra:[3,4,5,6],sweetpotato:[3,4,5,6]};
+const PRIOR={wheat:1.5,maize:1.4,rice:1.3,cotton:1.2,faba:1.2,sugarbeet:1.2,potato:1.15,tomato:1.15,onion:1.1,sorghum:1.05,sunflower:.9,soybean:.9,peanut:1,sesame:.9,lentil:.85,chickpea:.8,oat:.7,garlic:.9,carrot:.9,cabbage:.95,strawberry:.85};
+function satFit(c,y,r){ // أنسب تاريخ زراعة ومدة لمنحنى المحصول مع بيانات الدورة
+ const n=y.length,a=Math.max(0,c.l-12),b=Math.min(n-1,c.r+12),base=.18,amp=(c.peakV-base)/Math.max(.05,r.P-base);let best=null;
+ for(const sc of[.85,.92,1,1.08,1.18]){const D=r.D*sc,r2={kind:'curve',D,P:r.P,fp:r.fp,e:r.e};
+  for(let pl=y[a][0]-.4*D*DAY;pl<=y[b][0];pl+=3*DAY){let se=0,m=0;for(let i=a;i<=b;i+=2){const e=satExp(r2,(y[i][0]-pl)/DAY),mv=e==null?base:base+(e-base)*amp,d=y[i][1]-mv;se+=d*d;m++}
+   const rm=Math.sqrt(se/m);if(!best||rm<best.rm)best={rm,pl,sc,D}}}
+ return best}
+function satScore(c,y){const rows=[];
+ Object.keys(C).forEach(k=>{const sea=SEA[k];if(!sea)return;const r=satRef(k);if(!r||r.kind!=='curve')return;
+  const f=satFit(c,y,r);if(!f)return;const ps=satSeasonOf(f.pl);
+  const pm=new Date(f.pl).getUTCMonth()+1,wn=PMON[k];let sf=wn?(wn.includes(pm)?1:.08):(sea==='b'||sea==='y'?.85:1);
+  const fit=Math.exp(-Math.pow(f.rm/.085,2)),dp=Math.exp(-Math.pow(Math.log(f.sc)/.2,2)),pk=Math.exp(-Math.pow((c.peakV-r.P)/.25,2));
+  rows.push({k,s:fit*dp*sf*Math.sqrt(pk)*(PRIOR[k]||1),plant:f.pl,end:f.pl+f.D*DAY,rm:f.rm,D:Math.round(f.D)})});
+ const w=rows.map(r=>r.s*r.s),sum=w.reduce((a,b)=>a+b,0)||1;rows.forEach((r,i)=>{r.pct=w[i]/sum*100});rows.sort((a,b)=>b.s-a.s);return rows}
+function satPheno(P){
+ const first=Date.parse(P[0].from),lastT=Date.parse(P[P.length-1].to),span=Math.round((lastT-first)/DAY);
+ const res={span,ok:span>=150};if(!res.ok)return res;
+ const{y,cyc}=satCycles(P);res.y=y;res.cyc=cyc;
+ const vals=y.map(q=>q[1]).sort((a,b)=>a-b),p5=vals[Math.floor(vals.length*.05)],p95=vals[Math.floor(vals.length*.95)],med=vals[Math.floor(vals.length/2)];
+ res.perennial=(p95-p5<.22&&med>.42);res.forage=satForage(P);
+ if(res.perennial||res.forage)return res;
+ // نختار الدورة الأحدث (مكتملة إن وُجدت) للتحليل
+ cyc.forEach(c=>{c.cands=satScore(c,y)});
+ const done=cyc.filter(c=>!c.partialL&&!c.partialR),pick=done.length?done[done.length-1]:cyc[cyc.length-1];
+ if(pick){res.pick=pick;res.cands=pick.cands}
+ return res}
+function satFmt(ts){return ts==null?'—':new Date(ts).toISOString().slice(0,10)}
+function satSeaName(s){return s==='w'?L2('شتوية','Winter'):s==='s'?L2('صيفية','Summer'):L2('نيلية','Nili (late summer)')}
+function satPhenoHTML(P,ph){
+ if(!ph.ok){return`<div class="satMsg" style="margin:10px 0">🔎 ${L2(`لتحديد المحصول ومواعيد الزراعة والحصاد أحتاج منحنى موسم كامل (150 يوماً على الأقل، والأفضل سنة). الفترة الحالية ${ph.span} يوماً.`,`To identify the crop and planting/harvest dates I need a full-season curve (at least 150 days, ideally a year). The current period is ${ph.span} days.`)}<button id="sat365" style="width:100%;margin-top:8px">🗓️ ${L2('حلّل سنة كاملة (365 يوم)','Analyze a full year (365 days)')}</button></div>`}
+ let h=`<div class="satPh"><h4 style="margin:0 0 6px">🔬 ${L2('تحليل الموسم والمحصول','Season & crop analysis')}</h4>`;
+ if(ph.perennial)return h+`<p style="margin:0;font-size:.88rem">${L2('NDVI شبه ثابت طوال الفترة (تذبذب صغير). هذا نمط محاصيل الأشجار أو الغطاء الدائم (موالح، نخيل، زيتون، عنب، موز، مانجو…). لا توجد دورات موسمية واضحة.','NDVI stays nearly flat (small swings). This is typical of tree crops or permanent cover (citrus, dates, olives, grapes, banana, mango…). No clear seasonal cycles.')}</p></div>`;
+ if(ph.forage){const f=ph.forage;return h+`<p style="margin:0;font-size:.88rem">${L2(`نمط حشّات متكررة: حوالي ${f.cuts} حشّات، بفاصل نحو ${f.gap} يوماً. هذا نمط محاصيل العلف: ${f.summer?'البرسيم الحجازي (لأن الحشّات تمتد للصيف)':'البرسيم المصري (حشّات شتوية/ربيعية)'}.`,`Repeated-cut pattern: about ${f.cuts} cuts, ~${f.gap} days apart. This matches forage crops: ${f.summer?'alfalfa (cuts continue into summer)':'berseem clover (winter/spring cuts)'}.`)}</p><p class="mut" style="font-size:.78rem;margin:6px 0 0">${L2('تواريخ القمم:','Peak dates:')} ${f.dates.join(' · ')}</p></div>`}
+ const ncy=ph.cyc.length;
+ if(!ncy)return h+`<p style="margin:0;font-size:.88rem">${L2('لم أجد دورة نمو واضحة (قمة مرتفعة ثم هبوط) في هذه الفترة. قد يكون الحقل غير مزروع، أو القراءات قليلة بسبب الغيوم.','No clear growth cycle (a high peak followed by decline) was found. The field may be unplanted, or readings may be sparse due to clouds.')}</p></div>`;
+ h+=`<p style="margin:0 0 6px;font-size:.88rem">${L2(`عدد دورات النمو المكتشفة خلال ${ph.span} يوماً: <b>${ncy}</b>`,`Growth cycles detected over ${ph.span} days: <b>${ncy}</b>`)}</p>`;
+ h+=ph.cyc.map((c,i)=>{const tp=c.cands&&c.cands[0]&&c.cands[0].s>=.1?c.cands[0]:null,pl=tp?tp.plant:c.plant,en=tp?(c.partialR&&tp.end>Date.now()?null:tp.end):c.end,sea=satSeaName(satSeasonOf(pl!=null?pl:c.peakT-60*DAY));
+  return`<div class="satCy"><b>${L2('دورة','Cycle')} ${i+1} — ${sea}</b>${tp?` <span class="mut">(${L2('بافتراض','assuming')} ${escH(tx(C[tp.k][0]))})</span>`:''}<br>${L2('الزراعة','Planting')}: ${pl!=null?'≈ '+satFmt(pl)+' (±10 '+L2('أيام','d')+')':L2('قبل بداية الفترة','before the period start')} · ${L2('القمة','Peak')}: ${satFmt(c.peakT)} (NDVI ${c.peakV.toFixed(2)}) · ${L2('نهاية الموسم','Season end')}: ${en!=null?'≈ '+satFmt(en):L2('لم تنتهِ بعد','still ongoing')}${(pl!=null&&en!=null)?' · '+L2('المدة','Length')+' ≈ '+Math.round((en-pl)/DAY)+' '+L2('يوم','days'):''}</div>`}).join('');
+ if(ph.pick&&ph.cands){const c=ph.cands,top=c[0],second=c[1],partial=ph.pick.partialL||ph.pick.partialR;
+  const pc=Math.round(top.pct),gap=top.pct-(second?second.pct:0);
+  let conf,cc;if(top.s<.1){conf=L2('لا تطابق واضح','No clear match');cc='#d9534f'}else if(!partial&&pc>=55&&gap>=25){conf=L2('عالية نسبياً','Relatively high');cc='#2e9e4f'}else if(pc>=40&&!partial){conf=L2('متوسطة','Medium');cc='#d4a017'}else{conf=L2('منخفضة — محاصيل متشابهة أو دورة غير مكتملة','Low — similar crops or incomplete cycle');cc='#e0a21a'}
+  h+=`<h4 style="margin:10px 0 4px">🌾 ${L2('اقتراح المحصول (للدورة','Crop suggestion (for cycle')} ${ph.cyc.indexOf(ph.pick)+1})</h4>`;
+  if(top.s<.1)h+=`<p style="margin:0;font-size:.86rem">${L2('شكل الدورة لا يطابق أي محصول من القائمة بوضوح. قد يكون محصولاً غير مدرج أو حقلاً غير منتظم.','The cycle shape does not clearly match any crop in the list. It may be an unlisted crop or an irregular field.')}</p>`;
+  else{h+=c.slice(0,3).map(r=>`<div class="satBar"><span>${escH(tx(C[r.k][0]))}</span><div><i style="width:${Math.max(3,Math.round(r.pct))}%"></i></div><b>${Math.round(r.pct)}${lang==='en'?'%':'٪'}</b></div>`).join('');
+   h+=`<p style="margin:6px 0;font-size:.84rem">${L2('درجة الثقة:','Confidence:')} <b style="color:${cc}">${conf}</b></p>`;
+   if(SATS.crop&&C[SATS.crop]){const mine=c.find(r=>r.k===SATS.crop);if(mine&&mine.k!==top.k)h+=`<p class="mut" style="font-size:.8rem;margin:0 0 6px">${L2(`المحصول الذي اخترته (${escH(tx(C[SATS.crop][0]))}) نسبة تطابقه ${Math.round(mine.pct)}٪.`,`Your selected crop (${escH(tx(C[SATS.crop][0]))}) matches at ${Math.round(mine.pct)}%.`)}</p>`}
+   h+=`<button id="satUse" type="button" style="width:100%">✅ ${L2('استخدم الاقتراح الأول','Use top suggestion')} (${escH(tx(C[top.k][0]))}${L2(' + تاريخ الزراعة المقدّر',' + estimated planting date')})</button>`}}
+ h+=`<p class="mut" style="font-size:.74rem;margin:8px 0 0">${L2('هذا اقتراح مبني على شكل المنحنى وتوقيته وطول الدورة، وليس تأكيداً. المحاصيل المتشابهة (القمح/الشعير، الذرة/الأرز…) قد تتداخل. التواريخ تقديرية ±10 أيام، وأعطيت وزناً أكبر قليلاً للمحاصيل الأكثر شيوعاً في مصر. قارنه بما تعرفه عن حقلك.','This is a suggestion based on curve shape, timing and cycle length, not a confirmation. Similar crops (wheat/barley, maize/rice…) may overlap. Dates are estimates ±10 days, with slightly more weight for crops more common in Egypt. Compare it with what you know about your field.')}</p></div>`;return h}
 function satShow(){
- const o=$('satOut');if(!o||!SATR)return;const d=SATR.d,P=d.series||[];
+ const o=$('satOut');if(!o||!SATR)return;const d=SATR.d,P=(d.series||[]).slice();
  if(!P.length){o.innerHTML=`<div class="satMsg">${L2('لا توجد صور صالحة (بدون غيوم) في هذه الفترة لهذا الحقل. جرّب فترة أطول أو مساحة أكبر.','No cloud-free usable images in this period for this field. Try a longer period or larger area.')}</div>`;return}
- const last=P[P.length-1],prev=P.length>1?P[P.length-2]:null,cl=satBands(last.mean);
- const mx=Math.max(...P.map(p=>p.mean));
+ // قراءات مشكوك فيها: قفزة حادة معزولة عن جيرانها (غالباً غيم رفيع/ضباب/ظل)
+ P.forEach((p,i)=>{p.__sus=false;if(i>=1){const a=sv(P[i-1]),b=sv(p);if(Math.abs(b-a)>.25){const nx=P[i+1],pv=P[i-2];if(i===P.length-1?(pv?Math.abs(a-sv(pv))<.12:true):(nx&&Math.abs(sv(nx)-a)<.12))p.__sus=true}}});
+ const last=P[P.length-1],prev=P.length>1?P[P.length-2]:null,lv=sv(last),cl=satBands(lv),mx=Math.max(...P.map(sv));
  const dAgo=Math.max(0,Math.round((Date.now()-Date.parse(last.to))/86400000));
- let tr='—',trc='';if(prev){const dv=last.mean-prev.mean;tr=dv>.05?'↗ '+L2('تحسّن','Up'):dv<-.05?'↘ '+L2('تراجع','Down'):'→ '+L2('مستقر','Stable')}
- const ad=[];
+ let tr='—';if(prev){const dv=lv-sv(prev);tr=dv>.05?'↗ '+L2('تحسّن','Up'):dv<-.05?'↘ '+L2('تراجع','Down'):'→ '+L2('مستقر','Stable')}
+ const rc=satRefCtx(P),ad=[];
+ if(last.__sus)ad.push(['w',L2(`قفزة حادة في آخر قراءة (${(lv-sv(prev))>0?'+':''}${(lv-sv(prev)).toFixed(2)}). قد تكون غيماً رقيقاً أو ضباباً لم يُفلتر بالكامل، وقد تكون نمواً أو ريّاً أو حصاداً. أكّدها بقراءة بعد نحو 5 أيام قبل الاعتماد عليها.`,`Sharp jump in the latest reading (${(lv-sv(prev))>0?'+':''}${(lv-sv(prev)).toFixed(2)}). It may be thin cloud or haze not fully filtered, or real growth, irrigation or harvest. Confirm it with a reading about 5 days later before relying on it.`)]);
  if(dAgo>15)ad.push(['w',L2(`آخر صورة صالحة عمرها ${dAgo} يوماً (غيوم متكررة). القراءة قد لا تعكس الحالة الحالية.`,`Latest usable image is ${dAgo} days old (frequent clouds). It may not reflect current status.`)]);
- if(prev&&last.mean-prev.mean<-.1||mx-last.mean>.2&&last.mean<mx)ad.push(['w',L2('تراجع في NDVI عن قراءة سابقة. افحص الري ونقص العناصر والآفات والملوحة. وتذكّر أن النضج والحصاد يخفضان NDVI طبيعياً.','NDVI dropped from an earlier reading. Check irrigation, nutrient deficiency, pests and salinity. Note that maturity and harvest naturally lower NDVI.')]);
+ if(prev&&!last.__sus&&lv-sv(prev)<-.1)ad.push(['w',L2('تراجع في NDVI عن القراءة السابقة. افحص الري ونقص العناصر والآفات والملوحة، وتذكّر أن النضج والحصاد يخفضان NDVI طبيعياً.','NDVI dropped from the previous reading. Check irrigation, nutrient deficiency, pests and salinity; note that maturity and harvest naturally lower NDVI.')]);
  if(mx<.3)ad.push(['w',L2('الغطاء النباتي ضعيف طوال الفترة، وقد يكون الحقل غير مزروع أو في مرحلة ما قبل الإنبات.','Vegetation stayed low throughout; the field may be unplanted or pre-emergence.')]);
- if(last.sd!=null&&last.sd>.2)ad.push(['w',L2('تباين كبير داخل الحقل (انحراف معياري مرتفع): قد توجد أجزاء غير مزروعة أو مشكلة ري موضعية. وقد يشمل المربع أرضاً مجاورة.','High variation inside the field (large standard deviation): possible unplanted parts or localized irrigation issues. The square may also include neighboring land.')]);
- const sm=parseFloat($('sm')&&$('sm').value),fc=parseFloat($('fc')&&$('fc').value);
- if(prev&&last.mean-prev.mean<-.05&&isFinite(sm)&&isFinite(fc)&&fc>0&&sm<fc*.6)ad.push(['w',L2(`رطوبة التربة المُدخلة (${sm}%) منخفضة مقارنة بالسعة الحقلية (${fc}%) مع تراجع NDVI، فالري أولوية.`,`Entered soil moisture (${sm}%) is low vs field capacity (${fc}%) while NDVI is falling — irrigation is a priority.`)]);
- if(!ad.length)ad.push(['g',L2('لا مؤشرات مقلقة في هذه القراءات.','No worrying signs in these readings.')]);
+ if(last.sd!=null&&last.sd>.2)ad.push(['w',L2('تباين كبير داخل الحقل (انحراف معياري مرتفع): قد توجد أجزاء غير مزروعة أو مشكلة ري موضعية، وقد يشمل الحقل المرسوم أرضاً مجاورة.','High variation inside the field (large standard deviation): possible unplanted parts or localized irrigation issues; the drawn field may include neighboring land.')]);
+ // مقارنة بالمتوقع للمحصول
+ let stageHtml='';
+ if(rc){const nm=tx(C[rc.key][0]);
+  if(rc.need==='pd')ad.push(['i',L2(`اختر تاريخ الزراعة لأقارن منحنى ${nm} بالمتوقع.`,`Pick the planting date so I can compare the ${nm} curve with the expected one.`)]);
+  else if(rc.r.kind==='band'){ad.push(['i',L2(rc.r.ar,rc.r.en)]);if(lv<rc.r.lo-.05)ad.push(['w',L2(`NDVI الحالي (${lv.toFixed(2)}) أقل من المدى المعتاد لمحصول ${nm}. قد يكون عقب حشّة أو إجهاد (ري/ملوحة/آفات).`,`Current NDVI (${lv.toFixed(2)}) is below the usual range for ${nm}. It may follow a cut or indicate stress (irrigation/salinity/pests).`)])}
+  else{const ldt=Date.parse(last.to),dap=Math.round((ldt-rc.pd)/86400000),D=rc.r.D;
+   if(dap<0)ad.push(['w',L2('تاريخ الزراعة بعد آخر صورة؛ تأكد من التاريخ.','Planting date is after the latest image; check the date.')]);
+   else{const e=satExp(rc.r,dap);stageHtml=e==null?'':`<div class="satMsg" style="margin:8px 0">🌱 ${L2(`${nm}: اليوم ${dap} من نحو ${D} (${Math.min(100,Math.round(dap/D*100))}٪ من الموسم) — المرحلة: `,`${nm}: day ${dap} of about ${D} (${Math.min(100,Math.round(dap/D*100))}% of season) — stage: `)}<b>${satStage(rc.r,dap)}</b></div>`;
+    if(e==null)ad.push(['i',L2(`تاريخ الزراعة المُدخل يخص موسماً انتهى (مرّت مدته المتوقعة ≈${D} يوماً). الخط الأزرق المنقّط في الرسم يعرض ذلك الموسم للمقارنة، ولا أقارن به آخر قراءة.`,`The planting date belongs to a season that has ended (its expected ≈${D} days have passed). The dashed blue line shows that season for comparison; the latest reading is not compared with it.`)]);
+    else{const df=lv-e,ec=parseFloat($('ec')&&$('ec').value),sm=parseFloat($('sm')&&$('sm').value),fc=parseFloat($('fc')&&$('fc').value);
+     if(last.__sus)ad.push(['i',L2(`المتوقع لمحصول ${nm} في هذه المرحلة حوالي ${e.toFixed(2)}.`,`Expected for ${nm} at this stage is about ${e.toFixed(2)}.`)]);
+     else if(df<-.15){let x=L2(`NDVI (${lv.toFixed(2)}) أقل من المتوقع لمحصول ${nm} في هذه المرحلة (≈${e.toFixed(2)}) بمقدار ${Math.abs(df).toFixed(2)}. احتمالات: تأخر في الري أو التسميد أو إجهاد ملوحة أو آفات، أو أن تاريخ الزراعة المُدخَل غير دقيق.`,`NDVI (${lv.toFixed(2)}) is below the expected value for ${nm} at this stage (≈${e.toFixed(2)}) by ${Math.abs(df).toFixed(2)}. Possible: delayed irrigation or fertilization, salinity stress, pests, or an inaccurate planting date.`);
+      const tol=C[rc.key][5];if(isFinite(ec)&&isFinite(tol)&&ec>tol)x+=' '+L2(`لاحظ أن EC المُدخل (${ec}) أعلى من تحمّل المحصول (${tol}).`,`Note the entered EC (${ec}) exceeds the crop tolerance (${tol}).`);
+      if(isFinite(sm)&&isFinite(fc)&&fc>0&&sm<fc*.6)x+=' '+L2(`ورطوبة التربة (${sm}٪) منخفضة مقارنة بالسعة الحقلية (${fc}٪).`,`And soil moisture (${sm}%) is low vs field capacity (${fc}%).`);ad.push(['w',x])}
+     else if(df>.15)ad.push(['i',L2(`NDVI (${lv.toFixed(2)}) أعلى من المتوقع (≈${e.toFixed(2)}): غطاء كثيف، أو أن جدول المحصول أسرع من النموذج المرجعي.`,`NDVI (${lv.toFixed(2)}) is above expected (≈${e.toFixed(2)}): dense canopy, or the crop is ahead of the reference model.`)]);
+     else ad.push(['g',L2(`NDVI (${lv.toFixed(2)}) ضمن المتوقع لمحصول ${nm} في هذه المرحلة (≈${e.toFixed(2)}).`,`NDVI (${lv.toFixed(2)}) is within the expected range for ${nm} at this stage (≈${e.toFixed(2)}).`)])}}}}
+ if(!ad.some(a=>a[0]==='w'||a[0]==='g'))ad.push(['g',L2('لا مؤشرات مقلقة في هذه القراءات.','No worrying signs in these readings.')]);
+ const hasP=P.some(p=>p.p10!=null);
+ let ph=null,phHtml='';try{ph=satPheno(P);phHtml=satPhenoHTML(P,ph)}catch(e){console.error(e)}
  o.innerHTML=`<div class="satCls"><i style="background:${cl.c}"></i>${L2(cl.ar,cl.en)}</div>
- <div class="satK"><div><b style="color:${cl.c}">${last.mean.toFixed(2)}</b><span>${L2('آخر NDVI','Latest NDVI')}</span></div><div><b>${tr}</b><span>${L2('الاتجاه','Trend')}</span></div><div><b style="font-size:.95rem;white-space:nowrap">${last.to}</b><span>${L2('تاريخ آخر صورة','Last image date')}</span></div></div>
- ${satChart(P)}
- <p class="mut" style="font-size:.78rem;margin:0">${L2('الخط = متوسط NDVI، والظل = أدنى وأعلى قيمة داخل الحقل. الألوان تتبع فئات الغطاء.','Line = mean NDVI, shaded band = min–max inside the field. Colors follow cover classes.')} ${L2(`المساحة ${d.areaHa} هكتار، ${P.length} قراءة.`,`Area ${d.areaHa} ha, ${P.length} readings.`)}</p>
- <ul class="satAd">${ad.map(a=>`<li class="${a[0]}">${a[0]==='w'?'⚠️':'✅'} ${escH(a[1])}</li>`).join('')}</ul>
- <details><summary>${L2('جدول القراءات','Readings table')}</summary><table class="satTb"><tr><th>${L2('من','From')}</th><th>${L2('إلى','To')}</th><th>NDVI</th><th>min</th><th>max</th><th>${L2('صالح%','Valid%')}</th></tr>${P.slice().reverse().map(p=>`<tr><td>${p.from}</td><td>${p.to}</td><td>${p.mean.toFixed(2)}</td><td>${p.min==null?'—':p.min.toFixed(2)}</td><td>${p.max==null?'—':p.max.toFixed(2)}</td><td>${p.valid}</td></tr>`).join('')}</table></details>
+ <div class="satK"><div><b style="color:${cl.c}">${lv.toFixed(2)}</b><span>${L2('آخر NDVI','Latest NDVI')}</span></div><div><b>${tr}</b><span>${L2('الاتجاه','Trend')}</span></div><div><b style="font-size:.95rem;white-space:nowrap">${last.to}</b><span>${L2('تاريخ آخر صورة','Last image date')}</span></div></div>
+ ${stageHtml}${satChart(P,rc)}
+ <p class="mut" style="font-size:.78rem;margin:0">${L2(`الخط = وسيط NDVI داخل الحقل، والظل = ${hasP?'من النسبة 10٪ إلى 90٪':'أدنى وأعلى قيمة'}. الألوان تتبع فئات الغطاء.`,`Line = median NDVI inside the field, band = ${hasP?'10th–90th percentile':'min–max'}. Colors follow cover classes.`)} ${L2(`المساحة ${d.areaHa} هكتار، ${satN(P.length)}.`,`Area ${d.areaHa} ha, ${satN(P.length)}.`)}</p>
+ ${phHtml}
+ <ul class="satAd">${ad.map(a=>`<li class="${a[0]==='w'?'w':a[0]==='g'?'g':''}">${a[0]==='w'?'⚠️':a[0]==='g'?'✅':'ℹ️'} ${escH(a[1])}</li>`).join('')}</ul>
+ <details><summary>${L2('جدول القراءات','Readings table')}</summary><table class="satTb"><tr><th>${L2('من','From')}</th><th>${L2('إلى','To')}</th><th>NDVI</th><th>${hasP?'p10':'min'}</th><th>${hasP?'p90':'max'}</th><th>${L2('تغطية٪','Cover%')}</th></tr>${P.slice().reverse().map(p=>`<tr><td>${p.from}</td><td>${p.to}</td><td>${sv(p).toFixed(2)}</td><td>${slo(p)==null?'—':slo(p).toFixed(2)}</td><td>${shi(p)==null?'—':shi(p).toFixed(2)}</td><td>${p.cover!=null?p.cover:p.valid}</td></tr>`).join('')}</table></details>
  <details><summary>${L2('ملاحظات علمية ومصدر البيانات','Scientific notes & data source')}</summary><div style="font-size:.82rem;line-height:1.8">
- <p>${L2('NDVI = (NIR − Red) / (NIR + Red) من نطاقي B08 وB04 في Sentinel-2 L2A. تُستبعد البكسلات الغائمة والظلال والثلج عبر طبقة التصنيف SCL، ويُجمَّع المتوسط على فترات 5 أيام.','NDVI = (NIR − Red) / (NIR + Red) from Sentinel-2 L2A bands B08 and B04. Cloud, shadow and snow pixels are excluded using the SCL layer; values are aggregated over 5-day intervals.')}</p>
- <p>${L2('فئات الغطاء عامة ولا تخص محصولاً بعينه، والقيمة الطبيعية تتغير بمرحلة النمو. والحقول الأصغر من نحو 0.1 هكتار أو غير المربعة أقل دقة. في وضع المربع يكون الشكل تقريباً لموقع حقلك وليس حدوده الفعلية.','Cover classes are generic, not crop-specific, and normal values change with growth stage. Fields under ~0.1 ha or non-square fields are less accurate. In square mode the shape only approximates your field.')}</p>
- <p>${L2('تحتوي النتائج على بيانات Copernicus Sentinel المعدّلة (2026).','Contains modified Copernicus Sentinel data (2026).')}</p></div></details>`}
+ <p>${L2('NDVI = (NIR − Red) / (NIR + Red) من نطاقي B08 وB04 في Sentinel-2 L2A. تُستبعد البكسلات الغائمة والسحب الرقيقة والظلال والثلج والمياه عبر طبقة التصنيف SCL، والقيمة المعروضة هي وسيط بكسلات الحقل (أقل تأثراً بالقيم الشاذة من المتوسط) على فترات 5 أيام. تُحذف القراءات التي لا يصلح منها إلا أقل من 40٪ من أفضل تغطية.','NDVI = (NIR − Red) / (NIR + Red) from Sentinel-2 L2A bands B08 and B04. Cloud, thin cirrus, shadow, snow and water pixels are excluded with the SCL layer; the value shown is the median of field pixels (less sensitive to outliers than the mean) over 5-day intervals. Readings with under 40% of the best coverage are dropped.')}</p>
+ <p>${L2('المنحنى المتوقع تقريبي لنوع المحصول (مبني على خصائص عامة لتطور NDVI وطول الموسم في بيانات التطبيق)، وغير معايَر على حقول الدلتا. استخدمه مؤشراً لا حكماً. فئات الغطاء عامة، والحقول الأصغر من نحو 0.1 هكتار أقل دقة.','The expected curve is an approximation for the crop type (general NDVI phenology scaled to the season length in the app data), not calibrated on Nile Delta fields. Use it as an indicator, not a verdict. Cover classes are generic, and fields under ~0.1 ha are less accurate.')}</p>
+ <p>${L2('تحتوي النتائج على بيانات Copernicus Sentinel المعدّلة (2026).','Contains modified Copernicus Sentinel data (2026).')}</p></div></details>`;
+ const b365=$('sat365');if(b365)b365.onclick=()=>{SATS.days='365';const d=$('satDays');if(d)d.value='365';satRun()};
+ const bu=$('satUse');if(bu&&ph&&ph.cands&&ph.pick){bu.onclick=()=>{SATS.crop=ph.cands[0].k;if(ph.cands[0].s>=.1){SATS.pd=satFmt(ph.cands[0].plant);try{localStorage.setItem('qSatPd',SATS.pd)}catch(e){}}const sc=$('satCrop');if(sc)sc.value=SATS.crop;const sp=$('satPd');if(sp)sp.value=SATS.pd||'';satShow()}}}
 {const _sh=show;show=function(id){_sh(id);if(id==='sat')satUI()}}
 {const _sl=setLang;setLang=function(...a){_sl(...a);const p=$('p-sat');if(p&&p.classList.contains('on'))satUI()}}
 
@@ -1702,6 +1845,7 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     google:()=>signInWithPopup(auth,new GoogleAuthProvider()),
     reset:e=>sendPasswordResetEmail(auth,e),
     out:()=>signOut(auth),
+    token:()=>auth.currentUser?auth.currentUser.getIdToken():Promise.resolve(null),
     setTrials:n=>{if(ref)updateDoc(ref,{trials:n}).catch(()=>{})},
     retry:()=>{if(cur)load(cur)},
     config:async()=>{const s=await getDoc(doc(db,'config','app'));return s.exists()?s.data():null}
