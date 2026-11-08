@@ -235,6 +235,57 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 #offG.on{display:flex}#offG .ob{max-width:380px;display:flex;flex-direction:column;align-items:center;gap:14px}
 #offG .oi{font-size:3.4rem;line-height:1}#offG h2{margin:0;font-size:1.25rem;color:var(--ac)}#offG p{margin:0;color:var(--mut);font-size:.9rem;line-height:1.9}
 #offG button{min-width:180px}
+#runb{display:none;bottom:calc(92px + env(safe-area-inset-bottom,0px))}body.pg-crop #runb,body.pg-soil #runb,body.pg-water #runb,body.pg-salt #runb,body.pg-fert #runb{display:block}#toast{bottom:104px}
+/* ===== التصميم الفاخر ===== */
+:root[data-theme="dark"]{--bg:#05100b;--bg2:#0f3a29;--card:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.025));--fg:#f3ecd8;--mut:#a7b7a8;--ac:#e8c872;--ac2:#c9a24a;--gold:#e8c872;--bd:rgba(232,200,114,.22);--in:rgba(0,0,0,.35);--ok:#3ff0a8;--wn:#f5b83d;--er:#fb7185;--onac:#1f1500;--sh:0 18px 34px -20px #000}
+:root:not([data-theme="dark"]){--bg:#faf6ec;--bg2:#efe6cd;--card:rgba(255,253,247,.94);--fg:#18372a;--mut:#5f6f61;--ac:#1c4a37;--ac2:#2e7d57;--gold:#8f6a1c;--bd:rgba(143,106,28,.25);--onac:#fff}
+body{background:radial-gradient(900px 480px at 88% -8%,var(--bg2),transparent),radial-gradient(700px 400px at 0% 100%,var(--bg2),transparent),var(--bg)}
+.card{border-radius:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),var(--sh)}
+.hero,#dtS{display:none!important}
+.wrap{padding-bottom:110px}
+body.pg-home .tiles,body.pg-tools .tiles,body.pg-acct .tiles{display:none}
+.tiles{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none;margin-bottom:6px}.tiles::-webkit-scrollbar{display:none}
+.tile{flex:0 0 auto;min-width:78px;min-height:64px;padding:8px 10px;border-radius:18px}.tile.wide{min-width:96px}
+#qtb{display:none;align-items:center;gap:10px;margin:2px 0 12px}
+body:not(.pg-home):not(.pg-tools):not(.pg-acct) #qtb,body.pg-tools #qtb,body.pg-acct #qtb{display:flex}
+#qtb button{width:42px;height:42px;border-radius:15px;border:1px solid var(--bd);background:var(--card);color:var(--gold);font-size:1.2rem;min-height:0;padding:0;box-shadow:none}
+#qtb b{font-size:1.1rem}
+.gt{background:linear-gradient(120deg,#f6e3a6,#d4a94c 55%,#a8791f);-webkit-background-clip:text;background-clip:text;color:transparent}
+:root:not([data-theme="dark"]) .gt{background:none;color:var(--gold)}
+.hm .top2{display:flex;align-items:center;gap:12px;margin:6px 0 14px}.hm .top2 .t{flex:1}.hm .top2 small{display:block;font-size:.72rem;color:var(--mut)}.hm .top2 b{font-size:1.15rem}
+.avr{width:46px;height:46px;border-radius:50%;padding:2px;background:conic-gradient(from 200deg,#f6e3a6,#8f6a1c,#d4a94c,#f6e3a6);border:0;min-height:0;cursor:pointer}.avr span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#0b2a1e;color:#f6e3a6;font-weight:900;font-size:1rem}
+.chs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.ch2{border:1px solid var(--bd);background:var(--card);border-radius:99px;padding:7px 13px;font-size:.74rem;display:flex;gap:6px;align-items:center;cursor:default}button.ch2{cursor:pointer;color:var(--fg);min-height:0;box-shadow:none}
+.hf{position:relative;height:238px;border-radius:30px;overflow:hidden;border:1px solid var(--bd);box-shadow:0 26px 44px -26px #000;cursor:pointer;margin-bottom:6px}
+.hf svg{position:absolute;inset:0;width:100%;height:100%}.hf .ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,18,11,.05) 30%,rgba(4,18,11,.94))}
+.hf .tg{position:absolute;top:12px;inset-inline-start:12px;font-size:.68rem;padding:5px 11px;border-radius:99px;background:rgba(4,18,11,.78);border:1px solid rgba(255,255,255,.18);color:#f3ecd8;display:flex;gap:6px;align-items:center}
+.hf .dt{width:7px;height:7px;border-radius:50%;background:#3ff0a8;box-shadow:0 0 8px #3ff0a8}
+.hf .in{position:absolute;bottom:14px;inset-inline:16px;display:flex;justify-content:space-between;align-items:flex-end;color:#f3ecd8}
+.hf .lb{font-size:.72rem;opacity:.8}.hf .nm{font-size:2.5rem;font-weight:900;line-height:1.05}.hf .dl{font-size:.78rem;margin-top:2px}
+.hf .cta{align-self:center;padding:9px 16px;border-radius:99px;background:linear-gradient(135deg,#f6e3a6,#c9a24a);color:#1f1500;font-weight:800;font-size:.8rem}
+.sc2{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 9px;font-weight:800;font-size:.95rem}.sc2 small{color:var(--gold);font-weight:600;font-size:.74rem;cursor:pointer}
+.tg3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tl3{border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:22px;padding:14px 6px;text-align:center;font-size:.76rem;font-weight:700;cursor:pointer;min-height:92px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.tl3 .c{width:44px;height:44px;margin:0 auto 7px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(212,169,76,.25),rgba(212,169,76,.05));border:1px solid rgba(212,169,76,.4)}
+.tl3 .ic{width:26px;height:26px;margin:0}.tl3.lk:after{content:'PRO';display:block;font-size:.55rem;color:var(--gold);margin-top:2px;letter-spacing:1px}
+.tp{display:flex;gap:12px;align-items:center;margin-top:12px;border:1px solid var(--bd);background:var(--card);border-radius:22px;padding:13px 14px;cursor:pointer}.tp .c{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#d4a94c,#8f6a1c);color:#1f1500;flex:none;font-size:1.1rem}.tp b{display:block;font-size:.84rem}.tp small{color:var(--mut);font-size:.74rem;line-height:1.6}
+#bnav{position:fixed;bottom:max(12px,env(safe-area-inset-bottom));inset-inline:14px;max-width:520px;margin:auto;height:68px;border-radius:32px;display:flex;align-items:center;justify-content:space-around;background:rgba(6,20,13,.94);border:1px solid rgba(232,200,114,.3);box-shadow:0 22px 34px -12px #000,inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(16px);z-index:40}
+:root:not([data-theme="dark"]) #bnav{background:#18372a}
+#bnav button{background:none;border:0;box-shadow:none;color:#bfae7a;opacity:.62;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.62rem;width:60px;min-height:0;padding:0;cursor:pointer}
+#bnav button.on{opacity:1;color:#f6e3a6;font-weight:800}#bnav .ic{width:24px;height:24px;margin:0}
+#bnav .fb{width:60px;height:60px;border-radius:50%;margin-top:-34px;opacity:1;background:linear-gradient(145deg,#f6e3a6,#d4a94c 50%,#8f6a1c);color:#1f1500;justify-content:center;box-shadow:0 14px 26px -6px rgba(212,169,76,.6),0 0 0 6px var(--bg)}#bnav .fb .ic{width:28px;height:28px}
+.acv{text-align:center;margin:4px 0 14px}.acv .avr{width:78px;height:78px;margin:0 auto 8px;padding:3px;cursor:default}.acv .avr span{font-size:1.8rem}.acv b{font-size:1.15rem}.acv small{display:block;color:var(--mut);direction:ltr;font-size:.76rem}
+.mcd{position:relative;height:178px;border-radius:28px;overflow:hidden;padding:18px;color:#2a1d00;background:linear-gradient(135deg,#f6e3a6,#d4a94c 45%,#8f6a1c);box-shadow:0 26px 44px -20px rgba(212,169,76,.55)}
+.mcd.fr{background:linear-gradient(135deg,#1b3b2c,#0b2318);color:#f3ecd8;border:1px solid var(--bd);box-shadow:var(--sh)}
+.mcd:before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 14px,rgba(255,255,255,.14) 14px 15px)}
+.mcd>*{position:relative}.mcd .n{font-size:1.2rem;font-weight:900;letter-spacing:.5px}.mcd .s{font-size:.76rem;opacity:.78;margin-top:3px}.mcd .id{position:absolute;bottom:16px;inset-inline:18px;display:flex;justify-content:space-between;align-items:flex-end;font-size:.82rem}
+.mcd .up{padding:8px 16px;border-radius:99px;border:0;background:linear-gradient(135deg,#f6e3a6,#c9a24a);color:#1f1500;font-weight:800;min-height:0;font-size:.78rem}
+.st3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.st3 div{border:1px solid var(--bd);background:var(--card);border-radius:20px;padding:12px 6px;text-align:center;font-size:.72rem;color:var(--mut)}.st3 b{display:block;font-size:1.4rem;color:var(--gold)}
+.rw2{display:flex;align-items:center;gap:12px;border:1px solid var(--bd);background:var(--card);border-radius:20px;padding:11px 13px;margin-top:9px;cursor:pointer;width:100%;color:var(--fg);text-align:start;min-height:0;box-shadow:none;font-size:.88rem}
+.rw2 .c{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(212,169,76,.14);flex:none}.rw2 .ic{width:22px;height:22px;margin:0}.rw2 small{display:block;color:var(--mut);font-size:.72rem;font-weight:400}.rw2 .ar{margin-inline-start:auto;opacity:.45}
+.rw2 select{width:auto;min-height:34px;padding:2px 8px}
+.tiles .tile{flex-direction:row;align-items:center;gap:7px;min-width:0;min-height:44px;padding:6px 14px;border-radius:99px;white-space:nowrap}.tiles .tile .ic{width:20px;height:20px;margin:0}.tiles .tile span,.tiles .tile b{font-size:.76rem}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,200,114,.2)}
+.card h3{padding-bottom:9px;border-bottom:1px solid var(--bd);margin-bottom:12px}
 </style>
 <script>try{if(sessionStorage.getItem('qSp')==='1')document.documentElement.className+=' nosp'}catch(e){}</script>
 </head>
@@ -252,6 +303,9 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 <symbol id="i-ai" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H15l-6 5v-5H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M16 9.5l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="url(#gY)" stroke="none"/></g></symbol>
 <symbol id="i-ct" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="24" height="18" rx="3.5"/><path d="M5.5 9.5L16 18l10.5-8.5" stroke="url(#gY)"/></g></symbol>
 <symbol id="i-pest" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="16" cy="19" rx="5" ry="7"/><circle cx="16" cy="9" r="3"/><path d="M11 15l-5-3M11 20H5M12 25l-4 3M21 15l5-3M21 20h6M20 25l4 3M14 6l-2-3M18 6l2-3M16 12v14"/></g></symbol>
+<symbol id="i-home" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15l11-9 11 9v11a1.5 1.5 0 01-1.500 1.500H20v-8h-8v8H6.500A1.500 1.500 0 015 26z"/></g></symbol>
+<symbol id="i-tools" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2.500"/><rect x="18" y="5" width="9" height="9" rx="2.500"/><rect x="5" y="18" width="9" height="9" rx="2.500"/><rect x="18" y="18" width="9" height="9" rx="2.500"/></g></symbol>
+<symbol id="i-bolt" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4L7 19h8l-1 9 11-15h-8z"/></g></symbol>
 <symbol id="i-sat" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="12" width="8" height="8" rx="1.5" transform="rotate(45 16 16)"/><path d="M8 8l4 4M20 20l4 4M5 14l-1.5 1.5a3 3 0 004.2 4.2L9 18.5M23 13.5l1.5-1.5a3 3 0 00-4.2-4.2L19 9"/><path d="M6 26c4 0 8-2 10-6" opacity=".6"/></g></symbol>
 <symbol id="i-cal" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="22" height="20" rx="3"/><path d="M5 13h22M11 4v6M21 4v6"/><circle cx="16" cy="20" r="1.8" fill="url(#gY)" stroke="none"/></g></symbol>
 <symbol id="i-map" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8-3 8 3 8-3v19l-8 3-8-3-8 3z"/><path d="M12 5v19M20 8v19"/></g></symbol>
@@ -269,6 +323,7 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 <g class="sp-g c"><ellipse cx="17" cy="7" rx="3.5" ry="6" fill="#F5B83D"/></g></svg>
 <div class="sp-name">قوت</div><div class="sp-cart" id="spCart" aria-hidden="true">&#x1320E;&#x13171;&#x133CF;</div><div class="sp-tag">QOUT · SMART AGRI</div>
 </div></div>
+<nav id="bnav" class="noprint" aria-label="main"><button type="button" data-n="home"><svg class="ic"><use href="#i-home"/></svg><span></span></button><button type="button" data-n="tools"><svg class="ic"><use href="#i-tools"/></svg><span></span></button><button type="button" class="fb" data-n="crop" aria-label="analysis"><svg class="ic"><use href="#i-bolt"/></svg></button><button type="button" data-n="hist"><svg class="ic"><use href="#i-hist"/></svg><span></span></button><button type="button" data-n="acct"><svg class="ic"><use href="#i-user"/></svg><span></span></button></nav>
 <div class="wrap">
 <section class="hero">
   <div class="sun"></div><span class="leaf" style="inset-inline-end:16px">🌿</span><span class="leaf" style="inset-inline-end:64px;animation-delay:-2s;font-size:2.2rem">🌱</span>
@@ -290,9 +345,13 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 
 <div class="card dtS noprint" id="dtS"><div><div class="d1" id="dtD1"></div><div class="d2" id="dtD2"></div></div><div class="tr"><button class="sec" id="cmpB" style="min-height:44px;padding:6px 12px"></button><div class="tm" id="dtTm"></div></div></div>
 
+<div id="qtb"><button type="button" id="qtbB" aria-label="back">›</button><b id="qtbT"></b></div>
 <div class="tiles" id="tiles"></div>
 
-<div class="pn on" id="p-crop"><div class="card" id="locCard"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-map"/></svg><span id="locT"></span></h3>
+<div class="pn on hm" id="p-home"><div id="homeBox"></div></div>
+<div class="pn" id="p-tools"><div id="toolsBox"></div></div>
+<div class="pn" id="p-acct"><div id="acctBox"></div></div>
+<div class="pn" id="p-crop"><div class="card" id="locCard"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-map"/></svg><span id="locT"></span></h3>
   <button id="locBtn" style="width:100%"></button><div id="locMsg" class="badge" style="display:none"></div><div id="locAddr" class="locRow" style="display:none"></div><div id="wxBox" style="display:none"></div></div>
 <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-crop"/></svg>المحافظة والمحصول</h3><div class="g2">
   <div class="f"><label>اسم الحقل / المالك</label><input id="fname" maxlength="80" value="حقل التميز النموذجي"></div>
@@ -1172,7 +1231,7 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.09-2';
+const APP_VER='2026.11.10-2';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1869,14 +1928,97 @@ function pestRes(){
 function pestZoom(s){
   let z=1;const ov=document.createElement('div');ov.className='pZ';
   ov.innerHTML=`<div class="pZb"><b>${escH(s.t)}</b><span><button type="button" id="zm">−</button><button type="button" id="zp">+</button><button type="button" id="zx">✕</button></span></div><div class="pZs"><div class="pZi" style="width:100%">${s.bands.map(b=>pBand(b)).join('')}</div></div>`;
-  document.body.appendChild(ov);const im=ov.querySelector('.pZi');
+  document.body.appendChild(ov);if(window.pushZ)pushZ();const im=ov.querySelector('.pZi');
   const set=v=>{z=Math.max(1,Math.min(4,v));im.style.width=(z*100)+'%'};
   ov.querySelector('#zp').onclick=()=>set(z+.5);ov.querySelector('#zm').onclick=()=>set(z-.5);
-  const close=()=>{ov.remove();document.removeEventListener('keydown',kd)};const kd=e=>{if(e.key==='Escape')close()};
+  const close=()=>{const was=document.body.contains(ov);ov.remove();document.removeEventListener('keydown',kd);if(was&&history.state&&history.state.z)history.back()};const kd=e=>{if(e.key==='Escape')close()};
   document.addEventListener('keydown',kd);ov.querySelector('#zx').onclick=close;
 }
 function pestPre(){const k=$('crop')&&$('crop').value;if(!PEST.idx||!k||PEST.pre===k)return;PEST.pre=k;const i=PEST.idx.chaps.findIndex(c=>c.part==='pest'&&c.key===k);if(i>=0)PEST.ch=String(i)}
 {const _sh=show;show=function(id){_sh(id);if(id==='pest'){if(!PEST.idx){pestLoad().then(()=>{pestPre();pestUI()})}else{pestPre();pestUI()}}}}
+
+
+// ===== الواجهة الفاخرة: الرئيسية + الأدوات + حسابي + الشريط السفلي =====
+if(!store('nmTheme'))document.documentElement.setAttribute('data-theme','dark');
+const TOOLNAME={crop:'المحصول',soil:'التربة',water:'المياه',salt:'الملوحة',fert:'الأسمدة',res:'النتائج',hist:'السجل',ai:'المساعد',ct:'تواصل',cal:'التقويم الزراعي',sat:'الأقمار الصناعية',pest:'الوقاية والمكافحة',map:'الخريطة الحرارية للمحافظات'};
+const tn=k=>tx(TOOLNAME[k]||k);
+const IC=k=>`<svg class="ic" aria-hidden="true"><use href="#i-${k}"/></svg>`;
+function lxField(w,h,seed){const cols=['#2f7d3b','#3c9446','#4aa850','#8a9a2f','#b9a838','#256a34','#58b25a','#1f5c2d','#6aa83f'];let s=seed;const r=()=>(s=(s*9301+49297)%233280)/233280;let o=`<rect width="${w}" height="${h}" fill="#1c4a28"/>`;
+ for(let i=0;i<6;i++)for(let j=0;j<5;j++){const x=i*w/6-8+r()*8,y=j*h/5-8+r()*8,ww=w/6+12,hh=h/5+12;o+=`<polygon points="${x},${y+r()*7} ${x+ww},${y+r()*7} ${x+ww-r()*7},${y+hh} ${x+r()*7},${y+hh-r()*5}" fill="${cols[Math.floor(r()*cols.length)]}"/>`;for(let k=0;k<8;k++)o+=`<line x1="${x}" y1="${y+k*hh/8+3}" x2="${x+ww}" y2="${y+k*hh/8+3}" stroke="#00000018"/>`}
+ o+=`<path d="M0 ${h*.62} C ${w*.3} ${h*.5} ${w*.6} ${h*.78} ${w} ${h*.58}" stroke="#d9c9a0" stroke-width="5" fill="none" opacity=".5"/>`;
+ o+=`<polygon points="${w*.2},${h*.2} ${w*.76},${h*.16} ${w*.84},${h*.6} ${w*.32},${h*.72}" fill="#f6e3a622" stroke="#f6e3a6" stroke-width="2.4"/>`+[[.2,.2],[.76,.16],[.84,.6],[.32,.72]].map(p=>`<circle cx="${w*p[0]}" cy="${h*p[1]}" r="5" fill="#06100b" stroke="#f6e3a6" stroke-width="2"/>`).join('');return o}
+function lxNdvi(){try{if(SATR&&SATR.d&&(SATR.d.series||[]).length){const P=SATR.d.series,v=sv(P[P.length-1]),pv=P.length>1?sv(P[P.length-2]):null;const o={v:+v.toFixed(2),pv:pv==null?null:+pv.toFixed(2),d:P[P.length-1].to||''};localStorage.setItem('qNdvi',JSON.stringify(o));return o}}catch(e){}try{return JSON.parse(localStorage.getItem('qNdvi')||'null')}catch(e){return null}}
+const lxLbl=v=>v<.2?L2('شبه معدوم','Bare'):v<.4?L2('ضعيف','Low'):v<.6?L2('متوسط','Moderate'):v<.75?L2('جيد جداً','Very good'):L2('ممتاز','Excellent');
+function lxName(){return USER?(USER.displayName||(USER.email||'').split('@')[0]):L2('ضيف','Guest')}
+function lxGreet(){const h=new Date().getHours();return h<12?L2('صباح الخير','Good morning'):h<17?L2('نهارك سعيد','Good afternoon'):L2('مساء الخير','Good evening')}
+function homeRender(){
+  const b=$('homeBox');if(!b)return;const cr=$('crop')?$('crop').value:'',gv=$('gov')?$('gov').value:'';
+  const crn=Object.prototype.hasOwnProperty.call(C,cr)?C[cr][0]:'';
+  const nd=lxNdvi();let wx='';
+  if(WX&&WX.cur){const w=wxInfo(WX.cur.weather_code);wx=`<div class="ch2">${w[0]} <b dir="ltr">${(+WX.cur.temperature_2m).toFixed(0)}°</b> ${L2(w[1],w[2])}</div><div class="ch2">💧 ${Math.round(WX.cur.relative_humidity_2m)}%</div>`}
+  else wx=`<button type="button" class="ch2" id="hLoc">📍 ${L2('حدّد موقعك','Set location')}</button>`;
+  const hero=nd?`<div class="hf" id="hHero"><svg viewBox="0 0 316 238" preserveAspectRatio="xMidYMid slice">${lxField(316,238,7)}</svg><div class="ov"></div><div class="tg"><span class="dt"></span>${L2('آخر قراءة','Last reading')}${nd.d?' · '+escH(String(nd.d).slice(0,10)):''}</div><div class="in"><div><div class="lb">${L2('مؤشر صحة المحصول NDVI','Crop health NDVI')}</div><div class="nm gt">${nd.v.toFixed(2)}</div><div class="dl" style="color:#3ff0a8">${lxLbl(nd.v)}${nd.pv!=null?` · ${nd.v>=nd.pv?'▲':'▼'} ${Math.abs(nd.v-nd.pv).toFixed(2)}`:''}</div></div></div></div>`
+   :`<div class="hf" id="hHero"><svg viewBox="0 0 316 238" preserveAspectRatio="xMidYMid slice">${lxField(316,238,7)}</svg><div class="ov"></div><div class="tg"><span class="dt"></span>Sentinel-2 · 10 m</div><div class="in"><div><div class="lb">${L2('تابع صحة حقلك من الفضاء','Track your field from space')}</div><div class="nm gt" style="font-size:1.5rem">${L2('الأقمار الصناعية','Satellite')}</div></div><div class="cta">${L2('ابدأ','Start')}</div></div></div>`;
+  const TL6=['soil','water','fert','sat','pest','cal'];
+  const tools=TL6.map(k=>`<button type="button" class="tl3${k==='sat'&&!pro?' lk':''}" data-g="${k}"><div class="c">${IC(k)}</div>${tn(k)}</button>`).join('');
+  let tip;const tips=WX&&typeof wxTips==='function'?wxTips(WX):[];
+  if(tips.length)tip=`<div class="tp" data-g="hist2"><div class="c">💡</div><div><b>${L2('نصيحة اليوم','Tip of the day')}</b><small>${tips[0][1]}</small></div></div>`;
+  else tip=`<div class="tp" id="hTipLoc"><div class="c">📍</div><div><b>${L2('فعّل موقعك لنصائح أدق','Enable location for sharper tips')}</b><small>${L2('نعرض الطقس والريّ والتسميد حسب مكان حقلك.','Weather, irrigation and fertilizer advice for your field’s location.')}</small></div></div>`;
+  const h=hist()[0];let last='';
+  if(h){const n=Object.prototype.hasOwnProperty.call(C,h.c)?C[h.c][0]:'';last=`<div class="tp" data-g="hist"><div class="c">📄</div><div><b>${L2('آخر تقرير','Last report')}: ${escH(tx(n))}</b><small>${+h.s||0}/100 · ${new Date(+h.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')}</small></div></div>`}
+  b.innerHTML=`<div class="top2"><button type="button" class="avr" data-g="acct" aria-label="account"><span>${escH(lxName().charAt(0).toUpperCase())}</span></button><div class="t"><small>${lxGreet()}</small><b>${escH(lxName())}</b></div></div>
+  <div class="chs">${wx}${crn?`<div class="ch2">🌾 ${escH(tx(crn))}</div>`:''}${gv?`<div class="ch2">📌 ${escH(gname(gv))}</div>`:''}</div>
+  ${hero}<div class="sc2"><span>${L2('أدواتك','Your tools')}</span><small data-g="tools">${L2('عرض الكل','All')}</small></div><div class="tg3">${tools}</div>${tip}${last}`;
+  b.querySelectorAll('[data-g]').forEach(e=>e.onclick=()=>{const g=e.dataset.g;show(g==='hist2'?'crop':g)});
+  const hh=$('hHero');if(hh)hh.onclick=()=>show('sat');
+  const hl=$('hLoc'),ht=$('hTipLoc');[hl,ht].forEach(x=>{if(x)x.onclick=()=>{show('crop');setTimeout(()=>$('locBtn')&&$('locBtn').click(),300)}});
+}
+function toolsRender(){const b=$('toolsBox');if(!b)return;
+  b.innerHTML=`<div class="sc2" style="margin-top:4px"><span>${L2('كل الأدوات','All tools')}</span></div><div class="tg3">${TL.filter(t=>t[0]!=='hist').map(t=>`<button type="button" class="tl3${t[0]==='sat'&&!pro?' lk':''}" data-g="${t[0]}"><div class="c">${IC(t[0])}</div>${tn(t[0])}</button>`).join('')}</div>`;
+  b.querySelectorAll('[data-g]').forEach(e=>e.onclick=()=>show(e.dataset.g))}
+function acctRender(){const b=$('acctBox');if(!b)return;const n=hist().length,mail=USER?(USER.email||''):'';
+  const card=pro?`<div class="mcd"><div style="display:flex;justify-content:space-between;align-items:center"><div class="n">QOUT PRO</div><div style="width:34px;height:24px;border-radius:6px;background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(0,0,0,.12));border:1px solid rgba(0,0,0,.2)"></div></div><div class="s">${L2('العضوية المميّزة · الأقمار الصناعية وكل الأدوات','Premium membership · satellite & all tools')}</div><div class="id"><div>${escH(lxName())}</div><div style="font-size:1.8rem;font-weight:900;opacity:.45">Q</div></div></div>`
+   :`<div class="mcd fr"><div class="n gt">QOUT</div><div class="s">${L2('الباقة المجانية','Free plan')} · ${L2('المحاولات المتبقية','Trials left')}: ${trials}</div><div class="id"><div>${escH(lxName())}</div><button type="button" class="up" id="aUp">${L2('الترقية إلى Pro','Upgrade to Pro')}</button></div></div>`;
+  const rows=[['hist','hist',L2('تقاريري المحفوظة','Saved reports'),n+' '+L2('تقرير','reports'),'go'],['ct','ct',L2('تواصل مع المهندس','Contact the engineer'),'','go']];
+  b.innerHTML=`<div class="acv"><div class="avr"><span>${escH(lxName().charAt(0).toUpperCase())}</span></div><b>${escH(lxName())}</b><small>${escH(mail)}</small></div>${card}
+  <div class="st3"><div><b>${pro?'∞':trials}</b>${L2('المحاولات','Trials')}</div><div><b>${n}</b>${L2('تقارير','Reports')}</div><div><b>${pro?'Pro':L2('مجانية','Free')}</b>${L2('الباقة','Plan')}</div></div>
+  ${rows.map(r=>`<button type="button" class="rw2" data-go="${r[4]==='go'?r[0]:''}"><div class="c">${IC(r[1])}</div><div>${r[2]}${r[3]?`<small>${r[3]}</small>`:''}</div><span class="ar">‹</span></button>`).join('')}
+  <div class="rw2" style="cursor:default"><div class="c">${IC('lang')}</div><div>${L2('اللغة','Language')}</div><span class="ar" style="margin-inline-start:auto;opacity:1"><select id="aLang"><option value="ar">العربية</option><option value="en">English</option></select></span></div>
+  <button type="button" class="rw2" id="aTh"><div class="c">${IC('theme')}</div><div>${L2('تبديل المظهر (فاتح / غامق)','Switch theme (light / dark)')}</div><span class="ar">‹</span></button>
+  <button type="button" class="rw2" id="aIn"><div class="c">${IC('install')}</div><div>${L2('تثبيت التطبيق على الشاشة','Install the app')}</div><span class="ar">‹</span></button>
+  <button type="button" class="rw2" id="aPr"><div class="c">${IC('print')}</div><div>${L2('طباعة / حفظ PDF','Print / save PDF')}</div><span class="ar">‹</span></button>
+  <button type="button" class="rw2" id="aOut" style="color:var(--er)"><div class="c">${IC('user')}</div><div>${USER?L2('تسجيل الخروج','Sign out'):L2('تسجيل الدخول','Sign in')}</div><span class="ar">‹</span></button>
+  <p class="mut" style="text-align:center;font-size:.72rem;margin:16px 0 4px;line-height:1.8">${L2('م/ أحمد محمد سعيد عبد العال — كلية الزراعة · جامعة المنوفية · الأراضي والمياه','Eng. Ahmed Mohamed Saeed — Faculty of Agriculture, Menoufia University · Soil & Water')}</p>`;
+  b.querySelectorAll('[data-go]').forEach(e=>{if(e.dataset.go)e.onclick=()=>show(e.dataset.go)});
+  const L=$('aLang');L.value=lang;L.onchange=()=>{const s=$('lang');s.value=L.value;s.dispatchEvent(new Event('change',{bubbles:true}))};
+  $('aTh').onclick=()=>$('theme').click();$('aPr').onclick=()=>$('prt').click();
+  const ib=$('installB');if(ib&&getComputedStyle(ib).display==='none')$('aIn').style.display='none';else $('aIn').onclick=()=>ib.click();
+  $('aOut').onclick=()=>{if(USER)$('logout').click();else $('mAuth').classList.add('on')};
+  const up=$('aUp');if(up)up.onclick=()=>payOpen()}
+function navUI(id){document.body.className=document.body.className.replace(/\bpg-\S+/g,'').trim()+' pg-'+id;
+  const m=id==='home'?'home':id==='tools'?'tools':id==='hist'?'hist':id==='acct'?'acct':id==='crop'?'crop':'tools';
+  document.querySelectorAll('#bnav button').forEach(x=>{x.classList.toggle('on',x.dataset.n===m&&!x.classList.contains('fb')||(m==='crop'&&x.classList.contains('fb')))});
+  const T=$('qtbT');if(T)T.textContent=id==='tools'?L2('الأدوات','Tools'):id==='acct'?L2('حسابي','My account'):tn(id)}
+function navLbl(){const s=document.querySelectorAll('#bnav button:not(.fb) span');[L2('الرئيسية','Home'),L2('الأدوات','Tools'),L2('تقاريري','Reports'),L2('حسابي','Account')].forEach((t,i)=>{if(s[i])s[i].textContent=t})}
+document.querySelectorAll('#bnav button').forEach(x=>x.onclick=()=>show(x.dataset.n));
+$('qtbB').onclick=()=>{if(history.length>1)history.back();else show('home')};
+{const _sh=show;show=function(id,pop){_sh(id,pop);navUI(id);if(id==='home')homeRender();else if(id==='tools')toolsRender();else if(id==='acct')acctRender();else if(id==='hist')renderHist()}}
+{const _b=badge;badge=function(){_b();try{homeRender();acctRender()}catch(e){}}}
+{const _l=locUI;locUI=function(){_l();try{homeRender()}catch(e){}}}
+{const _s=satShow;satShow=function(){_s();try{lxNdvi();homeRender()}catch(e){}}}
+$('lang').addEventListener('change',()=>{setTimeout(()=>{navLbl();navUI((document.querySelector('.pn.on')||{id:'p-home'}).id.slice(2));homeRender();toolsRender();acctRender()},80)});
+navLbl();navUI('home');homeRender();
+
+// ===== زر الرجوع: يرجع للخطوة السابقة بدل الخروج من التطبيق =====
+{const _sh=show;const HOME=((document.querySelector('.pn.on')||{}).id||'p-crop').slice(2);let cur=HOME;
+ try{history.replaceState({q:HOME},'')}catch(e){}
+ show=function(id,pop){_sh(id);if(!pop&&cur!==id){try{history.pushState({q:id},'')}catch(e){}}cur=id};
+ window.addEventListener('popstate',e=>{
+   const z=document.querySelector('.pZ');if(z){z.remove();return}
+   const s=e.state||{};if(s.z)return;
+   if((s.q||HOME)===cur)return;show(s.q||HOME,true)});
+ window.pushZ=()=>{try{history.pushState({z:1,q:cur||HOME},'')}catch(e){}};
+}
 
 // ===== قائمة الأدوات + تثبيت التطبيق =====
 const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg>`;
