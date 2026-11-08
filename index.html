@@ -125,6 +125,20 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 @keyframes spcart{to{opacity:.95;transform:none}}
 .sp-tag{animation-delay:3s}
 
+.pTy{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.pTy .chip{cursor:pointer;color:var(--fg);font:inherit;font-size:.74rem}.pTy .chip.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.pCard{border:1px solid var(--bd);border-radius:16px;margin:8px 0;overflow:hidden;background:var(--card)}
+.pHd{display:flex;flex-direction:column;gap:3px;width:100%;text-align:start;background:transparent;border:0;color:var(--fg);font:inherit;padding:11px 13px;cursor:pointer}.pHd b{font-size:.95rem}.pHd .mut{font-size:.74rem}
+.pAi{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.pAi i{font-style:normal;direction:ltr;font-size:.68rem;padding:2px 8px;border-radius:99px;background:rgba(52,184,124,.16);border:1px solid var(--bd)}
+.pTh{max-height:120px;overflow:hidden;cursor:pointer;opacity:.9;border-top:1px solid var(--bd);-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.pbImg{width:100%;background-repeat:no-repeat;background-color:#fff}.pBd{border-top:1px solid var(--bd)}.pAct{padding:10px;text-align:center}
+.pZ{position:fixed;inset:0;z-index:50;background:#000d;display:flex;flex-direction:column}.pZb{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);color:var(--fg)}.pZb button{min-width:42px;min-height:42px;margin-inline-start:6px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--fg);font-size:1.1rem}
+.pZs{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y pinch-zoom;background:#fff}.pZi{max-width:none}
+.pSh{padding:10px 13px 4px;font-weight:700;font-size:.82rem;color:var(--gold)}
+.pCa{margin:4px 10px;padding:10px;border-radius:14px;background:rgba(52,184,124,.12);border:1px solid var(--bd);font-size:.8rem}.pCg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}.pCg label,.pCl label{display:flex;flex-direction:column;gap:3px;font-size:.72rem;color:var(--mut)}
+.pRw{margin:8px 10px;padding:10px;border-radius:14px;border:1px solid var(--bd);background:var(--in)}
+.pTn{width:100%;background-repeat:no-repeat;border-radius:8px;background-color:#fff}
+.pMeta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px;align-items:center}.pMeta i{font-style:normal;font-weight:700;font-size:.8rem}.pMeta span{font-size:.68rem;padding:2px 8px;border-radius:99px;border:1px solid var(--bd);background:rgba(52,184,124,.12)}
+.pDs{font-size:.84rem;margin:2px 0}.pCl{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end;margin-top:8px;font-size:.8rem}.pCl .pCt{grid-column:1/-1;font-size:.9rem;color:var(--ok)}.pPi{min-height:36px;padding:5px 8px}
 /* ===== قائمة الأدوات ===== */
 .menu{position:fixed;z-index:8;top:70px;left:8px;min-width:240px;max-width:calc(100vw - 16px);display:none;padding:8px;border-radius:18px;background:var(--bg);border:1px solid var(--bd);box-shadow:0 18px 44px rgba(0,0,0,.35)}
 .menu.open{display:block;animation:menuin .16s ease-out}
@@ -185,7 +199,7 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 .sm .zc{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:6px}.sm .zc button{width:36px;height:36px;padding:0;font-size:1.3rem;line-height:1;border-radius:10px}
 .sm .at{position:absolute;bottom:2px;left:4px;font-size:9px;background:rgba(255,255,255,.75);color:#222;padding:1px 4px;border-radius:4px;pointer-events:none}
 .smB{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}.smB button{padding:8px 2px;font-size:.78rem}
-.smI{font-size:.88rem;padding:8px 10px;border:1px solid var(--bd);border-radius:10px;background:var(--card)}.smI.er{border-color:#d9534f}.smI.ok{border-color:#2e9e4f}
+.smI{font-size:.88rem;padding:8px 10px;border:1px solid var(--bd);border-radius:10px;background:var(--card)}.smI.er{border-color:#d9534f}.smI.ok{border-color:#2e9e4f}.smI.wn{border-color:#e0a21a}
 .tile{position:relative}.tile.lk::after{content:"🔒 PRO";position:absolute;top:6px;inset-inline-start:8px;font-size:.62rem;font-weight:800;color:var(--gold,#c8962a);background:var(--card);border:1px solid var(--gold,#c8962a);border-radius:8px;padding:1px 5px}
 .satLock{text-align:center;padding:10px 4px}.satLock .big{font-size:2.6rem;line-height:1}.satLock ul{text-align:start;margin:10px auto;max-width:340px;padding-inline-start:20px;font-size:.88rem;line-height:1.9}
 .satX{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.satX .full{grid-column:1/-1}
@@ -237,6 +251,7 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 <symbol id="i-hist" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><path d="M16 9.5V16l4.5 2.5"/><circle cx="16" cy="16" r="1.7" fill="url(#gY)" stroke="none"/></g></symbol>
 <symbol id="i-ai" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H15l-6 5v-5H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M16 9.5l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="url(#gY)" stroke="none"/></g></symbol>
 <symbol id="i-ct" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="24" height="18" rx="3.5"/><path d="M5.5 9.5L16 18l10.5-8.5" stroke="url(#gY)"/></g></symbol>
+<symbol id="i-pest" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="16" cy="19" rx="5" ry="7"/><circle cx="16" cy="9" r="3"/><path d="M11 15l-5-3M11 20H5M12 25l-4 3M21 15l5-3M21 20h6M20 25l4 3M14 6l-2-3M18 6l2-3M16 12v14"/></g></symbol>
 <symbol id="i-sat" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="12" width="8" height="8" rx="1.5" transform="rotate(45 16 16)"/><path d="M8 8l4 4M20 20l4 4M5 14l-1.5 1.5a3 3 0 004.2 4.2L9 18.5M23 13.5l1.5-1.5a3 3 0 00-4.2-4.2L19 9"/><path d="M6 26c4 0 8-2 10-6" opacity=".6"/></g></symbol>
 <symbol id="i-cal" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="22" height="20" rx="3"/><path d="M5 13h22M11 4v6M21 4v6"/><circle cx="16" cy="20" r="1.8" fill="url(#gY)" stroke="none"/></g></symbol>
 <symbol id="i-map" viewBox="0 0 32 32"><g fill="none" stroke="url(#gG)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8-3 8 3 8-3v19l-8 3-8-3-8 3z"/><path d="M12 5v19M20 8v19"/></g></symbol>
@@ -340,6 +355,7 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 </div>
 
 <div class="pn" id="p-cal"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-cal"/></svg><span id="calT"></span></h3><div id="calBox"></div></div></div>
+<div class="pn" id="p-pest"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-pest"/></svg><span id="pestT"></span></h3><div id="pestBox"></div></div></div>
 <div class="pn" id="p-sat"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-sat"/></svg><span id="satT"></span></h3><div id="satBox"></div></div></div>
 <div class="pn" id="p-hist"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-hist"/></svg>التقارير المحفوظة</h3><ul id="hl"></ul></div></div>
 
@@ -455,8 +471,8 @@ function toast(t){const e=$('toast');e.textContent=tx(t);e.classList.add('on');c
 const MAIL='ahmed00mohamed20003@gmail.com',WA='201113276215';
 
 // ===== بناء الواجهة =====
-const TL=[['crop','🌱','المحصول'],['soil','🧪','التربة'],['water','💧','المياه'],['salt','🧂','الملوحة'],['fert','🌾','الأسمدة'],['res','📊','النتائج'],['hist','🗂️','السجل'],['ai','🤖','المساعد'],['ct','📞','تواصل'],['cal','📅','التقويم الزراعي'],['sat','🛰️','الأقمار الصناعية'],['map','🗺️','الخريطة الحرارية للمحافظات']];
-$('tiles').innerHTML=TL.map(t=>`<button class="tile${t[0]=='crop'?' on':''}${(t[0]=='map'||t[0]=='cal'||t[0]=='sat')?' wide':''}" data-t="${t[0]}"><span><svg class="ic" aria-hidden="true"><use href="#i-${t[0]}"/></svg></span>${t[2]}</button>`).join('');
+const TL=[['crop','🌱','المحصول'],['soil','🧪','التربة'],['water','💧','المياه'],['salt','🧂','الملوحة'],['fert','🌾','الأسمدة'],['res','📊','النتائج'],['hist','🗂️','السجل'],['ai','🤖','المساعد'],['ct','📞','تواصل'],['cal','📅','التقويم الزراعي'],['sat','🛰️','الأقمار الصناعية'],['pest','🐛','الوقاية والمكافحة'],['map','🗺️','الخريطة الحرارية للمحافظات']];
+$('tiles').innerHTML=TL.map(t=>`<button class="tile${t[0]=='crop'?' on':''}${(t[0]=='map'||t[0]=='cal'||t[0]=='sat'||t[0]=='pest')?' wide':''}" data-t="${t[0]}"><span><svg class="ic" aria-hidden="true"><use href="#i-${t[0]}"/></svg></span>${t[2]}</button>`).join('');
 function show(id){document.querySelectorAll('.pn').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('on',t.dataset.t===id));if(id==='ct')mk();scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('.tile').forEach(t=>t.onclick=()=>show(t.dataset.t));
 
@@ -1156,7 +1172,7 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.08-2';
+const APP_VER='2026.11.09-2';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1466,7 +1482,8 @@ function smInfo(){const e=$('satInfo');if(!e)return;const P=SATS.poly,n=P.length
   if(smCross(P)){m=L2('⚠️ الحدود متقاطعة. امسح وارسم الحقل بترتيب الأركان.','⚠️ Boundary crosses itself. Clear and redraw corners in order.');c='er'}
   else if(ha<.05){m=L2('⚠️ المساحة صغيرة جداً (أقل من 0.05 هكتار). كبّر الحقل.','⚠️ Area too small (< 0.05 ha).');c='er'}
   else if(ha>2000){m=L2('⚠️ المساحة كبيرة جداً (أكثر من 2000 هكتار).','⚠️ Area too large (> 2000 ha).');c='er'}
-  else if(ha<.1)m+=' '+L2('(الحقول الصغيرة أقل دقة)','(small fields are less accurate)')}
+  else if(ha<.1)m+=' '+L2('(الحقول الصغيرة أقل دقة)','(small fields are less accurate)');
+  else if(ha>10){c='wn';m+=' ⚠️ '+L2('مساحة كبيرة: غالباً تضم حقولاً بمحاصيل مختلفة فتختلط النتيجة. ارسم حقلاً واحداً (عادةً 1–5 فدان).','Large area: it probably covers fields with different crops, which blurs the result. Draw a single field (usually 1–5 feddan).')}}
  e.className='smI '+c;e.textContent=m}
 function smDraw(){const m=SM.el;if(!m||!m.isConnected)return;const w=m.clientWidth,h=m.clientHeight,z=SM.z;if(!w||!h)return;
  const[wx,wy]=smW(SM.lon,SM.lat,z),x0=wx-w/2,y0=wy-h/2,n=Math.pow(2,z);
@@ -1695,9 +1712,10 @@ function satPheno(P){
  return res}
 function satFmt(ts){return ts==null?'—':new Date(ts).toISOString().slice(0,10)}
 function satSeaName(s){return s==='w'?L2('شتوية','Winter'):s==='s'?L2('صيفية','Summer'):L2('نيلية','Nili (late summer)')}
-function satPhenoHTML(P,ph){
+function satPhenoHTML(P,ph,ha){const big=ha>10,mixed=L2(`مساحة الحقل ${ha} هكتار (≈${Math.round(ha*2.381)} فدان) كبيرة، وغالباً تضم حقولاً بمحاصيل مختلفة. المتوسط يخلط أنماطها فيظهر المنحنى شبه ثابت أو غير واضح. لن أحكم على المحصول من هذه المساحة؛ ارسم حقلاً واحداً صغيراً (1–5 فدان) وأعد التحليل.`,`The area is ${ha} ha (≈${Math.round(ha*2.381)} feddan), which is large and probably covers fields with different crops. Averaging blends their patterns so the curve looks flat or unclear. I will not judge the crop from this area; draw a single small field (1–5 feddan) and re-run.`);
  if(!ph.ok){return`<div class="satMsg" style="margin:10px 0">🔎 ${L2(`لتحديد المحصول ومواعيد الزراعة والحصاد أحتاج منحنى موسم كامل (150 يوماً على الأقل، والأفضل سنة). الفترة الحالية ${ph.span} يوماً.`,`To identify the crop and planting/harvest dates I need a full-season curve (at least 150 days, ideally a year). The current period is ${ph.span} days.`)}<button id="sat365" style="width:100%;margin-top:8px">🗓️ ${L2('حلّل سنة كاملة (365 يوم)','Analyze a full year (365 days)')}</button></div>`}
  let h=`<div class="satPh"><h4 style="margin:0 0 6px">🔬 ${L2('تحليل الموسم والمحصول','Season & crop analysis')}</h4>`;
+ if(big&&(ph.perennial||!ph.cyc.length))return h+`<p style="margin:0;font-size:.88rem">⚠️ ${mixed}</p></div>`;
  if(ph.perennial)return h+`<p style="margin:0;font-size:.88rem">${L2('NDVI شبه ثابت طوال الفترة (تذبذب صغير). هذا نمط محاصيل الأشجار أو الغطاء الدائم (موالح، نخيل، زيتون، عنب، موز، مانجو…). لا توجد دورات موسمية واضحة.','NDVI stays nearly flat (small swings). This is typical of tree crops or permanent cover (citrus, dates, olives, grapes, banana, mango…). No clear seasonal cycles.')}</p></div>`;
  if(ph.forage){const f=ph.forage;return h+`<p style="margin:0;font-size:.88rem">${L2(`نمط حشّات متكررة: حوالي ${f.cuts} حشّات، بفاصل نحو ${f.gap} يوماً. هذا نمط محاصيل العلف: ${f.summer?'البرسيم الحجازي (لأن الحشّات تمتد للصيف)':'البرسيم المصري (حشّات شتوية/ربيعية)'}.`,`Repeated-cut pattern: about ${f.cuts} cuts, ~${f.gap} days apart. This matches forage crops: ${f.summer?'alfalfa (cuts continue into summer)':'berseem clover (winter/spring cuts)'}.`)}</p><p class="mut" style="font-size:.78rem;margin:6px 0 0">${L2('تواريخ القمم:','Peak dates:')} ${f.dates.join(' · ')}</p></div>`}
  const ncy=ph.cyc.length;
@@ -1708,6 +1726,7 @@ function satPhenoHTML(P,ph){
  if(ph.pick&&ph.cands){const c=ph.cands,top=c[0],second=c[1],partial=ph.pick.partialL||ph.pick.partialR;
   const pc=Math.round(top.pct),gap=top.pct-(second?second.pct:0);
   let conf,cc;if(top.s<.1){conf=L2('لا تطابق واضح','No clear match');cc='#d9534f'}else if(!partial&&pc>=55&&gap>=25){conf=L2('عالية نسبياً','Relatively high');cc='#2e9e4f'}else if(pc>=40&&!partial){conf=L2('متوسطة','Medium');cc='#d4a017'}else{conf=L2('منخفضة — محاصيل متشابهة أو دورة غير مكتملة','Low — similar crops or incomplete cycle');cc='#e0a21a'}
+  if(big)h+=`<p style="margin:0 0 6px;font-size:.84rem">⚠️ ${mixed}</p>`;
   h+=`<h4 style="margin:10px 0 4px">🌾 ${L2('اقتراح المحصول (للدورة','Crop suggestion (for cycle')} ${ph.cyc.indexOf(ph.pick)+1})</h4>`;
   if(top.s<.1)h+=`<p style="margin:0;font-size:.86rem">${L2('شكل الدورة لا يطابق أي محصول من القائمة بوضوح. قد يكون محصولاً غير مدرج أو حقلاً غير منتظم.','The cycle shape does not clearly match any crop in the list. It may be an unlisted crop or an irregular field.')}</p>`;
   else{h+=c.slice(0,3).map(r=>`<div class="satBar"><span>${escH(tx(C[r.k][0]))}</span><div><i style="width:${Math.max(3,Math.round(r.pct))}%"></i></div><b>${Math.round(r.pct)}${lang==='en'?'%':'٪'}</b></div>`).join('');
@@ -1729,6 +1748,7 @@ function satShow(){
  if(prev&&!last.__sus&&lv-sv(prev)<-.1)ad.push(['w',L2('تراجع في NDVI عن القراءة السابقة. افحص الري ونقص العناصر والآفات والملوحة، وتذكّر أن النضج والحصاد يخفضان NDVI طبيعياً.','NDVI dropped from the previous reading. Check irrigation, nutrient deficiency, pests and salinity; note that maturity and harvest naturally lower NDVI.')]);
  if(mx<.3)ad.push(['w',L2('الغطاء النباتي ضعيف طوال الفترة، وقد يكون الحقل غير مزروع أو في مرحلة ما قبل الإنبات.','Vegetation stayed low throughout; the field may be unplanted or pre-emergence.')]);
  if(last.sd!=null&&last.sd>.2)ad.push(['w',L2('تباين كبير داخل الحقل (انحراف معياري مرتفع): قد توجد أجزاء غير مزروعة أو مشكلة ري موضعية، وقد يشمل الحقل المرسوم أرضاً مجاورة.','High variation inside the field (large standard deviation): possible unplanted parts or localized irrigation issues; the drawn field may include neighboring land.')]);
+ if(d.areaHa>10)ad.unshift(['w',L2(`مساحة الحقل ${d.areaHa} هكتار (≈${Math.round(d.areaHa*2.381)} فدان) كبيرة: غالباً تضم محاصيل مختلفة، فالرقم متوسط عام وليس حالة محصول واحد. للدقة ارسم حقلاً واحداً (1–5 فدان).`,`Field area ${d.areaHa} ha (≈${Math.round(d.areaHa*2.381)} feddan) is large: it likely covers different crops, so the number is a general average, not one crop's status. For accuracy draw a single field (1–5 feddan).`)]);
  // مقارنة بالمتوقع للمحصول
  let stageHtml='';
  if(rc){const nm=tx(C[rc.key][0]);
@@ -1747,7 +1767,7 @@ function satShow(){
      else ad.push(['g',L2(`NDVI (${lv.toFixed(2)}) ضمن المتوقع لمحصول ${nm} في هذه المرحلة (≈${e.toFixed(2)}).`,`NDVI (${lv.toFixed(2)}) is within the expected range for ${nm} at this stage (≈${e.toFixed(2)}).`)])}}}}
  if(!ad.some(a=>a[0]==='w'||a[0]==='g'))ad.push(['g',L2('لا مؤشرات مقلقة في هذه القراءات.','No worrying signs in these readings.')]);
  const hasP=P.some(p=>p.p10!=null);
- let ph=null,phHtml='';try{ph=satPheno(P);phHtml=satPhenoHTML(P,ph)}catch(e){console.error(e)}
+ let ph=null,phHtml='';try{ph=satPheno(P);phHtml=satPhenoHTML(P,ph,d.areaHa)}catch(e){console.error(e)}
  o.innerHTML=`<div class="satCls"><i style="background:${cl.c}"></i>${L2(cl.ar,cl.en)}</div>
  <div class="satK"><div><b style="color:${cl.c}">${lv.toFixed(2)}</b><span>${L2('آخر NDVI','Latest NDVI')}</span></div><div><b>${tr}</b><span>${L2('الاتجاه','Trend')}</span></div><div><b style="font-size:.95rem;white-space:nowrap">${last.to}</b><span>${L2('تاريخ آخر صورة','Last image date')}</span></div></div>
  ${stageHtml}${satChart(P,rc)}
@@ -1763,6 +1783,100 @@ function satShow(){
  const bu=$('satUse');if(bu&&ph&&ph.cands&&ph.pick){bu.onclick=()=>{SATS.crop=ph.cands[0].k;if(ph.cands[0].s>=.1){SATS.pd=satFmt(ph.cands[0].plant);try{localStorage.setItem('qSatPd',SATS.pd)}catch(e){}}const sc=$('satCrop');if(sc)sc.value=SATS.crop;const sp=$('satPd');if(sp)sp.value=SATS.pd||'';satShow()}}}
 {const _sh=show;show=function(id){_sh(id);if(id==='sat')satUI()}}
 {const _sl=setLang;setLang=function(...a){_sl(...a);const p=$('p-sat');if(p&&p.classList.contains('on'))satUI()}}
+
+// ===== الوقاية والمكافحة (مرجع الآفات والمبيدات) =====
+const PEST={th:{},area:1,vol:400,idx:null,sec:[],q:'',ch:'',ty:'',open:null,loading:false,err:'',pre:'',ph:{}};
+const PB='pests/';
+function pNorm(s){s=String(s||'').normalize('NFKC').replace(/[ً-ٰـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[صضسش]/g,'س');return s}
+function pSk(w){return pNorm(w).replace(/[^ء-ي]/g,'').replace(/[اء]/g,'')}
+async function pestLoad(){
+  if(PEST.idx||PEST.loading)return;PEST.loading=true;PEST.err='';pestUI();
+  try{const r=await fetch(PB+'index.json');if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();PEST.idx=d;
+    d.bands.forEach(b=>{const k=b.pk;PEST.ph[k]=Math.max(PEST.ph[k]||0,b.y+b.h);(b.rw||[]).forEach(r=>{PEST.th[r.tp]=Math.max(PEST.th[r.tp]||0,r.ty+r.th)})});
+    const sec=[];let cur=null;
+    d.bands.forEach((b,i)=>{const c=d.chaps[b.c];
+      if(!cur||b.ct==0||cur.c!==b.c){cur={c:b.c,t:b.t,k:b.k,part:c.part,pg:b.pg,bands:[],rows:[],ai:new Set(),sk:new Set()};sec.push(cur)}
+      cur.rows.push(...(b.rw||[]));
+      cur.bands.push(b);(b.ai||'').split(',').filter(Boolean).forEach(x=>cur.ai.add(x));(b.s||'').split(' ').filter(Boolean).forEach(x=>cur.sk.add(x));if(!cur.k&&b.k)cur.k=b.k});
+    sec.forEach(s=>{s.tk=pNorm(s.t+' '+d.chaps[s.c].n+' '+s.k).split(/\s+/).map(pSk).filter(x=>x.length>=2);s.al=[...s.ai].join(' ').toLowerCase()});
+    PEST.sec=sec;
+  }catch(e){PEST.err=String(e.message||e)}
+  PEST.loading=false;pestUI();
+}
+function pestMatch(s,qt,ql){
+  if(!qt.length&&!ql)return 1;let hit=0,sc=0;
+  for(const q of qt){let h=0;
+    if(s.tk.some(t=>t===q||(q.length>=3&&(t.startsWith(q)||t.includes(q)))))h=3;
+    else if(s.sk.has(q)||(q.length>=3&&[...s.sk].some(t=>t.includes(q))))h=1;
+    if(h){hit++;sc+=h}}
+  if(ql&&s.al.includes(ql)){hit=qt.length||1;sc+=4}
+  const need=qt.length<=2?qt.length:Math.ceil(qt.length*.6);
+  if(ql&&!qt.length)return sc;
+  return hit>=need&&hit>0?sc:0;
+}
+
+function pPr(){try{return JSON.parse(localStorage.getItem('qPr')||'{}')}catch(e){return{}}}
+function pPrSet(n,v){try{const p=pPr();if(v>0)p[n]=v;else delete p[n];localStorage.setItem('qPr',JSON.stringify(p))}catch(e){}}
+function pAmt(r){if(!r.r)return null;const[a,u,per]=r.r;if(per==='seed')return null;const A=PEST.area||0,tot=per==='fed'?a*A:a*(PEST.vol*A/100);return{tot,u}}
+function pFmt(x){return x>=100?Math.round(x).toLocaleString('en'):(Math.round(x*10)/10).toString()}
+function pUnit(u){return({g:L2('جم','g'),ml:L2('سم³','ml'),kg:L2('كجم','kg'),L:L2('لتر','L')})[u]}
+function pDose(r){if(!r.r)return L2('راجع الجدول الأصلي','See original table');const[a,u,per]=r.r;return a+' '+pUnit(u)+' / '+(per==='fed'?L2('فدان','feddan'):per==='seed'?L2('كجم تقاوي','kg seed'):L2('100 لتر ماء','100 L water'))}
+function pCost(r,pr){const a=pAmt(r);if(!a||!(pr>0))return'';const q=a.u==='g'||a.u==='ml'?a.tot/1000:a.tot;return pFmt(q*pr)}
+function pRow(r){const H=PEST.th[r.tp],a=pAmt(r),pr=pPr()[r.n]||'',unit=r.r&&(r.r[1]==='g'||r.r[1]==='kg')?L2('كجم','kg'):L2('لتر','L');
+  return `<div class="pRw" data-n="${r.n}"><div class="pTn" style="aspect-ratio:320/${r.th};background-image:url(${PB}tr${String(r.tp).padStart(2,'0')}.webp);background-size:100% ${(H/r.th*100).toFixed(2)}%;background-position:0 ${H>r.th?(r.ty/(H-r.th)*100).toFixed(2):0}%"></div>
+  <div class="pMeta"><i dir="ltr">${escH(r.g)}</i>${r.w?`<span>WHO ${r.w}</span>`:''}${r.ph?`<span>${L2('أمان','PHI')} ${r.ph} ${L2('يوم','d')}</span>`:''}</div>
+  <div class="pDs">${L2('الجرعة','Dose')}: <b>${pDose(r)}</b></div>
+  ${a?`<div class="pCl"><span>${L2('المطلوب','Needed')}: <b class="pT">${pFmt(a.tot)} ${pUnit(a.u)}</b></span><label>${L2('السعر/'+unit,'Price/'+unit)}<input type="number" inputmode="decimal" min="0" class="pPi" value="${pr}" placeholder="0"></label><span class="pCt">${pCost(r,pr)?L2('التكلفة','Cost')+': <b>'+pCost(r,pr)+' '+L2('ج.م','EGP')+'</b>':''}</span></div>`:''}</div>`}
+function pCalc(s){return `<div class="pCa"><b>🧮 ${L2('احسب لمساحتك','Calculate for your field')}</b><div class="pCg"><label>${L2('المساحة (فدان)','Area (feddan)')}<input type="number" inputmode="decimal" min="0" step="any" id="pAr" value="${PEST.area}"></label><label>${L2('ماء الرش (لتر/فدان)','Spray water (L/feddan)')}<input type="number" inputmode="decimal" min="0" id="pVo" value="${PEST.vol}"></label></div></div>`}
+function pBind(box){
+  const upd=()=>{box.querySelectorAll('.pRw').forEach(el=>{const n=el.dataset.n,r=PEST.sec[PEST.open].rows.find(x=>x.n===n);if(!r)return;const a=pAmt(r);if(!a)return;el.querySelector('.pT').textContent=pFmt(a.tot)+' '+pUnit(a.u);const pr=pPr()[n]||0,c=pCost(r,pr);el.querySelector('.pCt').innerHTML=c?L2('التكلفة','Cost')+': <b>'+c+' '+L2('ج.م','EGP')+'</b>':''})};
+  const ar=box.querySelector('#pAr'),vo=box.querySelector('#pVo');if(ar){ar.oninput=()=>{PEST.area=Math.max(0,+ar.value||0);upd()};vo.oninput=()=>{PEST.vol=Math.max(0,+vo.value||0);upd()}}
+  box.querySelectorAll('.pRw').forEach(el=>{const i=el.querySelector('.pPi');if(i)i.oninput=()=>{pPrSet(el.dataset.n,+i.value);upd()}})}
+function pBand(b,full){const H=PEST.ph[b.pk],w=PEST.idx.w;
+  return `<div class="pbImg" role="img" aria-label="${escH(b.t)}" style="aspect-ratio:${w}/${b.h};background-image:url(${PB}pk${String(b.pk).padStart(2,'0')}.webp);background-size:100% ${(H/b.h*100).toFixed(3)}%;background-position:0 ${H>b.h?(b.y/(H-b.h)*100).toFixed(3):0}%"></div>`}
+function pestUI(){
+  const box=$('pestBox');if(!box)return;$('pestT').textContent=L2('الوقاية والمكافحة','Pest & disease control');
+  if(!PEST.idx){box.innerHTML=PEST.err?`<div class="satErr">⚠ ${L2('تعذّر تحميل المرجع','Could not load the reference')}<br><small dir="ltr">${escH(PEST.err)}</small><br><button type="button" class="btn" id="pRetry" style="margin-top:8px">${L2('إعادة المحاولة','Retry')}</button></div>`:`<p class="mut">⏳ ${L2('جاري تحميل المرجع…','Loading reference…')}</p>`;
+    const r=$('pRetry');if(r)r.onclick=()=>{PEST.err='';pestLoad()};return}
+  const d=PEST.idx,types=['حشرات','فطريات','أكاروسات','نيماتودا','الحشائش','قواقع','بكتيريا','طحالب'];
+  const TE={'حشرات':'Insects','فطريات':'Fungi','أكاروسات':'Mites','نيماتودا':'Nematodes','الحشائش':'Weeds','قواقع':'Snails','بكتيريا':'Bacteria','طحالب':'Algae'};
+  const prev=document.activeElement&&document.activeElement.id==='pQ';
+  box.innerHTML=`<p class="mut" style="margin:0 0 10px;font-size:.82rem">${L2('اكتب اسم الآفة أو عرضها أو المادة الفعّالة، أو اختر المحصول — وهتطلعلك صفحة المرجع الرسمي بالصور والجرعات.','Type a pest, symptom or active ingredient, or pick a crop — the official reference page with photos and doses will appear.')}</p>
+  <input id="pQ" type="search" enterkeyhint="search" autocomplete="off" placeholder="${L2('مثال: دودة ورق القطن، بياض دقيقي، Abamectin','e.g. cotton leafworm, powdery mildew, Abamectin')}" value="${escH(PEST.q)}">
+  <select id="pC" style="margin-top:8px"><option value="">${L2('كل المحاصيل والأقسام','All crops & sections')}</option>${['pest','weed','app'].map(pt=>{const gs={};d.chaps.forEach((c,i)=>{if(c.part===pt)(gs[c.g]=gs[c.g]||[]).push([i,c.n])});return Object.entries(gs).map(([g,a])=>`<optgroup label="${escH(g)}">${a.map(([i,n])=>`<option value="${i}"${String(i)===PEST.ch?' selected':''}>${escH(n)}</option>`).join('')}</optgroup>`).join('')}).join('')}</select>
+  <div class="pTy"><button type="button" class="chip${PEST.ty===''?' on':''}" data-ty="">${L2('الكل','All')}</button>${types.map(t=>`<button type="button" class="chip${PEST.ty===t?' on':''}" data-ty="${t}">${lang==='en'?TE[t]:t}</button>`).join('')}</div>
+  <div id="pRes"></div>
+  <p class="mut" style="font-size:.74rem;margin-top:12px;line-height:1.7">⚠ ${L2('للاسترشاد فقط: التزم بتعليمات العبوة والتوصية المعتمدة، وارتدِ ملابس الوقاية، والتزم بفترة ما قبل الحصاد. استشر مهندسًا زراعيًا قبل الاستخدام.','For guidance only: follow the product label and approved recommendation, wear protective gear and respect the pre-harvest interval. Consult an agronomist before use.')}<br>${L2('المصدر','Source')}: ${escH(d.src)}</p>`;
+  const q=$('pQ');q.oninput=()=>{PEST.q=q.value;PEST.open=null;pestRes()};
+  $('pC').onchange=e=>{PEST.ch=e.target.value;PEST.open=null;pestRes()};
+  box.querySelectorAll('[data-ty]').forEach(b=>b.onclick=()=>{PEST.ty=b.dataset.ty;PEST.open=null;pestUI()});
+  pestRes();
+}
+function pestRes(){
+  const el=$('pRes');if(!el)return;const d=PEST.idx;
+  const raw=PEST.q.trim(),qt=pNorm(raw).split(/\s+/).map(pSk).filter(x=>x.length>=2),ql=/[a-z]{4,}/i.test(raw)?raw.toLowerCase().replace(/[^a-z\- ]/g,'').trim():'';
+  const qa=qt.length?qt:[];
+  let L=PEST.sec.map((s,i)=>({s,i,sc:(PEST.ch===''||String(s.c)===PEST.ch)&&(PEST.ty===''||s.k===PEST.ty||(PEST.ty==='الحشائش'&&s.part==='weed'))?pestMatch(s,qa,ql):0})).filter(x=>x.sc>0);
+  if(raw)L.sort((a,b)=>b.sc-a.sc);
+  const tot=L.length;L=L.slice(0,60);
+  if(!L.length){el.innerHTML=`<p class="mut" style="text-align:center;margin:18px 0">🔎 ${L2('مفيش نتيجة — جرّب كلمة أبسط أو غيّر المحصول.','No result — try a simpler word or change the crop.')}</p>`;return}
+  el.innerHTML=`<div class="mut" style="font-size:.76rem;margin:10px 0 6px">${L2('عدد النتائج','Results')}: ${tot}${tot>60?' ('+L2('أول 60','first 60')+')':''}</div>`+L.map(({s,i})=>{const c=d.chaps[s.c],o=PEST.open===i;
+    return `<div class="pCard${o?' open':''}"><button type="button" class="pHd" data-i="${i}"><b>${escH(s.t)}</b><span class="mut">${escH(c.n)}${s.k?' · '+escH(s.k):''} · ${L2('ص','p.')}${s.pg}</span>${s.ai.size?`<span class="pAi">${[...s.ai].slice(0,8).map(x=>`<i>${escH(x)}</i>`).join('')}${s.ai.size>8?'<i>…</i>':''}</span>`:''}</button>${o?`<div class="pBd">${s.rows.length?`<div class="pSh">${L2('التوصيات المعتمدة','Approved recommendations')} (${s.rows.length})</div>`+pCalc(s)+s.rows.map(pRow).join('')+`<div class="pSh">${L2('صفحة المرجع الأصلية','Original reference page')}</div>`:''}${s.bands.map(b=>pBand(b)).join('')}<div class="pAct"><button type="button" class="btn" data-z="${i}">🔍 ${L2('عرض بملء الشاشة وتكبير','Full screen & zoom')}</button></div></div>`:`<div class="pTh" data-i="${i}">${pBand(s.bands[0])}</div>`}</div>`}).join('');
+  el.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;PEST.open=PEST.open===i?null:i;pestRes();const o=el.querySelector('.pCard.open');if(o)o.scrollIntoView({block:'nearest',behavior:'smooth'})});
+  el.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>pestZoom(PEST.sec[+b.dataset.z]));
+  const ob=el.querySelector('.pCard.open .pBd');if(ob)pBind(ob);
+}
+function pestZoom(s){
+  let z=1;const ov=document.createElement('div');ov.className='pZ';
+  ov.innerHTML=`<div class="pZb"><b>${escH(s.t)}</b><span><button type="button" id="zm">−</button><button type="button" id="zp">+</button><button type="button" id="zx">✕</button></span></div><div class="pZs"><div class="pZi" style="width:100%">${s.bands.map(b=>pBand(b)).join('')}</div></div>`;
+  document.body.appendChild(ov);const im=ov.querySelector('.pZi');
+  const set=v=>{z=Math.max(1,Math.min(4,v));im.style.width=(z*100)+'%'};
+  ov.querySelector('#zp').onclick=()=>set(z+.5);ov.querySelector('#zm').onclick=()=>set(z-.5);
+  const close=()=>{ov.remove();document.removeEventListener('keydown',kd)};const kd=e=>{if(e.key==='Escape')close()};
+  document.addEventListener('keydown',kd);ov.querySelector('#zx').onclick=close;
+}
+function pestPre(){const k=$('crop')&&$('crop').value;if(!PEST.idx||!k||PEST.pre===k)return;PEST.pre=k;const i=PEST.idx.chaps.findIndex(c=>c.part==='pest'&&c.key===k);if(i>=0)PEST.ch=String(i)}
+{const _sh=show;show=function(id){_sh(id);if(id==='pest'){if(!PEST.idx){pestLoad().then(()=>{pestPre();pestUI()})}else{pestPre();pestUI()}}}}
 
 // ===== قائمة الأدوات + تثبيت التطبيق =====
 const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg>`;
