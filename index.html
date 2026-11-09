@@ -241,7 +241,7 @@ button.sec.act{border-color:var(--ac);background:var(--in);box-shadow:0 0 0 2px 
 :root:not([data-theme="dark"]){--bg:#faf6ec;--bg2:#efe6cd;--card:rgba(255,253,247,.94);--fg:#18372a;--mut:#5f6f61;--ac:#1c4a37;--ac2:#2e7d57;--gold:#8f6a1c;--bd:rgba(143,106,28,.25);--onac:#fff}
 body{background:radial-gradient(900px 480px at 88% -8%,var(--bg2),transparent),radial-gradient(700px 400px at 0% 100%,var(--bg2),transparent),var(--bg)}
 .card{border-radius:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),var(--sh)}
-.hero,#dtS{display:none!important}
+.hero{display:none!important}
 .wrap{padding-bottom:110px}
 body.pg-home .tiles,body.pg-tools .tiles,body.pg-acct .tiles{display:none}
 .tiles{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none;margin-bottom:6px}.tiles::-webkit-scrollbar{display:none}
@@ -308,6 +308,21 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
 #satPrint .spCo{font-size:10px;margin-bottom:8px}#satPrint table{width:100%}#satPrint th,#satPrint td{border-bottom:1px solid #e3d9b8;padding:3px 6px;text-align:start}
 #satPrint .spB .card,#satPrint .spB>*{break-inside:avoid}#satPrint .satK{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}#satPrint .satCh{width:100%;height:auto;max-height:260px}
 #satPrint .spF{margin-top:12px;border-top:1px solid #cdbf94;padding-top:6px;font-size:10px;color:#5a6657}}
+
+.sxBox{margin:12px 0;padding:10px 12px;border:1px solid var(--bd,rgba(232,200,114,.25));border-radius:14px}
+.sxT{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.sxT button{padding:6px 12px;border-radius:999px;border:1px solid var(--bd,rgba(232,200,114,.3));background:transparent;color:inherit;font:inherit;font-size:.82rem;cursor:pointer}.sxT button.on{background:var(--ac,#e8c872);color:#10241a;font-weight:700}
+.cmH{font-size:.85rem;margin:4px 0}.sxBox select{min-height:42px;border-radius:10px;padding:0 8px}
+@media print{#satPrint .sxBox{border:1px solid #cdbf94;break-inside:avoid}#satPrint .cmW img{max-height:300px!important}#satPrint .noP{display:none!important}}
+
+/* إصلاح الخريطة: الطبقات والأزرار فوق الصور */
+.sm .tl{z-index:0;overflow:hidden}.sm .ov{z-index:2}.sm .zc{z-index:5}.sm .at{bottom:24px!important;left:auto!important;right:4px}.sm .chx{z-index:3}.sm .at{z-index:4}
+.sm .zc button,.sm .zd button{width:42px;height:42px;font-size:1.25rem;font-weight:700;background:rgba(4,18,11,.85);color:#f3ecd8;border:1px solid rgba(232,200,114,.55);box-shadow:0 2px 8px rgba(0,0,0,.45)}
+.smLy{display:flex;gap:4px;margin:8px 0 6px;padding:4px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--bd)}
+.smLy button{flex:1;min-height:40px;padding:4px 6px;font-size:.8rem;border-radius:10px;border:0;background:transparent;color:inherit;font-weight:600}
+.smLy button.on{background:var(--ac,#e8c872);color:#10241a;font-weight:800}
+.smHint{position:absolute;top:8px;left:58px;right:58px;z-index:4;text-align:center;font-size:.78rem;font-weight:700;color:#fff;background:rgba(4,18,11,.78);padding:6px 10px;border-radius:10px;pointer-events:none;direction:rtl}
+.smErr{position:absolute;inset-inline:12px;top:50%;transform:translateY(-50%);z-index:6;text-align:center;background:rgba(120,20,20,.9);color:#fff;padding:10px;border-radius:12px;font-size:.82rem;direction:rtl}
+.sm .smHint,.sm .smErr{font-family:inherit}
 </style>
 <script>try{if(sessionStorage.getItem('qSp')==='1')document.documentElement.className+=' nosp'}catch(e){}</script>
 </head>
@@ -365,12 +380,11 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
   <div class="who">م/ أحمد محمد سعيد عبد العال — كلية الزراعة · جامعة المنوفية · الأراضي والمياه</div>
 </section>
 
-<div class="card dtS noprint" id="dtS"><div><div class="d1" id="dtD1"></div><div class="d2" id="dtD2"></div></div><div class="tr"><button class="sec" id="cmpB" style="min-height:44px;padding:6px 12px"></button><div class="tm" id="dtTm"></div></div></div>
 
 <div id="qtb"><button type="button" id="qtbB" aria-label="back">›</button><b id="qtbT"></b></div>
 <div class="tiles" id="tiles"></div>
 
-<div class="pn on hm" id="p-home"><div id="homeBox"></div></div>
+<div class="pn on hm" id="p-home"><div class="card dtS noprint" id="dtS"><div><div class="d1" id="dtD1"></div><div class="d2" id="dtD2"></div></div><div class="tr"><button class="sec" id="cmpB" style="min-height:44px;padding:6px 12px"></button><div class="tm" id="dtTm"></div></div></div><div id="homeBox"></div></div>
 <div class="pn" id="p-tools"><div id="toolsBox"></div></div>
 <div class="pn" id="p-acct"><div id="acctBox"></div></div>
 <div class="pn" id="p-crop"><div class="card" id="locCard"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-map"/></svg><span id="locT"></span></h3>
@@ -1253,7 +1267,7 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.11-1';
+const APP_VER='2026.11.11-3';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1575,16 +1589,18 @@ function smDraw(){const m=SM.el;if(!m||!m.isConnected)return;const w=m.clientWid
  const tx0=Math.floor(x0/256),tx1=Math.floor((x0+w)/256),ty0=Math.max(0,Math.floor(y0/256)),ty1=Math.min(n-1,Math.floor((y0+h)/256));const need=new Set(),tl=m.querySelector('.tl');
  const LY=SM.layer==='hyb'?['sat','lab']:[SM.layer];
  LY.forEach((ly,li)=>{for(let ty=ty0;ty<=ty1;ty++)for(let tx=tx0;tx<=tx1;tx++){const xx=((tx%n)+n)%n,k=ly+'/'+z+'/'+xx+'/'+ty+'/'+tx;need.add(k);let im=SM.tiles.get(k);
-  if(!im){im=new Image();im.alt='';im.draggable=false;im.referrerPolicy='no-referrer';im.style.cssText='position:absolute;left:0;top:0;width:256px;height:256px;max-width:none;pointer-events:none;z-index:'+(ly==='lab'?2:1);im.src=SM_URL[ly](z,xx,ty);tl.appendChild(im);SM.tiles.set(k,im)}
+  if(!im){im=new Image();im.alt='';im.draggable=false;im.referrerPolicy='no-referrer';im.style.cssText='position:absolute;left:0;top:0;width:256px;height:256px;max-width:none;pointer-events:none;z-index:'+(ly==='lab'?2:1);im.onerror=()=>{SM.err=(SM.err||0)+1;if(SM.err>=4){const e=$('smErr');if(e){e.hidden=false;e.textContent=L2('تعذّر تحميل صور الخريطة. تأكد من الإنترنت أو جرّب طبقة أخرى.','Map tiles failed to load. Check your connection or try another layer.')}}};im.onload=()=>{SM.err=0;const e=$('smErr');if(e)e.hidden=true};im.src=SM_URL[ly](z,xx,ty);tl.appendChild(im);SM.tiles.set(k,im)}
   im.style.transform=`translate(${Math.round(tx*256-x0)}px,${Math.round(ty*256-y0)}px)`}});
  for(const[k,im]of SM.tiles)if(!need.has(k)){im.remove();SM.tiles.delete(k)}
  const P=SATS.poly.map(p=>{const q=smW(p[0],p[1],z);return[q[0]-x0,q[1]-y0]});let s='';
- if(P.length>=3)s+=`<polygon points="${P.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="#2e9e4f" fill-opacity=".26" stroke="#ffe600" stroke-width="2.5" stroke-linejoin="round"/>`;
+ const cmo=SM.cm&&SM.cmOn?SM.cm:null;if(cmo){const a=smW(cmo.bbox[0],cmo.bbox[3],z),b=smW(cmo.bbox[2],cmo.bbox[1],z);s+=`<image href="${cmo.url}" x="${(a[0]-x0).toFixed(1)}" y="${(a[1]-y0).toFixed(1)}" width="${(b[0]-a[0]).toFixed(1)}" height="${(b[1]-a[1]).toFixed(1)}" preserveAspectRatio="none" opacity=".92" style="image-rendering:pixelated"/>`}
+ if(P.length>=3)s+=`<polygon points="${P.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="#2e9e4f" fill-opacity="${cmo?'.02':'.26'}" stroke="#ffe600" stroke-width="2.5" stroke-linejoin="round"/>`;
  else if(P.length===2)s+=`<line x1="${P[0][0]}" y1="${P[0][1]}" x2="${P[1][0]}" y2="${P[1][1]}" stroke="#ffe600" stroke-width="2.5"/>`;
  const E=P.length>=3?P.length:P.length-1;
  for(let i=0;i<E;i++){const a=P[i],b=P[(i+1)%P.length],px=Math.hypot(b[0]-a[0],b[1]-a[1]);if(px>74){const d=smDist(SATS.poly[i],SATS.poly[(i+1)%P.length]);s+=`<text x="${((a[0]+b[0])/2).toFixed(1)}" y="${((a[1]+b[1])/2-5).toFixed(1)}" font-size="11" font-weight="700" text-anchor="middle" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke">${d>=1000?(d/1000).toFixed(2)+' km':Math.round(d)+' m'}</text>`}}
  P.forEach((p,i)=>{const dr=SM.vd===i;s+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${dr?11:i===P.length-1?8:6}" fill="${dr?'#3ff0a8':i===P.length-1?'#ff5722':'#fff'}" stroke="#222" stroke-width="1.5"/><text x="${p[0].toFixed(1)}" y="${(p[1]+3.5).toFixed(1)}" font-size="9" font-weight="800" text-anchor="middle" fill="#111" style="pointer-events:none">${i+1}</text>`});
  m.querySelector('.ov').innerHTML=s;
+ const hn=$('smHint');if(hn){const n=SATS.poly.length;hn.textContent=n===0?L2('👆 اضغط على الخريطة لتحديد أركان الحقل','👆 Tap the map to mark the field corners'):n<3?L2(`✅ ${n} — أضف ${3-n} ${3-n===1?'نقطة':'نقاط'} على الأقل`,`✅ ${n} — add at least ${3-n} more`):'';hn.style.display=n>=3?'none':'block'}
  const mpp=156543.03*Math.cos(SM.lat*Math.PI/180)/n,nice=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,200000,500000];let sd=nice[0];for(const d of nice){if(d/mpp<=130)sd=d}
  const sc=$('smSc');if(sc){sc.style.width=Math.max(20,sd/mpp)+'px';sc.firstElementChild.textContent=sd>=1000?(sd/1000)+' km':sd+' m'}
  const co=$('smCo');if(co){const hv=SM.hv?`<span>📍 ${smFmt(SM.hv[1],SM.hv[0])}</span>`:'';co.innerHTML=`<span>🎯 ${smFmt(SM.lat,SM.lon)}</span>${hv}<span class="mut2">z${z}</span>`}}
@@ -1670,8 +1686,9 @@ function satUI(){
  </div>
  <div class="satX"><div><label>${L2('المحصول (اختياري)','Crop (optional)')}</label><select id="satCrop"><option value="">—</option>${Object.entries(G).map(([gk,gn])=>`<optgroup label="${tx(gn)}">${Object.keys(C).filter(k=>C[k][1]===gk).map(k=>o(k,tx(C[k][0]),SATS.crop)).join('')}</optgroup>`).join('')}</select></div><div><label>${L2('تاريخ الزراعة (اختياري)','Planting date (optional)')}</label><input id="satPd" type="date" value="${escH(SATS.pd||'')}" max="${new Date().toISOString().slice(0,10)}"></div></div>
  <div id="satMapW" class="smW" style="display:${SATS.mode==='map'?'block':'none'}">
-  <div class="sm" id="satMap"><div class="tl"></div><svg class="ov" aria-hidden="true"></svg><div class="chx" aria-hidden="true"></div><div class="zc"><button type="button" id="smP" aria-label="zoom in">+</button><button type="button" id="smM" aria-label="zoom out">−</button><button type="button" id="smFt2" aria-label="fit">🎯</button><button type="button" id="smFs" aria-label="fullscreen">⛶</button></div><div class="zd"><button type="button" id="smU2" aria-label="undo">↩</button><button type="button" id="smC2" aria-label="clear">🗑</button><button type="button" id="smT2" aria-label="layer">🗺</button></div><div id="smSc" class="smSc"><span></span></div><div class="smCo" id="smCo"></div><div class="at" id="smAt"></div></div>
-  <div class="smB"><button type="button" id="smU">↩ ${L2('تراجع','Undo')}</button><button type="button" id="smC">🗑 ${L2('مسح','Clear')}</button><button type="button" id="smL">📍 ${L2('موقعي','Me')}</button><button type="button" id="smT">${SM.layer==='sat'?'🏷️ '+L2('هجين','Hybrid'):SM.layer==='hyb'?'🗺️ '+L2('خريطة','Map'):'🛰️ '+L2('قمر','Sat')}</button><button type="button" id="smS" style="grid-column:span 2">▢ ${L2('مربع بالمساحة المكتوبة حول مركز الخريطة','Square of typed area at map center')}</button></div>
+  <div class="smLy" role="group" aria-label="layer">${[['sat','🛰️',L2('قمر صناعي','Satellite')],['hyb','🏷️',L2('قمر + أسماء','Satellite + labels')],['map','🗺️',L2('خريطة','Map')]].map(a=>`<button type="button" data-ly="${a[0]}" class="${SM.layer===a[0]?'on':''}">${a[1]} ${a[2]}</button>`).join('')}</div>
+  <div class="sm" id="satMap"><div class="tl"></div><svg class="ov" aria-hidden="true"></svg><div class="chx" aria-hidden="true"></div><div class="smHint" id="smHint"></div><div class="smErr" id="smErr" hidden></div><div class="zc"><button type="button" id="smP" aria-label="zoom in">+</button><button type="button" id="smM" aria-label="zoom out">−</button><button type="button" id="smFt2" aria-label="fit">🎯</button><button type="button" id="smFs" aria-label="fullscreen">⛶</button></div><div class="zd"><button type="button" id="smU2" aria-label="undo">↩</button><button type="button" id="smC2" aria-label="clear">🗑</button></div><div id="smSc" class="smSc"><span></span></div><div class="smCo" id="smCo"></div><div class="at" id="smAt"></div></div>
+  <div class="smB"><button type="button" id="smU">↩ ${L2('تراجع','Undo')}</button><button type="button" id="smC">🗑 ${L2('مسح','Clear')}</button><button type="button" id="smL">📍 ${L2('موقعي','Me')}</button><button type="button" id="smS" style="grid-column:span 2">▢ ${L2('مربع بالمساحة المكتوبة حول مركز الخريطة','Square of typed area at map center')}</button></div>
   <div style="display:flex;gap:6px;margin:0 0 8px"><input id="smQ" style="flex:1;min-width:0" placeholder="${L2('ابحث عن مكان (مثال: أشمون) أو اكتب إحداثيات 30.55, 31.00','Search a place or type coordinates 30.55, 31.00')}"><button type="button" id="smQb" style="width:52px">🔎</button></div>
   <div class="smI" id="satInfo"></div><div id="smPts"></div>
   <p class="mut" style="font-size:.76rem;margin:6px 0 0">${L2('اسحب لتحريك الخريطة، قرّب بإصبعين أو بزرّي + / −، واضغط لتحديد كل ركن بالترتيب حول الحقل.','Drag to pan, pinch or use + / − to zoom, and tap each corner in order around the field.')}</p>
@@ -1687,7 +1704,7 @@ function satUI(){
   $('smAt').textContent=SM.layer==='map'?'© OpenStreetMap contributors':'Tiles © Esri — Maxar, Earthstar Geographics';
   $('smP').onclick=()=>smZoom(1);$('smM').onclick=()=>smZoom(-1);
   $('smU').onclick=()=>{SATS.poly.pop();SATR=null;smDraw();smInfo()};$('smC').onclick=()=>{SATS.poly=[];SATR=null;SATE=null;$('satOut').innerHTML='';smDraw();smInfo()};
-  $('smL').onclick=smLocate;$('smS').onclick=smSquare;$('smQb').onclick=smSearch;$('smQ').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();smSearch()}};$('smT').onclick=()=>{SM.layer=SM.layer==='sat'?'hyb':SM.layer==='hyb'?'map':'sat';satUI()};$('smT2').onclick=$('smT').onclick;$('smFt2').onclick=()=>SATS.poly.length?smFit():smLocate();$('smU2').onclick=()=>$('smU').click();$('smC2').onclick=()=>$('smC').click();$('smFs').onclick=smFs;
+  $('smL').onclick=smLocate;$('smS').onclick=smSquare;$('smQb').onclick=smSearch;$('smQ').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();smSearch()}};document.querySelectorAll('.smLy button').forEach(b=>b.onclick=()=>{if(SM.layer===b.dataset.ly)return;SM.layer=b.dataset.ly;SM.err=0;satUI()});$('smFt2').onclick=()=>SATS.poly.length?smFit():smLocate();$('smU2').onclick=()=>$('smU').click();$('smC2').onclick=()=>$('smC').click();$('smFs').onclick=smFs;
   if(!SM.init){SM.init=true;if(typeof LOC!=='undefined'&&LOC&&isFinite(LOC.lat)&&isFinite(LOC.lon)){SM.lat=LOC.lat;SM.lon=LOC.lon;SM.z=16}else{SM.lat=27;SM.lon=30.5;SM.z=6}}
   requestAnimationFrame(()=>{smDraw();smInfo()});
   if(window.ResizeObserver){if(SM.ro)SM.ro.disconnect();SM.ro=new ResizeObserver(()=>smDraw());SM.ro.observe(SM.el)}}
@@ -1738,7 +1755,7 @@ async function satRun(){
    else if(/upstream 400/.test(er))m=L2('رفض Copernicus الطلب (صيغة غير مقبولة). التفاصيل بالأسفل.','Copernicus rejected the request. Details below.');
    else if(/upstream unreachable/.test(er))m=L2('تعذّر وصول الخادم إلى Copernicus الآن. حاول بعد قليل.','The server could not reach Copernicus now. Try again shortly.');
    throw new Error(m)}
-  SATR={pos,days,d};satShow()
+  SATR={pos,days,d,geometry};satShow()
  }catch(e){const m=(e&&e.name==='AbortError')?L2('انتهت مهلة الاتصال. حاول مرة أخرى.','Request timed out. Try again.'):(e&&e.message&&!/Failed to fetch|NetworkError|Load failed/i.test(e.message)?e.message:(SATT.t=String((e&&e.message)||e).slice(0,160),L2('تعذّر الاتصال بخدمة الأقمار الصناعية (تأكد من الإنترنت ومن عنوان الخدمة).','Could not reach the satellite service (check internet and service URL).')));satErr(m)}
  finally{SATB=false;const b=$('satGo');if(b)b.disabled=false}}
 const NDVI_G={cer:[.82,.55,.25],leg:[.78,.55,.3],ind:[.78,.6,.3],veg:[.75,.5,.3]};
@@ -2002,6 +2019,121 @@ function pestPre(){const k=$('crop')&&$('crop').value;if(!PEST.idx||!k||PEST.pre
 
 
 
+
+// ===== مؤشرات إضافية + مقارنة السنة الماضية + خريطة ألوان الحقل =====
+const SX={ndvi:{n:'NDVI',ar:'كثافة وصحة الغطاء الأخضر',en:'Green cover density & health',t:[.2,.4,.6,.75],
+  l:[['شبه عارٍ','Near bare'],['ضعيف','Weak'],['متوسط','Moderate'],['جيد','Good'],['كثيف جداً','Very dense']]},
+ ndmi:{n:'NDMI',ar:'رطوبة الأوراق والإجهاد المائي (NIR/SWIR)',en:'Leaf water content / water stress (NIR/SWIR)',t:[-.05,.1,.25,.4],
+  l:[['جاف / إجهاد شديد','Dry / severe stress'],['إجهاد مائي','Water stress'],['رطوبة متوسطة','Moderate moisture'],['رطوبة جيدة','Good moisture'],['رطب جداً','Very moist']]},
+ ndre:{n:'NDRE',ar:'الكلوروفيل والنيتروجين (Red-edge)، يفيد في المراحل المتقدمة',en:'Chlorophyll / nitrogen (red-edge), useful at later stages',t:[.12,.22,.32,.42],
+  l:[['كلوروفيل منخفض جداً','Very low'],['منخفض','Low'],['متوسط','Medium'],['جيد','Good'],['مرتفع','High']]},
+ evi:{n:'EVI',ar:'الغطاء الكثيف بدون تشبّع، ويقلّل أثر الغلاف الجوي',en:'Dense canopy without saturation; reduces atmospheric effect',t:[.15,.3,.45,.6],
+  l:[['شبه عارٍ','Near bare'],['ضعيف','Weak'],['متوسط','Moderate'],['جيد','Good'],['كثيف جداً','Very dense']]},
+ savi:{n:'SAVI',ar:'الغطاء مع تصحيح أثر التربة (مفيد للغطاء المتفرق)',en:'Cover with soil-brightness correction (sparse cover)',t:[.15,.3,.45,.6],
+  l:[['شبه عارٍ','Near bare'],['ضعيف','Weak'],['متوسط','Moderate'],['جيد','Good'],['كثيف جداً','Very dense']]}};
+const SXC=['#d73027','#fc8d59','#fee08b','#91cf60','#1a9850'];
+const SXS={idx:'ndvi',busy:'',msg:'',sel:0};
+const sxK=(i,v)=>{const t=SX[i].t;let k=0;while(k<4&&v>=t[k])k++;return k};
+const sxL=(i,k)=>L2(SX[i].l[k][0],SX[i].l[k][1]);
+const sxGet=(p,i)=>{if(i==='ndvi')return sv(p);const q=p.x&&p.x[i];return q?(q.med!=null?q.med:q.mean):null};
+const sxHas=P=>P.some(p=>p.x&&p.x.ndmi);
+async function satCall(path,body,ms){
+ const tk=(window.NamaaAuth&&NamaaAuth.token)?await NamaaAuth.token().catch(()=>null):null;
+ if(!tk)throw new Error(L2('سجّل الدخول من جديد ثم حاول مرة أخرى.','Please sign in again and retry.'));
+ const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),ms||60000);let r;
+ try{r=await fetch(SAT_URL+path,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tk},body:JSON.stringify(body),signal:ctl.signal})}
+ catch(e){throw new Error(e&&e.name==='AbortError'?L2('انتهت مهلة الاتصال. حاول مرة أخرى.','Request timed out. Try again.'):L2('تعذّر الاتصال بالخدمة.','Could not reach the service.'))}finally{clearTimeout(to)}
+ let d=null;try{d=await r.json()}catch(e){}
+ if(r.status===403&&d&&/pro required/.test(d.error||'')){satLockUI();payOpen(true);throw new Error(L2('هذه الميزة لمشتركي Pro فقط.','Pro only.'))}
+ if(!r.ok||!d||!d.ok){const er=(d&&d.error)||('HTTP '+r.status);SATT.t=er+((d&&d.detail)?' — '+d.detail:'');
+  throw new Error(/upstream 429/.test(er)?L2('تجاوزت الحصة المجانية مؤقتاً. حاول لاحقاً.','Free quota temporarily exceeded. Try later.'):/login required/.test(er)?L2('انتهت جلسة الدخول. سجّل الدخول من جديد.','Session expired. Sign in again.'):L2('رجّع الخادم خطأً: ','Server error: ')+er)}
+ return d}
+const WK_OLD=()=>L2('نسخة الـ Worker قديمة. حدّثها بالنسخة الجديدة (v4) من Cloudflare.','Worker is outdated. Update it to the new version (v4) in Cloudflare.');
+function sxChart(i,P,PP){
+ const W=340,H=190,L=38,R=10,T=10,B=26,iw=W-L-R,ih=H-T-B,DY=864e5;
+ const A=P.map(p=>{const q=i==='ndvi'?p:(p.x&&p.x[i]);return{t:(Date.parse(p.from)+Date.parse(p.to))/2,v:sxGet(p,i),lo:q?(q.p10!=null?q.p10:null):null,hi:q?(q.p90!=null?q.p90:null):null}}).filter(a=>a.v!=null);
+ const Bv=(PP||[]).map(p=>({t:(Date.parse(p.from)+Date.parse(p.to))/2+365*DY,v:sxGet(p,i)})).filter(a=>a.v!=null);
+ if(!A.length)return '';
+ const all=A.map(a=>a.v).concat(Bv.map(b=>b.v),A.flatMap(a=>[a.lo,a.hi]).filter(v=>v!=null));
+ let lo=Math.min(...all),hi=Math.max(...all);if(i==='ndvi'){lo=Math.min(0,lo);hi=Math.max(1,hi)}else{lo=Math.floor((lo-.05)*10)/10;hi=Math.ceil((hi+.05)*10)/10;if(hi-lo<.4)hi=lo+.4}
+ const ts=A.map(a=>a.t).concat(Bv.map(b=>b.t)),t0=Math.min(...ts),t1=Math.max(...ts);
+ const X=t=>L+(t1===t0?iw/2:(t-t0)/(t1-t0)*iw),Y=v=>T+(1-(v-lo)/(hi-lo))*ih;
+ let s=`<svg class="satCh" viewBox="0 0 ${W} ${H}" role="img" aria-label="${SX[i].n}">`;
+ for(let k=0;k<=4;k++){const g=lo+(hi-lo)*k/4;s+=`<line x1="${L}" x2="${W-R}" y1="${Y(g).toFixed(1)}" y2="${Y(g).toFixed(1)}" stroke="currentColor" opacity=".13"/><text x="${L-4}" y="${(Y(g)+3).toFixed(1)}" font-size="9" text-anchor="end" fill="currentColor" opacity=".6">${g.toFixed(2)}</text>`}
+ SX[i].t.forEach((v,k)=>{if(v>lo&&v<hi)s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="${SXC[k+1]}" stroke-dasharray="2 4" opacity=".55"/>`});
+ if(A.length>1&&A.every(a=>a.lo!=null&&a.hi!=null)){const up=A.map(a=>`${X(a.t).toFixed(1)},${Y(a.hi).toFixed(1)}`),dn=A.map(a=>`${X(a.t).toFixed(1)},${Y(a.lo).toFixed(1)}`).reverse();s+=`<polygon points="${up.concat(dn).join(' ')}" fill="#2e9e4f" opacity=".15"/>`}
+ if(Bv.length>1)s+=`<polyline points="${Bv.map(b=>X(b.t).toFixed(1)+','+Y(b.v).toFixed(1)).join(' ')}" fill="none" stroke="#c9a227" stroke-width="2" stroke-dasharray="5 4"/>`;
+ if(A.length>1)s+=`<polyline points="${A.map(a=>X(a.t).toFixed(1)+','+Y(a.v).toFixed(1)).join(' ')}" fill="none" stroke="#2e9e4f" stroke-width="2"/>`;
+ A.forEach(a=>{s+=`<circle cx="${X(a.t).toFixed(1)}" cy="${Y(a.v).toFixed(1)}" r="3.6" fill="${SXC[sxK(i,a.v)]}" stroke="#fff" stroke-width="1"/>`});
+ const f=t=>new Date(t).toISOString().slice(5,10);
+ s+=`<text x="${L}" y="${H-8}" font-size="9" fill="currentColor" opacity=".7">${f(t0)}</text><text x="${W-R}" y="${H-8}" font-size="9" text-anchor="end" fill="currentColor" opacity=".7">${f(t1)}</text></svg>`;
+ s+=`<div class="satLg"><span><i style="border-color:#2e9e4f"></i>${L2('هذا العام (الوسيط)','This year (median)')}</span>${Bv.length>1?`<span><i style="border-color:#c9a227;border-top-style:dashed"></i>${L2('نفس الفترة السنة الماضية','Same period last year')}</span>`:''}</div>`;
+ return s}
+function sxCompare(i,P,PP){
+ const DY=864e5,last=P[P.length-1],vl=sxGet(last,i);if(vl==null||!PP||!PP.length)return '';
+ const tl=(Date.parse(last.from)+Date.parse(last.to))/2;let best=null,bd=1e9;
+ PP.forEach(p=>{const v=sxGet(p,i);if(v==null)return;const dd=Math.abs((Date.parse(p.from)+Date.parse(p.to))/2+365*DY-tl)/DY;if(dd<bd){bd=dd;best=p}});
+ if(!best||bd>12)return `<div class="satMsg">${L2('لا توجد قراءة صالحة من السنة الماضية قريبة من هذا التاريخ.','No valid last-year reading close to this date.')}</div>`;
+ const vp=sxGet(best,i),df=vl-vp,pc=vp?Math.abs(df/vp*100):0;
+ const w=Math.abs(df)<.04?L2('مماثل تقريباً','about the same as'):df>0?L2('أعلى من','higher than'):L2('أقل من','lower than');
+ return `<div class="satMsg" style="margin:8px 0">📅 ${L2(`${SX[i].n} الآن (${vl.toFixed(2)}) ${w} نفس الوقت السنة الماضية (${vp.toFixed(2)})${Math.abs(df)>=.04?` بمقدار ${Math.abs(df).toFixed(2)} (${pc.toFixed(0)}٪)`:''}. الفرق قد يعود لاختلاف المحصول أو ميعاد الزراعة أو الطقس.`,`${SX[i].n} now (${vl.toFixed(2)}) is ${w} the same time last year (${vp.toFixed(2)})${Math.abs(df)>=.04?` by ${Math.abs(df).toFixed(2)} (${pc.toFixed(0)}%)`:''}. Differences may come from crop, planting date or weather.`)}</div>`}
+function sxTable(P){
+ const last=P[P.length-1],prev=P.length>1?P[P.length-2]:null;
+ return `<table class="satTb"><tr><th>${L2('المؤشر','Index')}</th><th>${L2('آخر قيمة','Latest')}</th><th>${L2('التقييم','Rating')}</th><th>${L2('الاتجاه','Trend')}</th></tr>`+Object.keys(SX).map(i=>{const v=sxGet(last,i);if(v==null)return '';const pv=prev?sxGet(prev,i):null,dv=pv==null?0:v-pv,k=sxK(i,v);
+  return `<tr><td><b>${SX[i].n}</b></td><td>${v.toFixed(2)}</td><td><i style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:${SXC[k]};margin-inline-end:4px"></i>${sxL(i,k)}</td><td>${pv==null?'—':dv>.03?'↗':dv<-.03?'↘':'→'}</td></tr>`}).join('')+`</table>`}
+function sxMapAdvice(cm){
+ const p=cm.pct,ha=SATR.d.areaHa,fe=ha*2.381,ad=[],weak=p[0]+p[1],good=p[3]+p[4];
+ if(weak>=30)ad.push(['w',L2(`حوالي ${weak.toFixed(0)}٪ من الحقل (≈${(weak/100*fe).toFixed(1)} فدان) في الفئتين الأضعف. قارن مكانها بالخريطة مع الري والتسميد وملوحة التربة ووجود آفات أو أرض غير مزروعة.`,`About ${weak.toFixed(0)}% of the field (≈${(weak/100*fe).toFixed(1)} feddan) is in the two weakest classes. Compare their location on the map with irrigation, fertilization, soil salinity, pests or unplanted ground.`)]);
+ else if(weak>=10)ad.push(['i',L2(`نحو ${weak.toFixed(0)}٪ من الحقل (≈${(weak/100*fe).toFixed(1)} فدان) أضعف من باقيه؛ راجع هذه البقع ميدانياً.`,`About ${weak.toFixed(0)}% (≈${(weak/100*fe).toFixed(1)} feddan) is weaker than the rest; inspect those patches in the field.`)]);
+ if(good>=60&&weak<10)ad.push(['g',L2('معظم الحقل في الفئتين الجيدة والممتازة وبتجانس مقبول.','Most of the field is in the good/excellent classes and fairly uniform.')]);
+ const maxc=Math.max(...p);if(maxc<45&&weak>=10&&good>=10)ad.push(['i',L2('الحقل غير متجانس: القيم موزّعة على عدة فئات. جزّئ الري أو التسميد حسب الأجزاء إن أمكن.','The field is uneven: values spread across several classes. Manage irrigation/fertilizer by zone if possible.')]);
+ if(cm.idx==='ndmi'&&p[0]+p[1]>=30)ad.push(['w',L2('الأجزاء الحمراء/البرتقالية في NDMI تشير غالباً لإجهاد مائي؛ راجع انتظام الري وانسداد النقاطات أو مستوى الأرض.','Red/orange NDMI zones usually indicate water stress; check irrigation uniformity, clogged emitters or ground level.')]);
+ return ad.length?`<ul class="satAd">${ad.map(a=>`<li class="${a[0]==='w'?'w':a[0]==='g'?'g':''}">${a[0]==='w'?'⚠️':a[0]==='g'?'✅':'ℹ️'} ${escH(a[1])}</li>`).join('')}</ul>`:''}
+function sxMapHTML(P){
+ const cm=SATR.cm,opts=P.slice(-10).reverse().map((p,k)=>`<option value="${P.length-1-k}"${(SXS.sel===P.length-1-k)?' selected':''}>${p.from} → ${p.to}</option>`).join('');
+ let h=`<div class="noP" style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"><select id="sxDt" style="flex:1;min-width:150px">${opts}</select><button type="button" class="btn" id="sxMap" ${SXS.busy?'disabled':''}>🗺️ ${L2('خريطة ألوان '+SX[SXS.idx].n,SX[SXS.idx].n+' colour map')}</button></div>`;
+ if(SXS.busy==='map')h+=`<div class="satMsg">${L2('⏳ جارٍ تجهيز صورة الحقل…','⏳ Preparing the field image…')}</div>`;
+ if(cm){const ha=SATR.d.areaHa,fe=ha*2.381;
+  h+=`<div class="cmH"><b>${SX[cm.idx].n}</b> · ${cm.from} → ${cm.to}</div><div class="cmW"><img src="${cm.url}" alt="${SX[cm.idx].n}" style="width:100%;max-height:420px;object-fit:contain;image-rendering:pixelated;background:#1c241f;border-radius:10px"></div>`;
+  if(SATS.mode==='map')h+=`<label class="noP" style="display:flex;gap:6px;align-items:center;margin:6px 0;font-size:.85rem"><input type="checkbox" id="sxOn" ${SM.cmOn?'checked':''}> ${L2('اعرضها فوق الخريطة أعلاه','Show it over the map above')}</label>`;
+  h+=`<table class="satTb"><tr><th></th><th>${L2('الفئة','Class')}</th><th>${L2('النسبة','Share')}</th><th>${L2('المساحة','Area')}</th></tr>`+cm.pct.map((v,k)=>`<tr><td><i style="display:inline-block;width:1em;height:1em;border-radius:3px;background:${SXC[k]}"></i></td><td>${sxL(cm.idx,k)}</td><td>${v.toFixed(1)}٪</td><td>${(v/100*fe).toFixed(2)} ${L2('فدان','fed.')}</td></tr>`).reverse().join('')+`</table>`;
+  h+=sxMapAdvice(cm)+`<p class="mut" style="font-size:.76rem;margin:4px 0">${L2('كل مربع في الصورة ≈ 10×10 م. الفئات استرشادية وتختلف حسب المحصول ومرحلته، والحواف قد تتأثر بالمباني أو الأراضي المجاورة.','Each square ≈ 10×10 m. Classes are indicative and depend on crop and stage; edges may be affected by neighbouring land or buildings.')}</p>`}
+ return h}
+function satXRender(){
+ const box=$('satX');if(!box||!SATR||!SATR.d)return;const P=SATR.d.series||[];if(!P.length)return;
+ if(!sxHas(P)){box.innerHTML=`<p class="mut" style="font-size:.8rem">${L2('المؤشرات الإضافية والخريطة الملوّنة تحتاج تحديث الـ Worker لنسخة v4.','Extra indices and the colour map need the Worker updated to v4.')}</p>`;return}
+ const i=SXS.idx,PP=SATR.prev&&SATR.prev.series;
+ box.innerHTML=`<h4 style="margin:6px 0">📊 ${L2('مؤشرات الحقل','Field indices')}</h4>${sxTable(P)}
+ <div class="sxT noP">${Object.keys(SX).map(k=>`<button type="button" data-i="${k}" class="${k===i?'on':''}">${SX[k].n}</button>`).join('')}</div>
+ <p class="mut" style="font-size:.8rem;margin:4px 0"><b>${SX[i].n}</b>: ${L2(SX[i].ar,SX[i].en)}</p>${sxChart(i,P,PP)}
+ ${PP?sxCompare(i,P,PP):''}
+ <div class="noP" style="margin:8px 0"><button type="button" class="btn" id="sxPrev" ${SXS.busy?'disabled':''}>📅 ${PP?L2('حدّث مقارنة السنة الماضية','Refresh last-year comparison'):L2('قارن بنفس الفترة السنة الماضية','Compare with the same period last year')}</button></div>
+ ${SXS.busy==='prev'?`<div class="satMsg">${L2('⏳ جارٍ جلب بيانات السنة الماضية…','⏳ Fetching last year…')}</div>`:''}
+ <h4 style="margin:12px 0 4px">🗺️ ${L2('خريطة الحقل الملوّنة','Colour map inside the field')}</h4>${sxMapHTML(P)}
+ ${SXS.msg?`<div class="satMsg" style="border-color:#e0a21a">⚠️ ${escH(SXS.msg)}</div>`:''}`;
+ box.querySelectorAll('.sxT button').forEach(b=>b.onclick=()=>{SXS.idx=b.dataset.i;SXS.msg='';if(SATR.cm&&SATR.cm.idx!==SXS.idx){}satXRender()});
+ const dt=$('sxDt');if(dt)dt.onchange=()=>{SXS.sel=+dt.value};
+ const bp=$('sxPrev');if(bp)bp.onclick=sxPrev;const bm=$('sxMap');if(bm)bm.onclick=sxMap;
+ const on=$('sxOn');if(on)on.onchange=()=>{SM.cmOn=on.checked;smDraw()}}
+async function sxPrev(){
+ if(SXS.busy||!SATR)return;SXS.busy='prev';SXS.msg='';satXRender();
+ try{const d=await satCall('/',{geometry:SATR.geometry,days:SATR.days,back:365},60000);if(d.back!==365)throw new Error(WK_OLD());SATR.prev=d}
+ catch(e){SXS.msg=e.message}finally{SXS.busy='';satXRender()}}
+async function sxMap(){
+ if(SXS.busy||!SATR)return;const P=SATR.d.series;const p=P[SXS.sel!=null&&P[SXS.sel]?SXS.sel:P.length-1];SXS.busy='map';SXS.msg='';satXRender();
+ try{const d=await satCall('/img',{geometry:SATR.geometry,index:SXS.idx,from:p.from,to:p.to},90000);if(!d.png)throw new Error(WK_OLD());
+  const bin=atob(d.png),u8=new Uint8Array(bin.length);for(let k=0;k<bin.length;k++)u8[k]=bin.charCodeAt(k);
+  const url=URL.createObjectURL(new Blob([u8],{type:'image/png'}));
+  const img=await new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>no(new Error(L2('تعذّر قراءة الصورة.','Could not read the image.')));im.src=url});
+  const cv=document.createElement('canvas');cv.width=img.naturalWidth;cv.height=img.naturalHeight;const cx=cv.getContext('2d');cx.drawImage(img,0,0);const px=cx.getImageData(0,0,cv.width,cv.height).data,cnt=[0,0,0,0,0];let tot=0;
+  for(let k=0;k<px.length;k+=4){if(px[k+3]<200)continue;let b=-1,bd=1e9;for(let c=0;c<5;c++){const q=d.colors[c],dd=Math.abs(px[k]-q[0])+Math.abs(px[k+1]-q[1])+Math.abs(px[k+2]-q[2]);if(dd<bd){bd=dd;b=c}}cnt[b]++;tot++}
+  if(!tot)throw new Error(L2('لا توجد بكسلات صالحة (غيوم) في هذه الفترة. اختر تاريخاً آخر.','No valid (cloud-free) pixels in this period. Pick another date.'));
+  if(SATR.cm&&SATR.cm.url)URL.revokeObjectURL(SATR.cm.url);
+  SATR.cm={idx:d.index,from:d.from,to:d.to,url,bbox:d.bbox,pct:cnt.map(c=>c/tot*100),n:tot};SM.cm=SATR.cm;SM.cmOn=SATS.mode==='map'}
+ catch(e){SXS.msg=e.message}finally{SXS.busy='';satXRender();if(SM.el)smDraw()}}
+{const _s2=satShow;satShow=function(){_s2();const o=$('satOut');if(!o||!SATR||!SATR.d||!(SATR.d.series||[]).length)return;
+ const ul=o.querySelector('ul.satAd');if(ul&&!$('satX')){ul.insertAdjacentHTML('beforebegin','<div id="satX" class="sxBox"></div>');satXRender()}}}
+
 // ===== تقرير القمر الصناعي PDF (مستقل عن التقرير الرئيسي) =====
 function satPdf(){
  const out=$('satOut');if(!out||!SATR||!SATR.d)return;const d=SATR.d,P=(d.series||[]);if(!P.length)return;
@@ -2012,9 +2144,9 @@ function satPdf(){
  let old=$('satPrint');if(old)old.remove();
  const w=document.createElement('div');w.id='satPrint';w.dir=lang==='ar'?'rtl':'ltr';
  const clone=out.cloneNode(true);
- clone.querySelectorAll('button,.satPdfB').forEach(b=>b.remove());clone.querySelectorAll('details').forEach(x=>x.open=true);
+ clone.querySelectorAll('button,.satPdfB,.noP,select').forEach(b=>b.remove());clone.querySelectorAll('details').forEach(x=>x.open=true);
  let mapH='';
- if(hasPoly&&SM.el){const m=SM.el.cloneNode(true);m.classList.remove('fs');m.querySelectorAll('.zc,.zd,.smCo,.chx').forEach(x=>x.remove());const ow=SM.el.clientWidth,oh=SM.el.clientHeight;m.style.cssText=`position:relative;width:${ow}px;height:${oh}px;overflow:hidden;border-radius:8px;margin:0 auto;zoom:${Math.min(1.6,640/ow).toFixed(3)}`;mapH=`<div class="spMap">${m.outerHTML}</div>`}
+ if(hasPoly&&SM.el){const m=SM.el.cloneNode(true);m.classList.remove('fs');m.querySelectorAll('.zc,.zd,.smCo,.chx,.smHint,.smErr').forEach(x=>x.remove());const ow=SM.el.clientWidth,oh=SM.el.clientHeight;m.style.cssText=`position:relative;width:${ow}px;height:${oh}px;overflow:hidden;border-radius:8px;margin:0 auto;zoom:${Math.min(1.6,640/ow).toFixed(3)}`;mapH=`<div class="spMap">${m.outerHTML}</div>`}
  const rows=hasPoly?P0.map((p,i)=>`<tr><td>${i+1}</td><td dir="ltr">${p[1].toFixed(6)}</td><td dir="ltr">${p[0].toFixed(6)}</td></tr>`).join(''):'';
  w.innerHTML=`<div class="spH"><div><b>قوت | Qout</b><small>${L2('منصة الزراعة الذكية','Smart agriculture platform')}</small></div><div class="spT">${L2('تقرير الأقمار الصناعية — صحة الغطاء النباتي','Satellite report — vegetation health')}</div></div>
  <div class="spM"><div><small>${L2('تاريخ التقرير','Report date')}</small><b>${dt}</b></div><div><small>${L2('المساحة','Area')}</small><b>${d.areaHa} ${L2('هكتار','ha')} (≈${(d.areaHa*2.381).toFixed(1)} ${L2('فدان','fed.')})</b></div><div><small>${L2('الفترة المحللة','Period')}</small><b dir="ltr">${P[0].from} → ${P[P.length-1].to}</b></div><div><small>${L2('المحصول','Crop')}</small><b>${escH(crn)}${SATS.pd?' · '+escH(SATS.pd):''}</b></div>${ctr?`<div style="grid-column:1/-1"><small>${L2('مركز الحقل (خط العرض، خط الطول)','Field center (lat, lon)')}</small><b dir="ltr">${ctr[0].toFixed(6)}, ${ctr[1].toFixed(6)}</b></div>`:''}</div>
