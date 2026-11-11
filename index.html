@@ -857,7 +857,7 @@ function run(click,mode){
    ['حيوي','—','—',bioOK?nm('bioS'):'غير مناسب','—','—',r(bioCost)],
    ['Fe/Zn/Mn',`${v.fe}/${v.zn}/${v.mn}`,'4.5/1/1','شيلات EDTA',mDef?mE.toFixed(1)+' كجم':'—',mDef?(mE*v.area).toFixed(1)+' كجم':'—','—'],
    ['مياه','—','—','موسمي',r(season)+' م³',r(season*v.area)+' م³',r(cW)]].map(row).join('');
-  $('sch').innerHTML=ST.map((x,i)=>`<tr><td>${['التأسيس','النمو الخضري','المرحلة المتأخرة'][i]}</td><td>${r(kN*x[0])} كجم</td><td>${r(kP*x[1])} كجم</td><td>${r(kK*x[2])} كجم</td></tr>`).join('');
+  try{stageRender(key,kN,kP,kK,r);mulderRender(key,kK,un,r)}catch(e){console.error(e)}
   $('sub').textContent=`${$('fname').value} — ${c[0]} (${vname()})${$('gov').value?' — '+$('gov').value:''} — موسم ≈ ${days} يوماً`;
 
   // التحذيرات
@@ -899,7 +899,7 @@ function run(click,mode){
 }
 
 // ===== حفظ / تصدير / مشاركة =====
-const FIELDS=['fname','gov','crop','area','unit','sand','silt','clay','caco3','vrC','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR'];
+const FIELDS=['xCa','xMg','fname','gov','crop','area','unit','sand','silt','clay','caco3','vrC','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR'];
 const hist=()=>{try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h.filter(x=>x&&typeof x==='object'&&x.v&&typeof x.v==='object').slice(0,12):[]}catch(e){return[]}};
 function renderHist(){const h=hist();$('hl').innerHTML=h.length?h.map((x,i)=>`<li><b>${(Object.prototype.hasOwnProperty.call(C,x.c)?C[x.c][0]:'')}</b> · ${(+x.s||0)}/100 · ${new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')} · <a data-l="${i}">فتح</a> · <a data-d="${i}">✕</a></li>`).join(''):'<li>لا توجد تقارير محفوظة</li>'}
 $('hl').onclick=e=>{const a=e.target.closest('a');if(!a)return;const h=hist();
@@ -1292,7 +1292,135 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.12-4';
+// ===== مراحل النمو والتسميد لكل محصول + تحليل Mulder =====
+// كل مرحلة: [الاسم, نسبة من طول الموسم, N, P, K, الدور المائي, ملاحظة, أشهر(للأشجار)]. مجموع N وP وK = 1 لكل محصول.
+const PHW={ini:.45,dev:.75,mid:1,late:.7},PHT={ini:.75,dev:.9,mid:1,late:.85};
+const PHG={
+ cereal:[['الإنبات والتأسيس',.12,.15,.8,.2,'ini','كل الفوسفور والبوتاس الأساسي مع الخدمة؛ رشّة زنك لو التربة جيرية.'],['التفريع',.25,.3,.2,.2,'dev','أهم دفعة نيتروجين لتكوين الأشطاء.'],['الاستطالة',.25,.3,0,.3,'dev','دفعة نيتروجين ثانية مع ري منتظم.'],['الطرد والتزهير',.2,.25,0,.3,'mid','مرحلة حرجة للماء — لا تعرّض النبات لعطش.'],['امتلاء الحبوب والنضج',.18,0,0,0,'late','أوقف النيتروجين وخفّف الري تدريجياً قبل الحصاد.']],
+ maize:[['الإنبات والتأسيس',.15,.2,.7,.2,'ini','الفوسفور والزنك أساسيان؛ الذرة شديدة الحساسية لنقص الزنك.'],['النمو الخضري (6–12 ورقة)',.3,.4,.3,.3,'dev','أكبر دفعة نيتروجين مع الري.'],['ما قبل التزهير',.2,.3,0,.4,'mid','تسميد قبل ظهور النورات؛ البوتاس يقوّي الساق.'],['التزهير والتلقيح',.2,.1,0,.1,'mid','أحرج مرحلة للماء — عطش الآن يقلل العقد جداً.'],['امتلاء الحبوب والنضج',.15,0,0,0,'late','بدون تسميد؛ قلّل الري قبل الحصاد.']],
+ rice:[['التأسيس والتشتيل',.15,.25,1,.3,'ini','الفوسفور كله هنا؛ زنك لو الأرض قلوية.'],['التفريع',.3,.4,0,.3,'dev','دفعة النيتروجين الرئيسية.'],['تكوين السنبلة',.25,.25,0,.3,'mid','دفعة تكميلية للـN والبوتاس.'],['الطرد والتزهير',.15,.1,0,.1,'mid','حافظ على غمر الماء.'],['امتلاء الحبوب والنضج',.15,0,0,0,'late','أوقف التسميد وجفّف الأرض قبل الحصاد.']],
+ legume:[['الإنبات والتأسيس',.15,.5,.8,.2,'ini','لقّح البذور بالريزوبيوم؛ N قليل كبادئ فقط.'],['النمو الخضري',.3,.5,.2,.3,'dev','تجنّب الإفراط في N لأنه يعطّل العقد الجذرية.'],['التزهير وعقد القرون',.3,0,0,.4,'mid','مرحلة حرجة للماء؛ البورون والكالسيوم مهمان للعقد.'],['امتلاء القرون والنضج',.25,0,0,.1,'late','بدون N؛ قلّل الري تدريجياً.']],
+ cotton:[['الإنبات والتأسيس',.12,.1,.8,.1,'ini','فوسفور أساسي.'],['النمو الخضري والتفريع',.28,.35,.2,.2,'dev','دفعة N أولى — لا تفرط لتجنّب النمو الخضري الزائد.'],['المربعات والتزهير',.25,.35,0,.3,'mid','دفعة N ثانية وبوتاس؛ ذروة الاحتياج المائي.'],['تكوين اللوز',.2,.2,0,.4,'mid','البوتاس أهم عنصر لجودة التيلة؛ راقب المغنيسيوم.'],['فتح اللوز والنضج',.15,0,0,0,'late','أوقف الري والتسميد لتشجيع التفتح.']],
+ beet:[['الإنبات والتأسيس',.15,.3,1,.2,'ini','فوسفور أساسي وبورون إن لزم.'],['نمو الأوراق',.35,.4,0,.3,'dev','دفعة N رئيسية.'],['تضخم الجذور',.3,.3,0,.5,'mid','البوتاس والصوديوم يرفعان وزن الجذر.'],['تركيز السكر',.2,0,0,0,'late','أوقف N تماماً — الإفراط فيه يخفض نسبة السكر.']],
+ cane:[['الإنبات والتفريع',.2,.3,.8,.2,'ini','فوسفور أساسي.'],['الاستطالة السريعة',.4,.5,.2,.5,'mid','أكبر استهلاك للماء والعناصر.'],['تكوين السكر',.25,.2,0,.3,'mid','قلّل N لتحسين الرُّتبة.'],['النضج',.15,0,0,0,'late','قطع الري قبل القطع بـ3–4 أسابيع.']],
+ oilseed:[['الإنبات والتأسيس',.15,.25,.8,.2,'ini','فوسفور أساسي وبورون لعباد الشمس.'],['النمو الخضري',.3,.45,.2,.3,'dev','دفعة النيتروجين الرئيسية.'],['تكوين القرص / التزهير',.3,.3,0,.4,'mid','مرحلة حرجة للماء.'],['امتلاء البذور والنضج',.25,0,0,.1,'late','أوقف الأسمدة.']],
+ forage:[['التأسيس',.1,.5,.6,.2,'ini','فوسفور كامل مع الزراعة؛ البرسيم يحتاج N بادئ فقط.'],['الحشات المبكرة',.4,.25,.2,.4,'dev','ضع البوتاس بعد كل حشة؛ راقب البورون في الحجازي.'],['الحشات المتوسطة والمتأخرة',.5,.25,.2,.4,'mid','تسميد بعد الحشة مباشرة ثم الري.']],
+ fruitveg:[['التشتيل والتأسيس',.15,.15,.6,.1,'ini','فوسفور أساسي لتكوين الجذور.'],['النمو الخضري',.2,.25,.3,.2,'dev','دفعة N وتأسيس الكالسيوم.'],['التزهير وعقد الثمار',.2,.2,.1,.2,'mid','بورون وكالسيوم لتقليل تساقط الأزهار وعفن الطرف الزهري.'],['نمو الثمار وبداية الحصاد',.25,.2,0,.35,'mid','البوتاس يرفع الحجم واللون والجودة؛ ري منتظم جداً.'],['ذروة الحصاد',.2,.2,0,.15,'late','تسميد خفيف مع كل ريّة (تسميد بالري).']],
+ potato:[['الإنبات والتأسيس',.15,.2,.8,.2,'ini','فوسفور أساسي؛ قلّل N حتى الإنبات الكامل.'],['النمو الخضري والستولونات',.25,.35,.2,.2,'dev','دفعة N رئيسية.'],['تكوين وتضخم الدرنات',.35,.3,0,.45,'mid','البوتاس والكالسيوم؛ تجنّب جفاف التربة (يسبب تشققاً).'],['النضج',.25,.15,0,.15,'late','أوقف N قبل الحصاد بـ3 أسابيع لتحسين التخزين.']],
+ bulb:[['الإنبات والتأسيس',.2,.2,.8,.2,'ini','فوسفور أساسي.'],['نمو الأوراق',.35,.5,.2,.3,'dev','أهم دفعة N؛ الكبريت يحسّن الحدّة والجودة.'],['تكوين وتضخم البصلات',.3,.3,0,.5,'mid','بوتاس أكثر وN أقل.'],['النضج',.15,0,0,0,'late','أوقف الري والتسميد لتجفيف الأعناق.']],
+ root:[['الإنبات والتأسيس',.2,.2,.8,.2,'ini','فوسفور أساسي؛ تربة ناعمة خالية من الأحجار.'],['نمو العروش',.3,.45,.2,.3,'dev','دفعة N رئيسية.'],['تضخم الجذور',.35,.35,0,.5,'mid','بوتاس وبورون؛ ري منتظم يمنع التشقق.'],['النضج',.15,0,0,0,'late','لا تسميد.']],
+ cabbage:[['التأسيس',.15,.2,.7,.2,'ini','فوسفور أساسي.'],['نمو الأوراق',.35,.4,.3,.3,'dev','دفعة N رئيسية.'],['تكوين الرؤوس',.35,.3,0,.4,'mid','كالسيوم وبورون لمنع احتراق الحواف.'],['امتلاء الرؤوس',.15,.1,0,.1,'late','تسميد خفيف جداً.']],
+ strawberry:[['التأسيس والتشتيل',.15,.15,.7,.1,'ini','فوسفور أساسي؛ تجنّب الملوحة.'],['النمو الخضري',.25,.25,.2,.2,'dev','دفعة N رئيسية.'],['الإزهار والعقد',.2,.2,.1,.25,'mid','بورون وكالسيوم.'],['بداية الحصاد',.2,.2,0,.25,'mid','بوتاس أعلى لجودة الثمرة.'],['ذروة الحصاد',.2,.2,0,.2,'late','تسميد بالري على جرعات صغيرة متكررة.']]
+};
+const PHF={
+ citrus:[['ما قبل الإزهار',.15,.3,.5,.1,'ini','يناير–فبراير','فوسفور أساسي ودفعة N قبل الإزهار؛ رشّة زنك ومنجنيز وحديد مع الدفعة الربيعية.'],['الإزهار والعقد',.15,.2,.2,.15,'dev','مارس–أبريل','بورون وزنك ورقياً؛ تجنّب الإجهاد المائي أثناء الإزهار.'],['نمو الثمار المبكر',.17,.25,.2,.25,'mid','مايو–يونيو','دفعة N وبوتاس لمنع تساقط الثمار الصغيرة.'],['تضخم الثمار',.17,.15,.1,.3,'mid','يوليو–أغسطس','أعلى حاجة بوتاس لحجم وجودة الثمرة.'],['النضج والتلوين',.25,.1,0,.2,'late','سبتمبر–نوفمبر','خفّف N لتحسين اللون ونسبة السكر/الحموضة.'],['بعد الحصاد',.11,0,0,0,'ini','ديسمبر','سماد عضوي وتحسين التربة.']],
+ dates:[['ما قبل الإزهار',.25,.3,.6,.1,'ini','ديسمبر–فبراير','سماد عضوي وفوسفور أساسي.'],['التلقيح والعقد',.15,.25,.2,.15,'dev','مارس–أبريل','بورون ورقياً؛ اهتم بالتلقيح اليدوي.'],['نمو الثمار (كيمري)',.25,.25,.2,.35,'mid','مايو–يوليو','نيتروجين وبوتاس لنمو الثمرة.'],['الخلال والرطب',.15,.1,0,.3,'mid','أغسطس–سبتمبر','بوتاس عالٍ؛ قلّل الري تدريجياً.'],['الجني وبعد الحصاد',.2,.1,0,.1,'late','أكتوبر–ديسمبر','تعويض ما استهلكته الشجرة.']],
+ grapes:[['تفتح البراعم',.12,.3,.4,.1,'ini','مارس','دفعة N أولى مع نمو البراعم.'],['النمو الخضري والإزهار',.2,.3,.3,.15,'dev','أبريل–مايو','بورون وزنك حول الإزهار.'],['عقد وتكوين الحبات',.15,.2,0,.25,'mid','مايو–يونيو','بوتاس يزداد؛ راقب المغنيسيوم لتجنّب ذبول العنقود.'],['التلوين والنضج',.2,.1,0,.4,'late','يوليو–أغسطس','بوتاس عالٍ للسكر واللون؛ أوقف N.'],['بعد الحصاد',.33,.1,.3,.1,'ini','سبتمبر–نوفمبر','عضوي وفوسفور لتخزين مخزون الشجرة للموسم القادم.']],
+ olive:[['تفتح البراعم',.17,.35,.4,.15,'ini','فبراير–مارس','دفعة N رئيسية قبل الإزهار.'],['الإزهار والعقد',.17,.25,.3,.2,'dev','أبريل–مايو','بورون ورقياً يحسّن العقد؛ لا إجهاد مائي.'],['تصلب النواة',.17,.2,.3,.3,'mid','يونيو–يوليو','خفّف الري قليلاً.'],['نمو الثمار وتكوين الزيت',.25,.1,0,.35,'mid','أغسطس–أكتوبر','بوتاس لجودة الزيت.'],['النضج والجني',.24,.1,0,0,'late','نوفمبر–يناير','لا بوتاس؛ سماد عضوي بعد الجني.']],
+ banana:[['التأسيس',.2,.2,.5,.1,'ini','أول 70 يوماً','فوسفور أساسي وعضوي.'],['النمو الخضري',.3,.35,.3,.25,'dev','','دفعة N رئيسية مع ري منتظم.'],['الطرد وتكوين الشمرة',.2,.25,.2,.25,'mid','','حاجة عالية للماء والبوتاس.'],['امتلاء الثمار',.2,.2,0,.4,'mid','','البوتاس أهم عنصر للموز؛ راقب المغنيسيوم لتفادي التضاد.'],['الحصاد',.1,0,0,0,'late','','لا تسميد.']],
+ mango:[['ما قبل الإزهار',.15,0,.4,.1,'ini','ديسمبر–يناير','لا نيتروجين قبل الإزهار؛ جفاف خفيف يحفّز الإزهار.'],['الإزهار والعقد',.2,.2,.2,.15,'dev','فبراير–أبريل','لا تروِ بكثرة وقت التزهير؛ بورون وزنك ورقياً.'],['نمو الثمار',.25,.35,.2,.35,'mid','مايو–يوليو','نيتروجين وبوتاس لنمو الثمرة.'],['النضج والحصاد',.15,.15,0,.3,'late','أغسطس–سبتمبر','بوتاس للجودة؛ لا N كثير.'],['ما بعد الحصاد',.25,.3,.2,.1,'ini','أكتوبر–نوفمبر','دفعة N لتكوين النمو الخضري الجديد.']],
+ pomegranate:[['ما قبل الإزهار',.2,.3,.5,.1,'ini','فبراير–مارس','دفعة N وفوسفور قبل التزهير.'],['الإزهار والعقد',.15,.25,.2,.2,'dev','أبريل–مايو','بورون وكالسيوم ورقياً لتقليل التشقق.'],['نمو الثمار',.25,.25,.2,.35,'mid','يونيو–أغسطس','ري منتظم لتجنّب تشقق الثمار.'],['النضج والتلوين',.2,.1,0,.3,'late','سبتمبر–أكتوبر','بوتاس للون وحجم الحبوب.'],['بعد الحصاد',.2,.1,.1,.05,'ini','نوفمبر–يناير','عضوي لتخزين مخزون الشجرة.']]
+};
+const PHM={wheat:'cereal',barley:'cereal',oat:'cereal',maize:'maize',sorghum:'maize',rice:'rice',faba:'legume',soybean:'legume',peanut:'legume',lentil:'legume',chickpea:'legume',cotton:'cotton',sugarbeet:'beet',sugarcane:'cane',sunflower:'oilseed',sesame:'oilseed',alfalfa:'forage',berseem:'forage',tomato:'fruitveg',pepper:'fruitveg',eggplant:'fruitveg',cucumber:'fruitveg',squash:'fruitveg',watermelon:'fruitveg',cantaloupe:'fruitveg',okra:'fruitveg',potato:'potato',onion:'bulb',garlic:'bulb',carrot:'root',sweetpotato:'root',cabbage:'cabbage',strawberry:'strawberry'};
+// ملاحظات خاصة بمحصول بعينه (تُضاف لمرحلة بالترتيب)
+const PHX={peanut:{2:' ضع الجبس (كالسيوم) وقت تكوين الأقدام لتفادي القرون الفارغة.'},soybean:{2:' راقب الحديد في الأراضي الجيرية.'},faba:{2:' فوسفور وبورون لزيادة العقد.'},tomato:{2:' الكالسيوم الورقي يقلل عفن الطرف الزهري.'},potato:{2:' الكالسيوم يحسّن صلابة الدرنة.'},garlic:{1:' الكبريت يرفع الجودة.'},alfalfa:{1:' البورون ضروري.'},sugarbeet:{3:' راقب نسبة الصوديوم والنيتروجين الأميني.'}};
+function phStages(key){
+ const c=C[key],tree=!!PHF[key];const base=tree?PHF[key]:PHG[PHM[key]];if(!base)return null;
+ const D=c[8];let acc=0;
+ return base.map((s,i)=>{const frac=s[1],d0=Math.round(acc*D),d1=Math.round((acc+frac)*D);acc+=frac;
+  const note=s[tree?7:6]+((PHX[key]||{})[i]||'');
+  return{n:s[0],d0,d1,N:s[2],P:s[3],K:s[4],role:s[5],mo:tree?s[6]:'',note}});
+}
+function stageRender(key,kN,kP,kK,r){
+ const st=phStages(key);const card=$('sch').closest('.card');if(!st){return}
+ const c=C[key],tree=!!PHF[key],et0=g('et0'),kc=c[7],M=tree?PHT:PHW;
+ card.querySelector('h3').lastChild.textContent=L2('جدول التسميد حسب مراحل نمو '+c[0],'Fertilizer schedule by growth stage — '+c[0]);
+ card.querySelector('thead tr').innerHTML=`<th>${L2('المرحلة','Stage')}</th><th>${L2(tree?'الفترة':'الأيام','When')}</th><th>${L2('ETc مم/يوم','ETc mm/d')}</th><th>N</th><th>P₂O₅</th><th>K₂O</th>`;
+ card.querySelector('table').style.fontSize='.7rem';card.querySelectorAll('th,td').forEach(t=>{t.style.padding='5px 3px'});
+ $('sch').innerHTML=st.map(s=>{const kcs=kc*M[s.role];return`<tr><td><b>${s.n}</b></td><td>${tree&&s.mo?s.mo:`<span dir="ltr">${s.d0}–${s.d1}</span>`}</td><td>${(et0*kcs).toFixed(1)}</td><td>${s.N?r(kN*s.N):'—'}</td><td>${s.P?r(kP*s.P):'—'}</td><td>${s.K?r(kK*s.K):'—'}</td></tr>`}).join('');
+ let nb=$('stgNote');if(!nb){nb=document.createElement('div');nb.id='stgNote';card.appendChild(nb)}
+ const bar=st.map((s,i)=>`<span style="flex:${s.d1-s.d0||1};background:var(--gold);opacity:${.35+.13*i};height:8px;display:block" title="${escH(s.n)}"></span>`).join('');
+ nb.innerHTML=`<div style="display:flex;gap:2px;margin:12px 0 6px;border-radius:4px;overflow:hidden" dir="rtl">${bar}</div><ul style="margin:8px 0 0;padding:0 18px 0 0;font-size:.82rem;line-height:1.9">${st.map(s=>`<li><b>${s.n}:</b> ${s.note}</li>`).join('')}</ul><p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('توزيع استرشادي مبني على الممارسات العامة لكل محصول؛ عدّله حسب توصية مهندس المنطقة والصنف وميعاد الزراعة. الكميات لكل وحدة المساحة المختارة.','Indicative split based on general crop practice; adjust to your agronomist, variety and planting date. Amounts per selected area unit.')}</p>`;
+}
+// ---- Mulder: تضاد العناصر ----
+(function(){
+ const card=document.createElement('div');card.className='card';card.id='mxIn';
+ card.innerHTML=`<h3>⚖️ ${L2('العناصر القاعدية (لتحليل Mulder)','Base cations (for Mulder analysis)')}</h3><p style="font-size:.8rem;color:var(--mut);margin:0 0 8px;line-height:1.8">${L2('اختياري: لو معاك تحليل Ca وMg المتبادلين (meq/100g) أدخلهم لتحليل التضاد بين العناصر. اتركهم 0 لو غير متاحين.','Optional: enter exchangeable Ca and Mg (meq/100g) to enable antagonism analysis. Leave 0 if unavailable.')}</p><div class="g2">${inp('xCa','Ca متبادل (meq/100g)',0,.5)}${inp('xMg','Mg متبادل (meq/100g)',0,.1)}</div>`;
+ $('soilF').parentNode.insertAdjacentElement('afterend',card);
+ ['xCa','xMg'].forEach(i=>$(i).addEventListener('input',()=>dirty()));
+ const res=document.createElement('div');res.className='card';res.id='mxRes';res.style.display='none';$('sch').closest('.card').insertAdjacentElement('afterend',res);
+})();
+const MXC={tomato:'الكالسيوم هنا حرج: البوتاس والأمونيوم والمغنيسيوم الزائدة تقلل امتصاصه وتسبب عفن الطرف الزهري.',pepper:'الكالسيوم حرج: تجنّب الإفراط في البوتاس/الأمونيوم.',cantaloupe:'توازن البوتاس مع الكالسيوم والمغنيسيوم مهم للجودة والسكر.',watermelon:'توازن البوتاس مع المغنيسيوم يؤثر على السكر والصلابة.',potato:'زيادة البوتاس تضعف امتصاص Mg وCa — حافظ على التوازن للدرنات.',banana:'الموز يمتص بوتاس كثير فيعطّل المغنيسيوم — أضف Mg مع البوتاس.',grapes:'زيادة البوتاس مع نقص Mg تسبب جفاف عنقود العنب.',citrus:'الفوسفور العالي يعطّل الزنك، والجير يثبّت Fe وMn وZn — الرش الورقي أنسب.',dates:'النخيل حساس لنقص Mn وFe؛ راقب البوتاس والمغنيسيوم.',olive:'البورون والبوتاس مهمان؛ الجير العالي يثبّت Fe.',maize:'الفوسفور الزائد مع الزنك المنخفض يسبب "البراعم البيضاء" — الذرة شديدة الحساسية.',rice:'الزنك أهم عنصر صغير للأرز في الأراضي القلوية.',wheat:'الفوسفور العالي يعطّل الزنك؛ والجير يقلل Mn وFe.',barley:'الفوسفور العالي يعطّل الزنك؛ والجير يقلل Mn وFe.',cotton:'البوتاس الزائد يعطّل المغنيسيوم؛ نقص المغنيسيوم يظهر حمرة الأوراق.',peanut:'الكالسيوم في منطقة القرون ضروري؛ البوتاس والمغنيسيوم الزائدان ينافسانه.',sugarbeet:'الصوديوم يحلّ جزئياً محل البوتاس؛ لكن الإفراط يضر بالجودة.',alfalfa:'البوتاس الزائد يضعف Mg وCa — راقب التوازن.',strawberry:'توازن الكالسيوم والبوتاس يحدد صلابة الثمرة وعمرها بعد الحصاد.'};
+function mulderRender(key,kK,un,r){
+ const box=$('mxRes');if(!box)return;
+ const v=LASTCALC.v,cec=v.cec,Ca=g('xCa'),Mg=g('xMg'),K=v.k/391,Na=v.esp*cec/100,rows=[];
+ const add=(pair,val,ideal,cl,act)=>rows.push(`<tr><td><b>${pair}</b></td><td>${val}</td><td>${ideal}</td><td class="${cl}">${cl==='ok'?'متوازن':cl==='wn'?'راقب':'خطر'}</td><td style="font-size:.78rem">${act}</td></tr>`);
+ let mgAdv='';
+ if(Ca>0&&Mg>0){const q=Ca/Mg;add('Ca : Mg',q.toFixed(1),'3 – 6',q>=3&&q<=6?'ok':(q>=2&&q<=8)?'wn':'er',q<2?'مغنيسيوم زائد يفكّك التربة — أضف جبساً.':q>6?'نقص نسبي في Mg — أضف سلفات مغنيسيوم.':'متوازن.');
+  add('K : Mg',(K/Mg).toFixed(2),'≤ 0.5',K/Mg<=.5?'ok':K/Mg<=.8?'wn':'er',K/Mg>.5?'البوتاس يزاحم المغنيسيوم — قلّل البوتاس وأضف Mg.':'متوازن.')}
+ if(cec>0&&Ca>0){const p=Ca/cec*100;add('Ca %CEC',p.toFixed(0)+'%','60 – 75%',p>=60&&p<=75?'ok':p>=50&&p<=85?'wn':'er',p<60?'كالسيوم منخفض — جبس زراعي.':p>75?'كالسيوم مرتفع قد يثبّت Mg وK.':'متوازن.')}
+ if(cec>0&&Mg>0){const p=Mg/cec*100;add('Mg %CEC',p.toFixed(0)+'%','10 – 20%',p>=10&&p<=20?'ok':p>=7&&p<=25?'wn':'er',p<10?'نقص مغنيسيوم.':p>20?'زيادة Mg تضر بالبنية.':'متوازن.');
+  if(p<10){const kgMg=(.12*cec-Mg)*10*12.15*LASTCALC.soilKg/1e6,prod=Math.min(150,kgMg/.098);mgAdv=`<div class="badge wn">🧪 ${L2('لرفع المغنيسيوم إلى 12% من CEC: سلفات مغنيسيوم ≈ '+r(prod)+' كجم/'+un+' (مقسّمة على 2–3 دفعات'+(kgMg/.098>150?'، ويُكمل على المواسم القادمة':'')+').','To lift Mg to 12% of CEC: Mg sulfate ≈ '+r(prod)+' kg/'+un+' in 2–3 doses.')}</div>`}}
+ if(cec>0){const p=K/cec*100;add('K %CEC',p.toFixed(1)+'%','2 – 7%',p>=2&&p<=7?'ok':p>=1&&p<=10?'wn':'er',p<2?'بوتاس منخفض.':p>7?'بوتاس مرتفع — يعطّل Mg وCa.':'متوازن.')}
+ const pz=v.zn>0?v.p/v.zn:0;add('P : Zn',pz.toFixed(0),'< 12',pz<12?'ok':pz<25?'wn':'er',pz>=12?'الفوسفور يعطّل الزنك — قلّل P وأضف زنك مخلّبياً (رش).':'متوازن.');
+ const fm=v.mn>0?v.fe/v.mn:0;add('Fe : Mn',fm.toFixed(1),'1 – 4',fm>=1&&fm<=4?'ok':(fm>=.5&&fm<=6)?'wn':'er',fm>4?'الحديد الزائد يعطّل المنجنيز — رش Mn.':fm<1?'المنجنيز الزائد يعطّل الحديد — رش Fe.':'متوازن.');
+ if(v.p>25&&v.fe<4.5)add('P ↔ Fe',v.p+' / '+v.fe,'—','wn','فوسفور مرتفع مع حديد منخفض — رش حديد مخلّبي.');
+ if(v.caco3>15)add('CaCO₃ ↔ Fe/Zn/Mn/P','CaCO₃ '+v.caco3+'%','< 15%',v.caco3>25?'er':'wn','الجير يثبّت هذه العناصر — استخدم التسميد الورقي والمخلّبات المقاومة للقلوية.');
+ if(v.esp>5)add('Na ↔ K/Ca','ESP '+v.esp+'%','< 5%',v.esp>15?'er':'wn','الصوديوم يزاحم K وCa — جبس وغسيل.');
+ const nf=$('fNS').selectedOptions[0].textContent;if(/نشادر|يوريا|أمونيوم/.test(nf)&&(Ca>0&&cec>0&&Ca/cec<.55||Mg>0&&cec>0&&Mg/cec<.1))add('NH₄ ↔ Ca/Mg',nf.split(' (')[0],'—','wn','الأمونيوم يقلل امتصاص Ca وMg — جزّئ الجرعات أو استخدم نترات.');
+ const kx=MXC[key];
+ const miss=(Ca>0&&Mg>0)?'':`<div class="badge wn" style="margin-bottom:8px">ℹ️ ${L2('أدخل Ca وMg المتبادلين في كارت "العناصر القاعدية" لتفعيل بقية العلاقات (Ca:Mg وK:Mg…).','Enter exchangeable Ca and Mg to enable Ca:Mg, K:Mg and other ratios.')}</div>`;
+ box.style.display='';box.innerHTML=`<h3>⚖️ ${L2('تحليل تضاد العناصر (Mulder)','Nutrient antagonism (Mulder)')}</h3>${miss}<div class="tw"><table><thead><tr><th>${L2('العلاقة','Pair')}</th><th>${L2('قيمتك','Yours')}</th><th>${L2('المثالي','Ideal')}</th><th>${L2('الحالة','Status')}</th><th>${L2('الإجراء','Action')}</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>${mgAdv}${kx?`<div class="badge ok" style="margin-top:8px">🌱 ${kx}</div>`:''}<p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('الحدود إرشادية مستمدة من مخطط Mulder وقواعد النسب المتعارف عليها؛ تتفاوت حسب التربة والمحصول. K يُقدَّر من البوتاس المتاح (ppm÷391).','Thresholds are indicative, based on Mulder’s chart and common ratio rules; K estimated from available K (ppm/391).')}</p>`;
+}
+// ===== تحليل التربة على 3 أعماق للأشجار =====
+const DPT={citrus:[.5,.3,.2],dates:[.4,.35,.25],grapes:[.4,.35,.25],olive:[.45,.35,.2],banana:[.6,.3,.1],mango:[.4,.35,.25],pomegranate:[.5,.3,.2]};
+const DPF=[['ph','pH',.1],['ec','EC (dS/m)',.1],['om','OM %',.1],['caco3','CaCO₃ %',.5],['esp','ESP %',.5],['n','N ppm',1],['p','P ppm',1],['k','K ppm',5],['xCa','Ca meq',.5],['xMg','Mg meq',.1]];
+const DPD=['0–30','30–60','60–90'];
+const DPS={on:false};
+(function(){
+ const card=document.createElement('div');card.className='card';card.id='depthBox';card.style.display='none';
+ $('soilF').parentNode.insertAdjacentElement('afterend',card);
+ window.dpRender=function(){
+  const cr=$('crop').value,w=DPT[cr];if(!w){card.style.display='none';return}
+  card.style.display='';
+  let h=`<h3>🌳 ${L2('تحليل التربة على 3 أعماق (محاصيل الأشجار)','3-depth soil analysis (tree crops)')}</h3><p style="font-size:.82rem;color:var(--mut);line-height:1.9;margin:0 0 8px">${L2('جذور الأشجار تمتد لعمق ~90 سم، وطبقة التربة التحتية قد تختلف تماماً عن السطح (ملوحة، جير، صودية). خذ عينة من كل عمق، والمنصة تحسب المتوسط الموزون حسب توزيع الجذور وتنبّه لمشاكل العمق.','Tree roots reach ~90 cm and the subsoil can differ greatly from the surface. Sample each depth; the platform computes a root-weighted mean and flags depth problems.')}</p>
+  <label style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><input type="checkbox" id="dpOn"${DPS.on?' checked':''}> ${L2('استخدم 3 أعماق','Use 3 depths')}</label>`;
+  if(DPS.on){
+   h+=`<div style="overflow-x:auto"><table class="dpT" style="width:100%;border-collapse:collapse;font-size:.82rem"><tr><th></th>${DPD.map((d,i)=>`<th>${d} سم<br><small>${L2('وزن الجذور','root wt')} ${Math.round(w[i]*100)}%</small></th>`).join('')}<th>${L2('الموزون','Weighted')}</th></tr>`+
+   DPF.map(f=>`<tr><td style="padding:3px 4px;white-space:nowrap">${f[1]}</td>${[0,1,2].map(i=>`<td style="padding:2px"><input class="dpI" data-f="${f[0]}" data-i="${i}" id="dp_${f[0]}_${i}" type="number" inputmode="decimal" step="${f[2]}" value="${DPS[f[0]+i]!=null?DPS[f[0]+i]:$(f[0]).value}" style="width:100%;min-width:62px"></td>`).join('')}<td id="dpW_${f[0]}" style="text-align:center;font-weight:700"></td></tr>`).join('')+`</table></div><div id="dpFlags" style="margin-top:10px"></div>`;
+  }
+  card.innerHTML=h;
+  $('dpOn').onchange=function(){DPS.on=this.checked;if(DPS.on){DPF.forEach(f=>{const v=$(f[0]).value;[0,1,2].forEach(i=>{if(DPS[f[0]+i]==null)DPS[f[0]+i]=v})})}dpLock();dpRender();if(DPS.on)dpCalc()};
+  card.querySelectorAll('.dpI').forEach(e=>e.oninput=()=>{DPS[e.dataset.f+e.dataset.i]=e.value;dpCalc()});
+  if(DPS.on)dpCalc();
+ };
+})();
+function dpLock(){DPF.forEach(f=>{const e=$(f[0]);if(e){e.readOnly=DPS.on&&!!DPT[$('crop').value];e.style.opacity=e.readOnly?.6:''}})}
+function dpVals(f){return [0,1,2].map(i=>{const e=$('dp_'+f+'_'+i);const v=parseFloat(e?e.value:DPS[f+i]);return isNaN(v)?0:v})}
+function dpCalc(){
+ const w=DPT[$('crop').value];if(!w||!DPS.on)return;
+ DPF.forEach(f=>{const a=dpVals(f[0]);let m;
+  if(f[0]==='ph')m=-Math.log10(a.reduce((s,x,i)=>s+w[i]*Math.pow(10,-x),0));else m=a.reduce((s,x,i)=>s+w[i]*x,0);
+  m=Math.round(m*100)/100;$(f[0]).value=m;const c=$('dpW_'+f[0]);if(c)c.textContent=m});
+ const fl=$('dpFlags');if(fl)fl.innerHTML=dpFlags().map(x=>`<div class="badge ${x[0]}">${x[1]}</div>`).join('');
+ dirty();
+}
+function dpFlags(){
+ const o=[],ec=dpVals('ec'),cc=dpVals('caco3'),es=dpVals('esp'),ph=dpVals('ph'),p=dpVals('p'),om=dpVals('om'),tol=C[$('crop').value][5];
+ if(ec[2]>ec[0]*1.5&&ec[2]>tol*.8)o.push(['er',`⚠️ ${L2('الملوحة تزيد مع العمق ('+ec[0]+' ← '+ec[2]+' dS/m): الجذور العميقة تتعرض لملوحة أعلى — ريّة غسيل عميقة وتحسين الصرف.','Salinity rises with depth ('+ec[0]+' → '+ec[2]+' dS/m): deep roots face higher salinity — deep leaching and better drainage.')}`]);
+ else if(Math.max(...ec)>tol)o.push(['wn',`⚠️ ${L2('ملوحة أحد الأعماق ('+Math.max(...ec)+' dS/m) أعلى من حد تحمل المحصول ('+tol+').','Salinity at one depth ('+Math.max(...ec)+' dS/m) exceeds crop tolerance ('+tol+').')}`]);
+ if(Math.max(...es)>15)o.push(['er',`⚠️ ${L2('صودية في طبقة (ESP>15) — جبس وغسيل؛ الصودية العميقة تخنق الجذور.','Sodic layer (ESP>15) — gypsum and leaching; deep sodicity chokes roots.')}`]);
+ if(Math.max(...cc)>25||(cc[2]>cc[0]+10))o.push(['wn',`⚠️ ${L2('احتمال طبقة جيرية متصلّبة (CaCO₃ مرتفع بالعمق) — قد تعيق الجذور والصرف؛ يُفضّل الحفر أو الكسر العميق.','Possible calcic hardpan (high CaCO₃ at depth) — may restrict roots/drainage; consider deep ripping.')}`]);
+ if(Math.max(...ph)-Math.min(...ph)>1)o.push(['wn',`ℹ️ ${L2('فرق pH بين الأعماق أكبر من 1 — الأسمدة السطحية لن تصل بنفس الكفاءة للعمق.','pH differs by >1 between depths — surface fertilizer will not act equally at depth.')}`]);
+ if(p[0]>3*Math.max(p[2],1))o.push(['wn',`ℹ️ ${L2('الفوسفور متركّز بالسطح — الفوسفور قليل الحركة؛ ضعه بالقرب من الجذور (تسميد حفر/حقن).','Phosphorus is concentrated at the surface — it is immobile; place near roots.')}`]);
+ if(om[2]<.3)o.push(['wn',`ℹ️ ${L2('مادة عضوية منخفضة جداً في العمق — أضف سماداً عضوياً في حفر/خنادق حول الشجرة.','Very low organic matter at depth — add compost in trenches around trees.')}`]);
+ if(!o.length)o.push(['ok','✅ '+L2('لا اختلافات حرجة بين الأعماق.','No critical differences between depths.')]);
+ return o;
+}
+{const oc=$('crop').onchange;$('crop').onchange=function(){oc.apply(this,arguments);if(!DPT[$('crop').value]){DPS.on=false}dpLock();dpRender()}}
+{const r0=run;run=function(c,m){r0(c,m);if(DPS.on&&DPT[$('crop').value]){const f=dpFlags().filter(x=>x[0]!=='ok'),el=$('warns');if(el&&f.length)el.innerHTML=el.innerHTML.replace(/<div class="badge ok">[^<]*لا تحذيرات حرجة[^<]*<\/div>/,'')+f.map(x=>`<div class="badge ${x[0]}">${x[1]}</div>`).join('')}}}
+dpRender();
+const APP_VER='2026.11.12-9';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2300,9 +2428,10 @@ async function dxAdd(files){for(const f of files){if(DXS.imgs.length>=3)break;if
 async function dxRun(){
  if(DXS.busy||!DXS.imgs.length)return;DXS.msg='';
  if(typeof USER==='undefined'||!USER){DXS.msg=L2('سجّل الدخول أولاً لاستخدام التشخيص.','Please sign in first.');dxRender();return}
+ if(!pro){DXS.msg=L2('التشخيص بالكاميرا ميزة لمشتركي Pro فقط.','Camera diagnosis is a Pro feature.');dxRender();$('mPay').classList.add('on');return}
  DXS.busy=true;DXS.res=null;dxRender();SATT.t='';
  try{const d=await satCall('/diagnose',{images:DXS.imgs.map(i=>i.b64),crop:DXS.crop,note:DXS.note,lang:lang==='en'?'en':'ar'},90000);if(!d.result)throw new Error(WK_OLD());DXS.res=d}
- catch(e){DXS.msg=e.message+(SATT.t&&/not configured/.test(SATT.t)?' — '+L2('مفتاح التشخيص غير مضبوط في الـ Worker.','diagnosis key is not set in the Worker.'):'')+((SATT.t&&/daily limit/.test(SATT.t))?' — '+L2('وصلت للحد اليومي (30 تشخيص).','daily limit reached (30).'):'')}
+ catch(e){DXS.msg=e.message+(SATT.t&&!/not configured|daily limit/.test(SATT.t)?' ['+String(SATT.t).replace(/^upstream \d+ — ?/,'').slice(0,260)+']':'')+(SATT.t&&/not configured/.test(SATT.t)?' — '+L2('مفتاح التشخيص غير مضبوط في الـ Worker.','diagnosis key is not set in the Worker.'):'')+((SATT.t&&/daily limit/.test(SATT.t))?' — '+L2('وصلت للحد اليومي (30 تشخيص).','daily limit reached (30).'):'')}
  finally{DXS.busy=false;dxRender()}}
 function dxRender(){
  const box=$('dxBox');if(!box)return;const R=DXS.res&&DXS.res.result;
@@ -2313,6 +2442,7 @@ function dxRender(){
  ${DXS.imgs.length?`<div class="dxT">${DXS.imgs.map((i,k)=>`<div><img src="${i.url}" alt=""><button type="button" data-rm="${k}" aria-label="remove">✕</button></div>`).join('')}</div>`:''}
  <select id="dxC" style="margin-top:8px"><option value="">${L2('المحصول (اختياري)','Crop (optional)')}</option>${cropOpts}</select>
  <input id="dxN" type="text" maxlength="300" style="margin-top:8px" placeholder="${L2('ملاحظة (اختياري): من إمتى ظهرت؟ آخر ري أو رش؟','Note (optional): since when? last irrigation or spray?')}" value="${escH(DXS.note)}">
+ <p class="mut" style="font-size:.76rem;margin:8px 0 0">${pro?L2('حسابك Pro: التشخيص متاح.','Pro account: diagnosis available.'):L2('🔒 ميزة لمشتركي Pro.','🔒 Pro feature.')}</p>
  <button type="button" class="btn" id="dxGo" style="width:100%;margin-top:8px" ${DXS.busy||!DXS.imgs.length?'disabled':''}>🔍 ${DXS.busy?L2('جارٍ التحليل…','Analysing…'):L2('شخّص','Diagnose')}</button>`;
  if(R){const U={low:['🟢',L2('أولوية منخفضة','Low priority')],medium:['🟠',L2('أولوية متوسطة','Medium priority')],high:['🔴',L2('أولوية عالية','High priority')]}[R.urgency];
   h+=`<div class="dxR">`;
