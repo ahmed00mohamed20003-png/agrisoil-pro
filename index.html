@@ -341,6 +341,12 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
 .gmL{display:flex;align-items:center;gap:6px;margin:6px 0;font-size:.72rem}.gmL div{display:flex;flex:1;height:12px;border-radius:6px;overflow:hidden}.gmL i{flex:1}.gmL small{opacity:.7}
 .gxI p{margin:6px 0;font-size:.82rem;line-height:1.8}
 @media print{#satPrint .tmC{break-inside:avoid;max-height:340px}#satPrint .gmW{break-inside:avoid}}
+
+.dxD{border:1px solid var(--bd);border-radius:16px;padding:10px 12px;margin-bottom:12px;background:linear-gradient(160deg,rgba(232,200,114,.1),rgba(30,120,80,.1))}.dxD>summary{cursor:pointer;font-weight:800;color:var(--ac);list-style:none}.dxD>summary::-webkit-details-marker{display:none}
+.dxB{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dxB .btn{text-align:center;display:flex;align-items:center;justify-content:center;min-height:46px;cursor:pointer}
+.dxT{display:flex;gap:8px;margin-top:8px}.dxT div{position:relative;width:84px;height:84px}.dxT img{width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid var(--bd)}.dxT button{position:absolute;top:-6px;inset-inline-end:-6px;width:24px;height:24px;border-radius:50%;padding:0;min-height:0;font-size:.7rem;background:#8a1f1f;color:#fff;border:0}
+.dxR{margin-top:10px}.dxH{margin:6px 0;font-size:.9rem}.dxCd{border:1px solid var(--bd);border-radius:14px;padding:10px;margin:8px 0}.dxCd p{margin:6px 0;font-size:.82rem;line-height:1.8}.dxCh{display:flex;justify-content:space-between;gap:8px;align-items:center}.dxCh span{font-size:.72rem;padding:2px 8px;border-radius:999px;background:rgba(232,200,114,.2);color:var(--ac)}
+.dxBar{height:8px;border-radius:6px;background:rgba(255,255,255,.1);margin:6px 0 2px;overflow:hidden}.dxBar i{display:block;height:100%;background:linear-gradient(90deg,#fc8d59,#1a9850)}.dxA ul{margin:6px 0;padding-inline-start:18px;font-size:.84rem;line-height:1.9}
 </style>
 <script>try{if(sessionStorage.getItem('qSp')==='1')document.documentElement.className+=' nosp'}catch(e){}</script>
 </head>
@@ -1286,7 +1292,7 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
-const APP_VER='2026.11.12-1';
+const APP_VER='2026.11.12-4';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2284,6 +2290,47 @@ function gxRender(){
  const ul=o.querySelector('ul.satAd');if(!ul)return;
  if(!$('satTM')){ul.insertAdjacentHTML('beforebegin','<div id="satTM" class="sxBox"></div>');tmRender()}
  if(!$('satG')){ul.insertAdjacentHTML('beforebegin','<div id="satG" class="sxBox"></div>');gxRender()}}}
+
+
+// ===== تشخيص الآفات بالكاميرا =====
+const DX_ENABLED=true; // اجعلها false لإخفاء التشخيص لو لم يُضبط المفتاح
+const DXS={imgs:[],busy:false,res:null,msg:'',note:'',crop:'',open:false};
+function dxShrink(file){return new Promise((ok,no)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const M=1024,k=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement('canvas');cv.width=Math.round(im.naturalWidth*k);cv.height=Math.round(im.naturalHeight*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(u);const d=cv.toDataURL('image/jpeg',.82);ok({url:d,b64:d.split(',')[1]})};im.onerror=()=>{URL.revokeObjectURL(u);no(new Error(L2('تعذّر قراءة الصورة.','Could not read the image.')))};im.src=u})}
+async function dxAdd(files){for(const f of files){if(DXS.imgs.length>=3)break;if(!/^image\//.test(f.type))continue;try{DXS.imgs.push(await dxShrink(f))}catch(e){DXS.msg=e.message}}DXS.res=null;dxRender()}
+async function dxRun(){
+ if(DXS.busy||!DXS.imgs.length)return;DXS.msg='';
+ if(typeof USER==='undefined'||!USER){DXS.msg=L2('سجّل الدخول أولاً لاستخدام التشخيص.','Please sign in first.');dxRender();return}
+ DXS.busy=true;DXS.res=null;dxRender();SATT.t='';
+ try{const d=await satCall('/diagnose',{images:DXS.imgs.map(i=>i.b64),crop:DXS.crop,note:DXS.note,lang:lang==='en'?'en':'ar'},90000);if(!d.result)throw new Error(WK_OLD());DXS.res=d}
+ catch(e){DXS.msg=e.message+(SATT.t&&/not configured/.test(SATT.t)?' — '+L2('مفتاح التشخيص غير مضبوط في الـ Worker.','diagnosis key is not set in the Worker.'):'')+((SATT.t&&/daily limit/.test(SATT.t))?' — '+L2('وصلت للحد اليومي (30 تشخيص).','daily limit reached (30).'):'')}
+ finally{DXS.busy=false;dxRender()}}
+function dxRender(){
+ const box=$('dxBox');if(!box)return;const R=DXS.res&&DXS.res.result;
+ const cropOpts=Object.keys(C).map(k=>`<option value="${escH(tx(C[k][0]))}"${DXS.crop===tx(C[k][0])?' selected':''}>${escH(tx(C[k][0]))}</option>`).join('');
+ let h=`<details class="dxD"${DXS.open?' open':''}><summary>📷 ${L2('شخّص بالكاميرا (ذكاء اصطناعي)','Diagnose with camera (AI)')}</summary>
+ <p class="mut" style="font-size:.8rem;margin:6px 0">${L2('صوّر الجزء المصاب (ورقة أو ثمرة أو ساق، ويفضّل صورة قريبة وأخرى للنبات كامل). بيرجّعلك احتمالات مرتبة بالثقة، وتفتح كل احتمال في المرجع بالجرعات.','Photograph the affected part (leaf, fruit or stem; ideally one close-up and one whole plant). You get ranked possibilities, each linking to the reference with doses.')}</p>
+ <div class="dxB"><label class="btn">📷 ${L2('التقط صورة','Take photo')}<input type="file" accept="image/*" capture="environment" id="dxCam" hidden></label><label class="btn sec">🖼️ ${L2('من المعرض','From gallery')}<input type="file" accept="image/*" multiple id="dxGal" hidden></label></div>
+ ${DXS.imgs.length?`<div class="dxT">${DXS.imgs.map((i,k)=>`<div><img src="${i.url}" alt=""><button type="button" data-rm="${k}" aria-label="remove">✕</button></div>`).join('')}</div>`:''}
+ <select id="dxC" style="margin-top:8px"><option value="">${L2('المحصول (اختياري)','Crop (optional)')}</option>${cropOpts}</select>
+ <input id="dxN" type="text" maxlength="300" style="margin-top:8px" placeholder="${L2('ملاحظة (اختياري): من إمتى ظهرت؟ آخر ري أو رش؟','Note (optional): since when? last irrigation or spray?')}" value="${escH(DXS.note)}">
+ <button type="button" class="btn" id="dxGo" style="width:100%;margin-top:8px" ${DXS.busy||!DXS.imgs.length?'disabled':''}>🔍 ${DXS.busy?L2('جارٍ التحليل…','Analysing…'):L2('شخّص','Diagnose')}</button>`;
+ if(R){const U={low:['🟢',L2('أولوية منخفضة','Low priority')],medium:['🟠',L2('أولوية متوسطة','Medium priority')],high:['🔴',L2('أولوية عالية','High priority')]}[R.urgency];
+  h+=`<div class="dxR">`;
+  if(!R.is_plant||R.need_better_photo)h+=`<div class="satMsg" style="border-color:#e0a21a">📸 ${escH(R.need_better_photo||L2('الصورة غير واضحة لنبات.','The image does not clearly show a plant.'))}</div>`;
+  if(R.healthy&&!R.candidates.length)h+=`<div class="satMsg">✅ ${L2('النبات يبدو سليماً في الصور.','The plant looks healthy in the photos.')}</div>`;
+  else if(R.is_plant)h+=`<div class="dxH"><b>${R.crop?escH(R.crop)+' · ':''}${U[0]} ${U[1]}</b></div>`;
+  R.candidates.forEach((c,k)=>{h+=`<div class="dxCd"><div class="dxCh"><b>${k+1}. ${escH(lang==='en'&&c.name_en?c.name_en:c.name_ar)}</b><span>${escH(c.type)}</span></div><div class="dxBar"><i style="width:${c.confidence}%"></i></div><small>${L2('درجة الثقة','Confidence')}: ${c.confidence}٪</small>${c.evidence?`<p><b>${L2('ما يدعمه في الصورة:','Seen in photo:')}</b> ${escH(c.evidence)}</p>`:''}${c.distinguish?`<p><b>${L2('للتأكد:','To confirm:')}</b> ${escH(c.distinguish)}</p>`:''}${c.ref_query?`<button type="button" class="btn sec" data-q="${escH(c.ref_query)}">🔎 ${L2('شوفها في المرجع والجرعات','Open in reference & doses')}</button>`:''}</div>`});
+  if(R.immediate_actions.length)h+=`<div class="dxA"><b>${L2('إجراءات فورية مقترحة','Suggested immediate actions')}</b><ul>${R.immediate_actions.map(a=>`<li>${escH(a)}</li>`).join('')}</ul></div>`;
+  h+=`<p class="mut" style="font-size:.74rem;line-height:1.8">⚠️ ${L2('تشخيص تقديري بالذكاء الاصطناعي من الصور فقط، وقد يخطئ (خصوصاً مع الفيروسات ونقص العناصر). لا ترش بناءً عليه وحده: أكّد من مهندس زراعي أو تحليل معملي. التزم بالمرجع والعبوة في الجرعات.','AI estimate from photos only; it can be wrong (especially for viruses and nutrient deficiencies). Do not spray based on it alone: confirm with an agronomist or lab test. Follow the reference and label for doses.')}</p>${DXS.res.left!=null?`<small class="mut">${L2('متبقي اليوم','Left today')}: ${DXS.res.left}</small>`:''}</div>`}
+ if(DXS.msg)h+=`<div class="satMsg" style="border-color:#e0a21a;margin-top:8px">⚠️ ${escH(DXS.msg)}</div>`;
+ h+=`</details>`;box.innerHTML=h;
+ const D=box.querySelector('details');D.ontoggle=()=>{DXS.open=D.open};
+ $('dxCam').onchange=e=>dxAdd([...e.target.files]);$('dxGal').onchange=e=>dxAdd([...e.target.files]);
+ box.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{DXS.imgs.splice(+b.dataset.rm,1);DXS.res=null;dxRender()});
+ $('dxC').onchange=e=>{DXS.crop=e.target.value};$('dxN').oninput=e=>{DXS.note=e.target.value};$('dxGo').onclick=dxRun;
+ box.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{PEST.q=b.dataset.q;PEST.ch='';PEST.ty='';PEST.open=null;pestUI();const q=$('pRes');if(q)q.scrollIntoView({behavior:'smooth',block:'start'})})}
+{const _pu=pestUI;pestUI=function(){_pu();const b=$('pestBox');if(!DX_ENABLED||!b||!PEST.idx)return;if(!DXS.crop){const k=$('crop')&&$('crop').value;if(k&&C[k])DXS.crop=tx(C[k][0])}
+ let x=$('dxBox');if(!x){x=document.createElement('div');x.id='dxBox'}b.insertBefore(x,b.firstChild);dxRender()}}
 
 // ===== تقرير القمر الصناعي PDF (مستقل عن التقرير الرئيسي) =====
 function satPdf(){
