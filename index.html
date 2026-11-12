@@ -90,7 +90,7 @@ footer{text-align:center;color:var(--mut);font-size:.72rem;margin:16px 0}
 .lg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.lg i{font-style:normal;font-size:.68rem;border:1px solid var(--bd);border-radius:99px;padding:2px 8px;display:flex;align-items:center;gap:4px}.lg i:before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
 .printHead{display:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media print{body{background:#fff!important;color:#000!important}.tiles,#runb,.noprint,.sun,.leaf{display:none!important}.pn{display:block!important}#p-hist,#p-ai,#p-ct,#p-crop,#p-soil,#p-water,#p-map{display:none!important}.card{background:#fff!important;border:1px solid #aaa!important;color:#000!important;box-shadow:none}th,td{color:#000!important}.printHead{display:block;border-bottom:2px solid #14633f;margin-bottom:10px;font-weight:700;color:#14633f}}
+@media print{body{background:#fff!important;color:#000!important}.tiles,#runb,.noprint,.sun,.leaf{display:none!important}.pn{display:none!important}#p-res{display:block!important}.card{background:#fff!important;border:1px solid #aaa!important;color:#000!important;box-shadow:none}th,td{color:#000!important}.printHead{display:block;border-bottom:2px solid #14633f;margin-bottom:10px;font-weight:700;color:#14633f}}
 
 /* ===== شاشة الافتتاح ===== */
 #splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#10402d 0%,#06130d 70%);transition:opacity .7s ease,visibility .7s;cursor:pointer}
@@ -823,7 +823,7 @@ function run(click,mode){
 
   // صحة التربة
   const mDef=(v.fe<4.5)+(v.zn<1)+(v.mn<1);let s=100;
-  if(v.ph<6||v.ph>8)s-=15;else if(v.ph<6.5||v.ph>7.5)s-=5;
+  s+=phScore(key,v.ph);
   if(ec>tol)s-=25;else if(ec>tol*.6)s-=10;
   if(sar>10)s-=10;if(v.esp>15)s-=10;s-=mDef*8;
   if(v.om<1)s-=15;else if(v.om<2)s-=5;if(v.cec<10)s-=10;else if(v.cec<15)s-=5;
@@ -838,7 +838,7 @@ function run(click,mode){
   // التسميد: كجم عنصر لكل وحدة مساحة
   const ms=A*.2*BD/1000,nEf=tex.t[8]*(v.caco3>15?.9:1),pFix=(v.ph>7.5||v.caco3>15)?1.25:1,nCur=v.n+v.om*4;
   let nN=Math.max(0,c[2]-nCur)*ms/nEf,nP=Math.max(0,c[3]-v.p)*ms*2.29*pFix,nK=Math.max(0,c[4]-v.k)*ms*1.205;
-  const oN=v.orT*10*v.orN*.3,oP=v.orT*10*v.orP*.5,oK=v.orT*10*v.orK*.8;
+  const PCA=pcAdj(key,A);nN=Math.max(0,nN+PCA.dN);const oN=v.orT*10*v.orN*.3,oP=v.orT*10*v.orP*.5,oK=v.orT*10*v.orK*.8;
   const bx=BIO[+$('bioS').value];let bioOK=true;
   if(bx[3]==='cer'&&c[1]!=='cer')bioOK=false;if(bx[3]==='leg'&&!LEG.includes(key))bioOK=false;
   const bs=bioOK?bx[1]:0,bp=bioOK?bx[2]:0,bioCost=bioOK&&+$('bioS').value>0?v.bioR*v.area:0;
@@ -857,7 +857,7 @@ function run(click,mode){
    ['حيوي','—','—',bioOK?nm('bioS'):'غير مناسب','—','—',r(bioCost)],
    ['Fe/Zn/Mn',`${v.fe}/${v.zn}/${v.mn}`,'4.5/1/1','شيلات EDTA',mDef?mE.toFixed(1)+' كجم':'—',mDef?(mE*v.area).toFixed(1)+' كجم':'—','—'],
    ['مياه','—','—','موسمي',r(season)+' م³',r(season*v.area)+' م³',r(cW)]].map(row).join('');
-  try{stageRender(key,kN,kP,kK,r);mulderRender(key,kK,un,r)}catch(e){console.error(e)}
+  try{stageRender(key,kN,kP,kK,r);mulderRender(key,kK,un,r);refRender(key);window.LASTD={nN,nP,nK};ybRender(key,nN,nP,nK,PCA,uf,un,r);fbForm()}catch(e){console.error(e)}
   $('sub').textContent=`${$('fname').value} — ${c[0]} (${vname()})${$('gov').value?' — '+$('gov').value:''} — موسم ≈ ${days} يوماً`;
 
   // التحذيرات
@@ -871,7 +871,7 @@ function run(click,mode){
   if(ec>tol)w.push(['er',`⚠️ ملوحة التربة أعلى من حد المحصول (${tol} dS/m) — غسيل وصرف.`]);
   if(v.esp>15)w.push(['er','⚠️ تربة صودية (ESP>15) — جبس + غسيل لتحسين النفاذية.']);
   if(v.caco3>15)w.push(['wn','⚠️ تربة جيرية (CaCO₃ مرتفع): خطر نقص Fe وZn وتثبيت الفوسفور.']);
-  if(v.ph>7.5)w.push(['wn','⚠️ pH مرتفع يقلل تيسر P وFe وZn — فضّل التسميد الورقي والحمضي.']);
+  {const pw=phWarn(key,v.ph);if(pw)w.push(pw);}
   if(mDef)w.push(['wn','⚠️ نقص عناصر صغرى — رش شيلات EDTA.']);
   if(/كلوريد|chloride/i.test($('fKS').selectedOptions[0].textContent)&&(ec>tol*.6||v.ecw>1))w.push(['wn','⚠️ كلوريد البوتاسيوم يزيد الملوحة — الأفضل سلفات البوتاسيوم في هذا الظرف.']);
   if(!bioOK&&+$('bioS').value>0)w.push(['wn','ℹ️ المخصب الحيوي المختار لا يناسب هذا المحصول فلم يُحتسب.']);
@@ -899,7 +899,7 @@ function run(click,mode){
 }
 
 // ===== حفظ / تصدير / مشاركة =====
-const FIELDS=['xCa','xMg','fname','gov','crop','area','unit','sand','silt','clay','caco3','vrC','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR'];
+const FIELDS=['xCa','xMg','fname','gov','crop','area','unit','sand','silt','clay','caco3','vrC','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR','yT','pcS','pcR'];
 const hist=()=>{try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h.filter(x=>x&&typeof x==='object'&&x.v&&typeof x.v==='object').slice(0,12):[]}catch(e){return[]}};
 function renderHist(){const h=hist();$('hl').innerHTML=h.length?h.map((x,i)=>`<li><b>${(Object.prototype.hasOwnProperty.call(C,x.c)?C[x.c][0]:'')}</b> · ${(+x.s||0)}/100 · ${new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')} · <a data-l="${i}">فتح</a> · <a data-d="${i}">✕</a></li>`).join(''):'<li>لا توجد تقارير محفوظة</li>'}
 $('hl').onclick=e=>{const a=e.target.closest('a');if(!a)return;const h=hist();
@@ -1292,6 +1292,31 @@ locUI();
 
 // ===== إشعارات: الاتصال والتحديثات والإعلانات =====
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
+// ===== pH لكل محصول + مرجعية الأرقام =====
+// [أدنى مثالي, أعلى مثالي, حد التحمل العملي, المصدر: H=جامعة هاواي CTAHR GHGS-18 (بنفس النطاق) / E=تقدير إرشادي]
+const PHR={wheat:[6,7.5,8.3,'E'],barley:[6,8,8.6,'E'],maize:[5.5,7,8,'H'],rice:[5,6.5,8,'H'],sorghum:[5.5,7,8.5,'H'],oat:[5.5,7.5,8.3,'E'],faba:[6,7.5,8.3,'E'],soybean:[6,7,7.8,'E'],peanut:[5.5,6.5,7.8,'H'],lentil:[6,7.5,8.3,'E'],chickpea:[6,7.5,8.3,'E'],cotton:[5.8,8,8.8,'E'],sugarbeet:[6,8,8.6,'E'],sugarcane:[6,7,8.5,'H'],sunflower:[6,7,8.3,'H'],sesame:[5.5,7.5,8.3,'E'],alfalfa:[6.5,7.5,8.5,'H'],berseem:[6,7.5,8.3,'E'],tomato:[5.5,6.8,8,'H'],potato:[5,6.5,7.8,'E'],onion:[6,7,8,'E'],garlic:[6,7.5,8.2,'E'],pepper:[5.5,6.5,8,'H'],cucumber:[5.5,6.5,8,'H'],eggplant:[5.5,6.5,8,'H'],squash:[5.5,6.5,8,'H'],watermelon:[5,6.5,8,'H'],cantaloupe:[5.5,6.5,8,'H'],okra:[6,7.5,8.2,'H'],cabbage:[6,7,8,'H'],carrot:[5.5,6.5,8,'H'],sweetpotato:[5,6,7.8,'H'],citrus:[6,7,8.2,'H'],dates:[6.5,8,8.8,'H'],grapes:[6,7.5,8.3,'E'],olive:[6.5,8,8.6,'E'],strawberry:[5,6.5,7.8,'H'],banana:[6,7.5,8.2,'H'],mango:[5.5,6.5,8,'H'],pomegranate:[6,7.5,8.3,'H']};
+// محاصيل ملوحتها تقدير (غير موجودة بأرقام في FAO Paper 29)
+const SALEST=['oat','lentil','chickpea','sesame','watermelon','okra','olive','banana','mango','pomegranate'];
+function phScore(key,ph){const p=PHR[key];if(!p)return ph<6||ph>8?-15:(ph<6.5||ph>7.5?-5:0);if(ph>p[2]||ph<p[0]-.7)return -15;if(ph>p[1]||ph<p[0])return -5;return 0}
+function phWarn(key,ph){const p=PHR[key],nm=C[key][0];if(!p)return null;
+ if(ph>p[2])return['er',`⚠️ pH (${ph}) أعلى من حد تحمّل محصول ${nm} (${p[2]}): يحبس P وFe وZn وMn — تسميد ورقي وحمضي، وكبريت زراعي على المدى الطويل.`];
+ if(ph>p[1])return['wn',`⚠️ pH (${ph}) أعلى من المثالي لمحصول ${nm} (${p[0]}–${p[1]}): يقلل تيسر P وFe وZn — فضّل التسميد الورقي والحمضي.`];
+ if(ph<p[0])return['wn',`⚠️ pH (${ph}) أقل من المثالي لمحصول ${nm} (${p[0]}–${p[1]}): ضع جيراً زراعياً وراقب Mo وCa وMg.`];return null}
+(function(){const res=document.createElement('div');res.className='card';res.id='refRes';res.style.display='none';$('sch').closest('.card').insertAdjacentElement('afterend',res)})();
+function refRender(key){
+ const box=$('refRes');if(!box)return;const c=C[key],p=PHR[key],est=SALEST.includes(key);
+ const cf=(t,cl)=>`<span class="badge ${cl}" style="display:inline-block;padding:2px 8px;margin:0">${t}</span>`;
+ const A=(u,t)=>`<a style="color:var(--gold);word-break:break-word" href="${u}" target="_blank" rel="noopener noreferrer">${t}</a>`;
+ const rows=[
+  [L2('تحمل الملوحة (حد التحمل / الميل)','Salinity (threshold / slope)'),`${c[5]} dS/m · ${c[6]}%`,est?L2('تقدير — FAO يعطي تصنيفاً نوعياً فقط','Estimate — FAO gives qualitative rating only'):A('https://www.fao.org/3/Y4263E/y4263e0e.htm','FAO Irrigation & Drainage Paper 29 (Ayers & Westcot)'),est?cf(L2('تقدير','Estimate'),'er'):cf(L2('عالية — مطابق للمرجع','High — matches source'),'ok')],
+  [L2('pH المثالي','Optimum pH'),p?`${p[0]} – ${p[1]} (${L2('حد التحمل','limit')} ${p[2]})`:'—',p&&p[3]==='H'?A('https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/GHGS-18.pdf','Univ. of Hawaii CTAHR GHGS-18')+L2(' (النطاق من المرجع، وحد التحمل تقدير)',' (range from source; limit is an estimate)'):L2('تقدير إرشادي من الممارسة العامة','General-practice estimate'),p&&p[3]==='H'?cf(L2('متوسطة','Medium'),'wn'):cf(L2('تقدير','Estimate'),'er')],
+  [L2('معامل المحصول Kc (منتصف الموسم)','Crop coefficient Kc (mid-season)'),String(c[7]),L2('مبني على قيم FAO-56 التقريبية (لم تُراجع قيمة قيمة)','Based on approximate FAO-56 values (not verified one by one)'),cf(L2('متوسطة','Medium'),'wn')],
+  [L2('طول الموسم','Season length'),c[8]+L2(' يوم',' days'),L2('متوسط ممارسة؛ يختلف بالصنف وميعاد الزراعة','Typical; varies by variety and sowing date'),cf(L2('متوسطة','Medium'),'wn')],
+  [L2('هدف N / P / K (ppm)','N / P / K target (ppm)'),`${c[2]} / ${c[3]} / ${c[4]}`,L2('تقدير داخلي — يُراجع بتوصيات وزارة الزراعة المحلية','Internal estimate — verify with local ministry recommendations'),cf(L2('تقدير','Estimate'),'er')],
+  [L2('توزيع التسميد على المراحل','Fertilizer split by stage'),L2('حسب المرحلة','per stage'),L2('ممارسات عامة لكل مجموعة محاصيل','General practice per crop group'),cf(L2('تقدير','Estimate'),'er')]];
+ box.style.display='';
+ box.innerHTML=`<h3>📚 ${L2('مصدر أرقام '+c[0]+' ودرجة الثقة','Sources and confidence — '+c[0])}</h3>${rows.map(r=>`<div style="padding:9px 0;border-bottom:1px solid var(--bd,#ffffff22)"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="font-size:.84rem">${r[0]}</b>${r[3]}</div><div style="font-size:.86rem;margin:3px 0" dir="auto">${r[1]}</div><div style="font-size:.74rem;color:var(--mut);line-height:1.7">${r[2]}</div></div>`).join('')}<p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('"تقدير" = رقم مبني على الممارسة العامة وغير موثق بمرجع محدد؛ التوصيات النهائية تُراجع مع مهندس زراعي.','"Estimate" = based on general practice, not tied to a specific reference; final recommendations should be reviewed by an agronomist.')}</p>`;
+}
 // ===== مراحل النمو والتسميد لكل محصول + تحليل Mulder =====
 // كل مرحلة: [الاسم, نسبة من طول الموسم, N, P, K, الدور المائي, ملاحظة, أشهر(للأشجار)]. مجموع N وP وK = 1 لكل محصول.
 const PHW={ini:.45,dev:.75,mid:1,late:.7},PHT={ini:.75,dev:.9,mid:1,late:.85};
@@ -1372,6 +1397,97 @@ function mulderRender(key,kK,un,r){
  const miss=(Ca>0&&Mg>0)?'':`<div class="badge wn" style="margin-bottom:8px">ℹ️ ${L2('أدخل Ca وMg المتبادلين في كارت "العناصر القاعدية" لتفعيل بقية العلاقات (Ca:Mg وK:Mg…).','Enter exchangeable Ca and Mg to enable Ca:Mg, K:Mg and other ratios.')}</div>`;
  box.style.display='';box.innerHTML=`<h3>⚖️ ${L2('تحليل تضاد العناصر (Mulder)','Nutrient antagonism (Mulder)')}</h3>${miss}<div class="tw"><table><thead><tr><th>${L2('العلاقة','Pair')}</th><th>${L2('قيمتك','Yours')}</th><th>${L2('المثالي','Ideal')}</th><th>${L2('الحالة','Status')}</th><th>${L2('الإجراء','Action')}</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>${mgAdv}${kx?`<div class="badge ok" style="margin-top:8px">🌱 ${kx}</div>`:''}<p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('الحدود إرشادية مستمدة من مخطط Mulder وقواعد النسب المتعارف عليها؛ تتفاوت حسب التربة والمحصول. K يُقدَّر من البوتاس المتاح (ppm÷391).','Thresholds are indicative, based on Mulder’s chart and common ratio rules; K estimated from available K (ppm/391).')}</p>`;
 }
+// ===== الإنتاج المستهدف + المحصول السابق + تسجيل نتيجة الموسم =====
+// حمل المحصول (كجم لكل طن منتج): [N, P₂O₅, K₂O, وحدة الإنتاج, مصدر, إنتاج نموذجي طن/فدان]
+const RMV={
+ wheat:[20,9.7,6,'طن حبوب','S1',2.8],barley:[20,6.8,6,'طن حبوب','S1',1.8],oat:[21,7.5,6,'طن حبوب','S1',1.8],maize:[13,7.3,4.9,'طن حبوب','S1',3.5],soybean:[64.5,14,23.2,'طن بذور','S1',1.3],
+ rice:[12.7,6.7,3.6,'طن أرز شعير','S2',3.8],sorghum:[11.8,7,4.8,'طن حبوب','S2',3],cotton:[25,11,15,'طن قطن زهر','S2',1.2],
+ potato:[null,1,5.8,'طن درنات','S3',12],sugarbeet:[null,.8,1.7,'طن جذور','S3',22],
+ cabbage:[2,.73,3.1,'طن رؤوس','S4',18],onion:[1.8,.8,2.4,'طن بصل','S4',14],carrot:[1.5,.8,4.7,'طن جزر','S4',15],cucumber:[1.5,.69,2.4,'طن ثمار','S4',8],squash:[1.6,.6,2,'طن ثمار','S4',8],
+ citrus:[1.5,.5,2.4,'طن ثمار','S5',12],banana:[1.97,.57,7.95,'طن ثمار','S6',25],
+ alfalfa:[28,6.5,28,'طن مادة جافة','S7',10],berseem:[28,6.5,28,'طن مادة جافة','S7',3.5]};
+const RSRC={S1:['IPNI عبر OMAFRA أونتاريو','https://fieldcropnews.com/?p=28952'],S2:['IPNI عبر Univ. of Arkansas FSA-2176','https://www.uaex.uada.edu/publications/pdf/FSA-2176.pdf'],S3:['PDA/PPRC (المملكة المتحدة) — P وK فقط','https://www.pda.org.uk/wp/wp-content/uploads/2020/03/pda-pprc.pdf'],S4:['IGZ (ألمانيا) Nutrient Offtake Vegetables','https://www.igzev.de/publikationen/IGZ_Nutrient_Offtake_Vegetables.pdf'],S5:['ICL — حمل البرتقال (متوسط المدى)','https://icl-growingsolutions.com/en-us/agriculture/knowledge-hub/the-road-to-high-yielding-and-sustainable-citrus-production/'],S6:['Yara — Marchal & Mallessard 1979','https://english-master.yara.co.uk/crop-nutrition-master/bananas/nutritional-summary-for-bananas/'],S7:['OMAFRA legume hay (قيم البرسيم الحجازي، وتُطبَّق على البرسيم المصري كبديل)','https://fieldcropnews.com/?p=28952']};
+const LEGC=['soybean','faba','lentil','chickpea','peanut','alfalfa','berseem'];
+// دراسة مصرية: المعدلات الاقتصادية (كجم/فدان) N, P₂O₅, K₂O
+const EGB={wheat:[62.6,31.3,46.1],barley:[68.9,40.8,50.3],sugarbeet:[61.9,30.9,71.1],faba:[33.3,46.3,44.9],soybean:[34.2,41.6,30.2],cotton:[59.6,53.1,56.3],maize:[125.9,46.5,58.6],rice:[62.7,23.4,25.5]};
+// المحصول السابق: نسبة C:N وكتلة البقايا (t/ha) من Manitoba Agriculture؛ رصيد النيتروجين للبقوليات من Univ. of Wisconsin A3517 (lb/ac × 1.121)
+const PCT={none:{l:'غير معروف / أرض بور'},cereal:{l:'قمح / شعير / شوفان',cn:60,m:3},maize:{l:'ذرة (عروش)',cn:82,m:6.7},sunflower:{l:'عباد الشمس',cn:60,m:4.9},veg:{l:'خضر / بطاطس (بقايا)',cn:31,m:3},soy:{l:'فول صويا',cr:44.8},grainleg:{l:'بقوليات حبوب (فول/عدس/حمص/فول سوداني)',cr:22.4},clover:{l:'برسيم مصري (مقلوب في الأرض)',cr:73},alfalfa:{l:'برسيم حجازي (مقلوب في الأرض)',cr:90}};
+function pcAdj(key,A){
+ const pc=PCT[$('pcS')?$('pcS').value:'none']||PCT.none,inc=!$('pcR')||$('pcR').value==='inc',ha=A/10000,r={dN:0,txt:'',lab:pc.l};
+ if(LEGC.includes(key)){r.txt=L2('المحصول الحالي بقولي يثبّت النيتروجين بنفسه — لا يُعدَّل N.','Current crop is a legume that fixes its own N — no N adjustment.');return r}
+ if(pc.cr){r.dN=-pc.cr*ha;r.txt=L2(`رصيد نيتروجين من البقوليات ≈ ${pc.cr.toFixed(0)} كجم N/هكتار (يخصم من الجرعة).`,`Legume N credit ≈ ${pc.cr.toFixed(0)} kg N/ha (deducted).`);return r}
+ if(pc.cn){if(!inc){r.txt=L2('البقايا مُزالة أو محروقة: لا تثبيت للنيتروجين (لكن تُفقد المادة العضوية).','Residue removed/burned: no N immobilization (but organic matter is lost).');return r}
+  const C=400*pc.m,imm=Math.max(0,C*(.05-1/pc.cn)*.5);r.dN=imm*ha;
+  r.txt=L2(`بقايا C:N ≈ ${pc.cn}:1 (أعلى من 20:1 فتثبّت النيتروجين مؤقتاً) — تعويض تقديري ≈ ${imm.toFixed(0)} كجم N/هكتار في الدفعة الأولى.`,`Residue C:N ≈ ${pc.cn}:1 (>20:1, temporarily immobilizes N) — estimated compensation ≈ ${imm.toFixed(0)} kg N/ha in the first split.`)}
+ return r;
+}
+(function(){
+ const card=document.createElement('div');card.className='card';card.id='ytIn';
+ card.innerHTML=`<h3>🎯 ${L2('الإنتاج المستهدف والمحصول السابق','Target yield and previous crop')}</h3>
+ <div class="g2"><div class="f"><label id="yTl"></label><input id="yT" type="number" inputmode="decimal" step=".1" value="0"></div>
+ <div class="f"><label>${L2('المحصول السابق','Previous crop')}</label><select id="pcS">${Object.entries(PCT).map(([k,v])=>`<option value="${k}">${v.l}</option>`).join('')}</select></div>
+ <div class="f"><label>${L2('بقايا المحصول السابق','Previous-crop residue')}</label><select id="pcR"><option value="inc">${L2('مدفونة في التربة','Incorporated')}</option><option value="rem">${L2('مُزالة / محروقة','Removed / burned')}</option></select></div></div>
+ <p id="yTh" style="font-size:.78rem;color:var(--mut);margin:6px 0 0;line-height:1.8"></p>`;
+ $('mxIn').insertAdjacentElement('afterend',card);
+ $('yT').addEventListener('input',e=>{if(e.isTrusted)$('yT').dataset.u='1';dirty()});$('pcS').addEventListener('change',dirty);$('pcR').addEventListener('change',dirty);
+ const yb=document.createElement('div');yb.className='card';yb.id='ybRes';yb.style.display='none';$('mxRes').insertAdjacentElement('afterend',yb);
+})();
+function ytDef(force){const key=$('crop').value,r=RMV[key],e=$('yT');if(!e)return;const A=parseFloat($('unit').value)||4200.83,uf=A/4200.83;
+ $('yTl').textContent=L2('الإنتاج المستهدف (طن لكل وحدة المساحة)','Target yield (t per area unit)');
+ if(r){if(force||!e.dataset.u)e.value=+(r[5]*uf).toFixed(2);$('yTh').textContent=L2(`القيمة الافتراضية إنتاج نموذجي تقريبي (${r[5]} طن/فدان ${r[3]}) — عدّلها لإنتاجك المتوقع.`,`Default is a rough typical yield (${r[5]} t/feddan) — set your expected yield.`)}
+ else{if(force||!e.dataset.u)e.value=0;$('yTh').textContent=L2('لا توجد بيانات موثقة لحمل هذا المحصول بعد، لذلك لا يُحسب ميزان الإنتاج له (لكن يعمل المحصول السابق).','No documented nutrient-removal data for this crop yet, so no yield balance (previous-crop effect still works).')}}
+{const oc=$('crop').onchange;$('crop').onchange=function(){oc.apply(this,arguments);if($('yT'))$('yT').dataset.u='';ytDef(true)}}
+$('unit').addEventListener('change',()=>{ytDef(false)});
+ytDef(true);
+function ybRender(key,nN,nP,nK,PCA,uf,un,r){
+ const box=$('ybRes');if(!box)return;const rm=RMV[key],Y=g('yT'),eg=EGB[key];let h='';const blk=(n,rem,dose,q,cl,t)=>`<div style="padding:8px 0;border-bottom:1px solid var(--bd,#ffffff22)"><div style="display:flex;justify-content:space-between"><b>${n}</b><span class="${cl}" style="font-weight:700">${q}</span></div><div style="font-size:.82rem;margin:3px 0">${L2('حمل المحصول','Removal')} <b>${rem}</b> ${L2('كجم','kg')} · ${L2('جرعة المنصة','Platform dose')} <b>${dose}</b> ${L2('كجم','kg')}</div><div style="font-size:.76rem;color:var(--mut)">${t}</div></div>`;
+ h+=`<h3>⚖️ ${L2('ميزان العناصر للإنتاج المستهدف والمحصول السابق','Yield nutrient balance and previous crop')}</h3>`;
+ if(rm&&Y>0){
+  const rows=[['N',rm[0],nN,0],['P₂O₅',rm[1],nP,1],['K₂O',rm[2],nK,2]].map(([n,co,dose,i])=>{
+   if(co==null)return blk(n,'—',r(dose),'—','',L2('لا يوجد معامل حمل موثق','No documented coefficient'));
+   if(i===0&&LEGC.includes(key))return blk(n,r(co*Y),r(dose),'—','',L2('محصول بقولي: N يأتي أساساً من التثبيت الحيوي','Legume: N mostly from fixation'));
+   const rem=co*Y,q=rem>0?dose/rem:0;let cl='ok',t=L2('مناسبة','Reasonable');
+   if(i===0){if(q<.7){cl='wn';t=L2('أقل من حمل المحصول من N — قد لا تكفي للإنتاج المستهدف؛ راجعها مع مهندس زراعي','Below crop N removal — may not meet the target yield; review with an agronomist')}else if(q>2.5){cl='wn';t=L2('أعلى كثيراً من اللازم — فقد وتلوث وتكلفة','Much above need — losses and cost')}}
+   else{if(q<.5){cl='wn';t=L2('أقل من حمل المحصول — ستسحب من مخزون التربة؛ أعد التحليل بعد الموسم','Below crop removal — soil reserves will decline')}else if(q>3){cl='wn';t=L2('أعلى كثيراً من حمل المحصول — تراكم/تكلفة زائدة','Far above removal — build-up/extra cost')}}
+   return blk(n,r(rem),r(dose),q.toFixed(1)+'×',cl,t)}).join('');
+  const s=RSRC[rm[4]];
+  h+=`<p style="font-size:.8rem;margin:0 0 8px;line-height:1.8">${L2('إنتاج مستهدف','Target yield')} <b>${Y}</b> ${L2('طن','t')} (${rm[3]}) / ${un}</p>${rows}<p style="font-size:.74rem;color:var(--mut);margin:6px 0 0">${L2('المصدر','Source')}: <a style="color:var(--gold)" target="_blank" rel="noopener noreferrer" href="${s[1]}">${s[0]}</a></p>`;
+ }else h+=`<div class="badge wn">ℹ️ ${L2('لا توجد بيانات موثقة لحمل هذا المحصول بعد؛ يتم استكمالها كلما توفر مرجع.','No documented removal data for this crop yet.')}</div>`;
+ if(eg){const d=[nN,nP,nK].map(x=>x/uf),nm=['N','P₂O₅','K₂O'],lo=d.map((x,i)=>x<eg[i]*.7?nm[i]:'').filter(Boolean),hi=d.map((x,i)=>x>eg[i]*1.6?nm[i]:'').filter(Boolean);h+=`<div class="badge ${lo.length||hi.length?'wn':'ok'}" style="margin-top:10px">📊 ${L2('مقارنة بدراسة مصرية (المعدلات الاقتصادية، كجم/فدان N / P₂O₅ / K₂O):','Egyptian study economic rates (kg/feddan N / P₂O₅ / K₂O):')} <b>${eg.join(' / ')}</b> — ${L2('جرعة المنصة','platform dose')}: <b>${d.map(x=>Math.round(x)).join(' / ')}</b> <a style="color:var(--gold)" target="_blank" rel="noopener noreferrer" href="https://ejar.journals.ekb.eg/article_443136.html">EJAR</a>${lo.length?'<br>⚠️ '+L2('جرعة '+lo.join(' و')+' أقل من 70% من المعدل الاقتصادي في الدراسة — راجعها مع مهندس زراعي.','Dose of '+lo.join(', ')+' is under 70% of the study economic rate — review with an agronomist.'):''}${hi.length?'<br>⚠️ '+L2('جرعة '+hi.join(' و')+' أعلى من 160% من معدل الدراسة.','Dose of '+hi.join(', ')+' exceeds 160% of the study rate.'):''}</div>`}
+ h+=`<div class="badge ${PCA.dN<0?'ok':PCA.dN>0?'wn':'ok'}" style="margin-top:10px">🌾 ${L2('المحصول السابق','Previous crop')}: <b>${PCA.lab}</b>${PCA.txt?' — '+PCA.txt:''}${PCA.dN?` (${PCA.dN>0?'+':''}${PCA.dN.toFixed(1)} ${L2('كجم N/'+un,'kg N/'+un)})`:''}</div>
+ <p style="font-size:.74rem;color:var(--mut);margin:8px 0 0;line-height:1.8">${L2('رصيد البقوليات من Univ. of Wisconsin (A3517) وC:N للبقايا من Manitoba Agriculture. تثبيت النيتروجين نموذج مبسّط: كفاءة ميكروبية 40%، C:N للميكروبات 8، وتحلل 50% في الموسم — تقدير وليس قياساً.','Legume credits: Univ. of Wisconsin A3517; residue C:N: Manitoba Agriculture. Immobilization is a simplified model (40% microbial efficiency, microbial C:N 8, 50% decomposition in season) — an estimate.')}</p>`;
+ box.style.display='';box.innerHTML=h;
+}
+// ---- تسجيل نتيجة الموسم (تغذية راجعة) ----
+const FBK='qoutFb';
+const fbGet=()=>{try{const a=JSON.parse(store(FBK)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}};
+(function(){
+ const card=document.createElement('div');card.className='card';card.id='fbBox';card.style.display='none';
+ $('ybRes').insertAdjacentElement('afterend',card);
+ const list=document.createElement('div');list.className='card';list.id='fbList';
+ $('hl').closest('.card').insertAdjacentElement('afterend',list);
+})();
+function fbForm(){const b=$('fbBox');if(!b)return;b.style.display='';const key=$('crop').value;
+ b.innerHTML=`<h3>📈 ${L2('سجّل نتيجة الموسم (يرفع دقة المنصة)','Log the season result (improves accuracy)')}</h3><p style="font-size:.8rem;color:var(--mut);margin:0 0 8px;line-height:1.8">${L2('بعد الحصاد سجّل الإنتاج الفعلي ورأيك في التوصية. التسجيلات تتجمع في "تقاريري" وتُظهر الفرق بين المستهدف والفعلي.','After harvest, log actual yield and your view of the recommendation. Entries collect in "My reports" and show target vs actual.')}</p>
+ <div class="g2"><div class="f"><label>${L2('الإنتاج الفعلي (طن لكل وحدة المساحة)','Actual yield (t per area unit)')}</label><input id="fbY" type="number" inputmode="decimal" step=".1"></div>
+ <div class="f"><label>${L2('تقييمك للتوصية','Your rating')}</label><select id="fbE"><option value="ok">${L2('مناسبة','Appropriate')}</option><option value="over">${L2('تسميد زائد عن اللازم','Over-fertilized')}</option><option value="under">${L2('ظهرت أعراض نقص','Deficiency symptoms')}</option><option value="salt">${L2('مشكلة ملوحة / ري','Salinity / irrigation problem')}</option></select></div></div>
+ <div class="f"><label>${L2('ملاحظات (اختياري)','Notes (optional)')}</label><input id="fbN" type="text" maxlength="200"></div>
+ <button type="button" id="fbS" class="sec" style="margin-top:8px">${L2('حفظ النتيجة','Save result')}</button><span id="fbM" style="margin-inline-start:10px;font-size:.8rem"></span>`;
+ $('fbS').onclick=()=>{const ya=g('fbY');if(!(ya>0)){$('fbM').textContent=L2('أدخل الإنتاج الفعلي','Enter actual yield');return}
+  const a=fbGet(),v=LASTCALC&&LASTCALC.v||{};a.unshift({d:Date.now(),c:key,yt:g('yT'),ya,e:$('fbE').value,n:($('fbN').value||'').slice(0,200),s:LAST?LAST.healthScore:null,ph:v.ph,ec:v.ec,pc:$('pcS').value,kN:window.LASTD?LASTD.nN:null,kP:window.LASTD?LASTD.nP:null,kK:window.LASTD?LASTD.nK:null});
+  store(FBK,JSON.stringify(a.slice(0,200)));$('fbM').textContent=L2('✅ تم الحفظ','✅ Saved');fbRender()}}
+function fbRender(){const l=$('fbList');if(!l)return;const a=fbGet();
+ if(!a.length){l.innerHTML=`<h3>📈 ${L2('نتائج المواسم المسجّلة','Logged season results')}</h3><p style="font-size:.82rem;color:var(--mut)">${L2('لا توجد نتائج بعد. بعد كل موسم سجّل الإنتاج الفعلي من صفحة النتائج.','Nothing logged yet.')}</p>`;return}
+ const rr=a.filter(x=>x.yt>0).map(x=>x.ya/x.yt),avg=rr.length?rr.reduce((s,x)=>s+x,0)/rr.length:0,ok=a.filter(x=>x.e==='ok').length;
+ const nm=c=>Object.prototype.hasOwnProperty.call(C,c)?C[c][0]:c,el={ok:L2('مناسبة','Appropriate'),over:L2('زائد','Over'),under:L2('نقص','Deficiency'),salt:L2('ملوحة/ري','Salt/irrig.')};
+ l.innerHTML=`<h3>📈 ${L2('نتائج المواسم المسجّلة','Logged season results')}</h3><div class="kpis"><div class="kpi"><span>${L2('عدد النتائج','Entries')}</span><b>${a.length}</b></div><div class="kpi"><span>${L2('الفعلي ÷ المستهدف','Actual ÷ target')}</span><b>${rr.length?Math.round(avg*100)+'%':'—'}</b></div><div class="kpi"><span>${L2('توصية مناسبة','Rated appropriate')}</span><b>${Math.round(ok/a.length*100)}%</b></div></div>
+ <ul style="padding:0 18px 0 0;font-size:.82rem;line-height:1.9">${a.slice(0,20).map((x,i)=>`<li>${escH(nm(x.c))} · ${L2('مستهدف','target')} ${x.yt||'—'} → ${L2('فعلي','actual')} <b>${x.ya}</b> · ${el[x.e]||''} · ${new Date(x.d).toLocaleDateString(lang==='en'?'en-GB':'ar-EG')}${x.n?' · '+escH(x.n):''} <a href="#" data-fd="${i}" style="color:var(--er)">✕</a></li>`).join('')}</ul>
+ <button type="button" class="sec" id="fbCsv">${L2('تصدير CSV','Export CSV')}</button><p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('محفوظة على جهازك فقط. لتجميع نتائج كل المستخدمين لتحسين المنصة يلزم ربطها بقاعدة بيانات (خطوة لاحقة).','Stored on this device only. Pooling results across users needs a database (later step).')}</p>`;
+ l.querySelectorAll('[data-fd]').forEach(e=>e.onclick=ev=>{ev.preventDefault();const b=fbGet();b.splice(+e.dataset.fd,1);store(FBK,JSON.stringify(b));fbRender()});
+ $('fbCsv').onclick=()=>{const h=['date','crop','target_yield','actual_yield','rating','prev_crop','soil_score','ph','ec','dose_N','dose_P2O5','dose_K2O','note'],q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const csv='﻿'+h.join(',')+'\n'+fbGet().map(x=>[new Date(x.d).toISOString().slice(0,10),x.c,x.yt,x.ya,x.e,x.pc,x.s,x.ph,x.ec,x.kN,x.kP,x.kK,x.n].map(q).join(',')).join('\n');
+  const u=URL.createObjectURL(new Blob([csv],{type:'text/csv'})),A=document.createElement('a');A.href=u;A.download='qout_season_results.csv';A.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}}
+fbRender();
 // ===== تحليل التربة على 3 أعماق للأشجار =====
 const DPT={citrus:[.5,.3,.2],dates:[.4,.35,.25],grapes:[.4,.35,.25],olive:[.45,.35,.2],banana:[.6,.3,.1],mango:[.4,.35,.25],pomegranate:[.5,.3,.2]};
 const DPF=[['ph','pH',.1],['ec','EC (dS/m)',.1],['om','OM %',.1],['caco3','CaCO₃ %',.5],['esp','ESP %',.5],['n','N ppm',1],['p','P ppm',1],['k','K ppm',5],['xCa','Ca meq',.5],['xMg','Mg meq',.1]];
@@ -1420,7 +1536,7 @@ function dpFlags(){
 {const oc=$('crop').onchange;$('crop').onchange=function(){oc.apply(this,arguments);if(!DPT[$('crop').value]){DPS.on=false}dpLock();dpRender()}}
 {const r0=run;run=function(c,m){r0(c,m);if(DPS.on&&DPT[$('crop').value]){const f=dpFlags().filter(x=>x[0]!=='ok'),el=$('warns');if(el&&f.length)el.innerHTML=el.innerHTML.replace(/<div class="badge ok">[^<]*لا تحذيرات حرجة[^<]*<\/div>/,'')+f.map(x=>`<div class="badge ${x[0]}">${x[1]}</div>`).join('')}}}
 dpRender();
-const APP_VER='2026.11.12-9';
+const APP_VER='2026.11.12-12';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
