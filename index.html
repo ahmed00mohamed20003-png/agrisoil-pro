@@ -652,15 +652,18 @@ const PAYH=$('mPay').querySelector('h3'),PAYP=PAYH.nextElementSibling,PAYH0=PAYH
 function payOpen(proFeature){PAYH.textContent=proFeature?L2('ميزة الأقمار الصناعية لمشتركي Pro','Satellite is a Pro feature'):PAYH0;PAYP.textContent=proFeature?L2('حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيل Pro','Pay via InstaPay then send the receipt with your account email to activate Pro'):PAYP0;$('mPay').classList.add('on')}
 $('cPay').onclick=()=>{$('mPay').classList.remove('on');setTimeout(()=>{PAYH.textContent=PAYH0;PAYP.textContent=PAYP0},200)};
 // يستدعيها سكربت Firebase عند تغيّر حالة الدخول
+let UPH='';
+function phSet(u,d){const k='qPh'+(u?u.uid:'');let p=null;if(d&&typeof d.photo==='string'){p=d.photo;try{localStorage.setItem(k,p)}catch(e){}}else{try{p=localStorage.getItem(k)}catch(e){}}UPH=p||(u&&u.photoURL)||''}
+const phOk=x=>/^(data:image\/jpeg;base64,[A-Za-z0-9+\/=]+|https:\/\/[^\s"'<>]+)$/.test(x||'');
 window.onUser=(u,d,err)=>{
   AUTH_READY=true;
-  if(!u||!d){USER=null;pro=false;trials=0;badge();greet();
+  if(!u||!d){USER=null;UPH='';pro=false;trials=0;badge();greet();
     $('mAuth').classList.add('on');
     $('acct').style.display='none';authUI();
     if(u&&!d){const off=!navigator.onLine||(err&&(err.code==='unavailable'||/offline|network|unavailable/i.test(err.message||'')));
       authMsg(off?L2('📡 لا يوجد اتصال بالإنترنت — تحقق من الشبكة، وسيُعاد الدخول تلقائياً عند عودة الاتصال.','📡 No internet connection — check your network; sign-in will retry automatically when you are back online.'):L2('تعذر قراءة بيانات الحساب — راجع قواعد Firestore','Could not read account data — check Firestore rules')+' ['+((err&&(err.code||err.message))||'?')+']')}
     return}
-  USER=u;trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
+  USER=u;phSet(u,d);trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
   $('payMail').textContent=u.email||'';$('acctMail').textContent=u.email||u.displayName||'';$('acct').style.display='flex';$('mAuth').classList.remove('on');authMsg('');
   authUI();badge();greet();staleUI();annCheck()};
 
@@ -1294,8 +1297,10 @@ locUI();
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
 // ===== pH لكل محصول + مرجعية الأرقام =====
 // [أدنى مثالي, أعلى مثالي, حد التحمل العملي, المصدر: H=جامعة هاواي CTAHR GHGS-18 (بنفس النطاق) / E=تقدير إرشادي]
-const PHR={wheat:[6,7.5,8.3,'E'],barley:[6,8,8.6,'E'],maize:[5.5,7,8,'H'],rice:[5,6.5,8,'H'],sorghum:[5.5,7,8.5,'H'],oat:[5.5,7.5,8.3,'E'],faba:[6,7.5,8.3,'E'],soybean:[6,7,7.8,'E'],peanut:[5.5,6.5,7.8,'H'],lentil:[6,7.5,8.3,'E'],chickpea:[6,7.5,8.3,'E'],cotton:[5.8,8,8.8,'E'],sugarbeet:[6,8,8.6,'E'],sugarcane:[6,7,8.5,'H'],sunflower:[6,7,8.3,'H'],sesame:[5.5,7.5,8.3,'E'],alfalfa:[6.5,7.5,8.5,'H'],berseem:[6,7.5,8.3,'E'],tomato:[5.5,6.8,8,'H'],potato:[5,6.5,7.8,'E'],onion:[6,7,8,'E'],garlic:[6,7.5,8.2,'E'],pepper:[5.5,6.5,8,'H'],cucumber:[5.5,6.5,8,'H'],eggplant:[5.5,6.5,8,'H'],squash:[5.5,6.5,8,'H'],watermelon:[5,6.5,8,'H'],cantaloupe:[5.5,6.5,8,'H'],okra:[6,7.5,8.2,'H'],cabbage:[6,7,8,'H'],carrot:[5.5,6.5,8,'H'],sweetpotato:[5,6,7.8,'H'],citrus:[6,7,8.2,'H'],dates:[6.5,8,8.8,'H'],grapes:[6,7.5,8.3,'E'],olive:[6.5,8,8.6,'E'],strawberry:[5,6.5,7.8,'H'],banana:[6,7.5,8.2,'H'],mango:[5.5,6.5,8,'H'],pomegranate:[6,7.5,8.3,'H']};
+const PHR={wheat:[6,7.5,8.3,'E'],barley:[6,8,8.6,'E'],maize:[5.5,7,8,'H'],rice:[5,6.5,8,'H'],sorghum:[5.5,7.5,8,'F'],oat:[5,6,7.5,'F'],faba:[6,7,8.6,'F'],soybean:[5.5,6.5,8.4,'F'],peanut:[5.5,6.5,7.8,'H'],lentil:[5.5,7.5,8.2,'F'],chickpea:[6,8.5,9.5,'F'],cotton:[5.8,8,8.8,'E'],sugarbeet:[6,8,8.6,'E'],sugarcane:[6,7,8.5,'H'],sunflower:[6,7,8.3,'H'],sesame:[5.5,7.5,8.3,'E'],alfalfa:[6.5,7.5,8.5,'H'],berseem:[6,7.5,8.3,'E'],tomato:[5.5,6.8,8,'H'],potato:[5,6.5,7.8,'E'],onion:[6,7,8,'E'],garlic:[6,7.5,8.2,'E'],pepper:[5.5,6.5,8,'H'],cucumber:[5.5,6.5,8,'H'],eggplant:[5.5,6.5,8,'H'],squash:[5.5,6.5,8,'H'],watermelon:[5,6.5,8,'H'],cantaloupe:[5.5,6.5,8,'H'],okra:[6,7.5,8.2,'H'],cabbage:[6,7,8,'H'],carrot:[5.5,6.5,8,'H'],sweetpotato:[5,6,7.8,'H'],citrus:[6,7,8.2,'H'],dates:[6.5,8,8.8,'H'],grapes:[6,7.5,8.3,'E'],olive:[6.5,8,8.6,'E'],strawberry:[5,6.5,7.8,'H'],banana:[6,7.5,8.2,'H'],mango:[5.5,6.5,8,'H'],pomegranate:[6,7.5,8.3,'H']};
 // محاصيل ملوحتها تقدير (غير موجودة بأرقام في FAO Paper 29)
+const ECO={sorghum:48747,oat:481,faba:2146,soybean:1150,lentil:7209,chickpea:2479};
+const SALCLS={oat:'T',chickpea:'MS',sesame:'S',watermelon:'MS',okra:'MS',olive:'MT',banana:'S',mango:'S',pomegranate:'MS'},SALN={S:'حساس',MS:'متوسط الحساسية',MT:'متوسط التحمل',T:'متحمل'};
 const SALEST=['oat','lentil','chickpea','sesame','watermelon','okra','olive','banana','mango','pomegranate'];
 function phScore(key,ph){const p=PHR[key];if(!p)return ph<6||ph>8?-15:(ph<6.5||ph>7.5?-5:0);if(ph>p[2]||ph<p[0]-.7)return -15;if(ph>p[1]||ph<p[0])return -5;return 0}
 function phWarn(key,ph){const p=PHR[key],nm=C[key][0];if(!p)return null;
@@ -1308,8 +1313,8 @@ function refRender(key){
  const cf=(t,cl)=>`<span class="badge ${cl}" style="display:inline-block;padding:2px 8px;margin:0">${t}</span>`;
  const A=(u,t)=>`<a style="color:var(--gold);word-break:break-word" href="${u}" target="_blank" rel="noopener noreferrer">${t}</a>`;
  const rows=[
-  [L2('تحمل الملوحة (حد التحمل / الميل)','Salinity (threshold / slope)'),`${c[5]} dS/m · ${c[6]}%`,est?L2('تقدير — FAO يعطي تصنيفاً نوعياً فقط','Estimate — FAO gives qualitative rating only'):A('https://www.fao.org/3/Y4263E/y4263e0e.htm','FAO Irrigation & Drainage Paper 29 (Ayers & Westcot)'),est?cf(L2('تقدير','Estimate'),'er'):cf(L2('عالية — مطابق للمرجع','High — matches source'),'ok')],
-  [L2('pH المثالي','Optimum pH'),p?`${p[0]} – ${p[1]} (${L2('حد التحمل','limit')} ${p[2]})`:'—',p&&p[3]==='H'?A('https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/GHGS-18.pdf','Univ. of Hawaii CTAHR GHGS-18')+L2(' (النطاق من المرجع، وحد التحمل تقدير)',' (range from source; limit is an estimate)'):L2('تقدير إرشادي من الممارسة العامة','General-practice estimate'),p&&p[3]==='H'?cf(L2('متوسطة','Medium'),'wn'):cf(L2('تقدير','Estimate'),'er')],
+  [L2('تحمل الملوحة (حد التحمل / الميل)','Salinity (threshold / slope)'),`${c[5]} dS/m · ${c[6]}%`,est?L2('الرقم تقدير — FAO 29 يعطي '+(SALCLS[key]?'تصنيفاً نوعياً فقط: «'+SALN[SALCLS[key]]+'»':'لا بيانات لهذا المحصول'),'Number is an estimate — FAO 29 gives '+(SALCLS[key]?'only a qualitative class: '+SALCLS[key]:'no data for this crop')):A('https://www.fao.org/3/Y4263E/y4263e0e.htm','FAO Irrigation & Drainage Paper 29 (Ayers & Westcot)'),est?cf(L2('تقدير','Estimate'),'er'):cf(L2('عالية — مطابق للمرجع','High — matches source'),'ok')],
+  [L2('pH المثالي','Optimum pH'),p?`${p[0]} – ${p[1]} (${L2('حد التحمل','limit')} ${p[2]})`:'—',p&&p[3]==='F'?A('https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id='+ECO[key],'FAO EcoCrop')+L2(' (المثالي والمطلق من المرجع)',' (optimum and absolute range from source)'):p&&p[3]==='H'?A('https://www3.ctahr.hawaii.edu/oc/freepubs/pdf/GHGS-18.pdf','Univ. of Hawaii CTAHR GHGS-18')+L2(' (النطاق من المرجع، وحد التحمل تقدير)',' (range from source; limit is an estimate)'):L2('تقدير إرشادي من الممارسة العامة','General-practice estimate'),p&&p[3]==='F'?cf(L2('عالية','High'),'ok'):p&&p[3]==='H'?cf(L2('متوسطة','Medium'),'wn'):cf(L2('تقدير','Estimate'),'er')],
   [L2('معامل المحصول Kc (منتصف الموسم)','Crop coefficient Kc (mid-season)'),String(c[7]),L2('مبني على قيم FAO-56 التقريبية (لم تُراجع قيمة قيمة)','Based on approximate FAO-56 values (not verified one by one)'),cf(L2('متوسطة','Medium'),'wn')],
   [L2('طول الموسم','Season length'),c[8]+L2(' يوم',' days'),L2('متوسط ممارسة؛ يختلف بالصنف وميعاد الزراعة','Typical; varies by variety and sowing date'),cf(L2('متوسطة','Medium'),'wn')],
   [L2('هدف N / P / K (ppm)','N / P / K target (ppm)'),`${c[2]} / ${c[3]} / ${c[4]}`,L2('تقدير داخلي — يُراجع بتوصيات وزارة الزراعة المحلية','Internal estimate — verify with local ministry recommendations'),cf(L2('تقدير','Estimate'),'er')],
@@ -1401,12 +1406,17 @@ function mulderRender(key,kK,un,r){
 // حمل المحصول (كجم لكل طن منتج): [N, P₂O₅, K₂O, وحدة الإنتاج, مصدر, إنتاج نموذجي طن/فدان]
 const RMV={
  wheat:[20,9.7,6,'طن حبوب','S1',2.8],barley:[20,6.8,6,'طن حبوب','S1',1.8],oat:[21,7.5,6,'طن حبوب','S1',1.8],maize:[13,7.3,4.9,'طن حبوب','S1',3.5],soybean:[64.5,14,23.2,'طن بذور','S1',1.3],
- rice:[12.7,6.7,3.6,'طن أرز شعير','S2',3.8],sorghum:[11.8,7,4.8,'طن حبوب','S2',3],cotton:[25,11,15,'طن قطن زهر','S2',1.2],
+ rice:[12.7,6.7,3.6,'طن أرز شعير','S2',3.8],sorghum:[11.8,7,4.8,'طن حبوب','S2',1.9],cotton:[25,11,15,'طن قطن زهر','S2',1.2],
  potato:[null,1,5.8,'طن درنات','S3',12],sugarbeet:[null,.8,1.7,'طن جذور','S3',22],
+ peanut:[35,5.5,8.5,'طن قرون بقشرة','S8',1.2],sesame:[18.9,9.4,15.1,'طن بذور','S8',.45],garlic:[4,2,3.2,'طن رؤوس','S8g',5],cantaloupe:[2.2,1.1,1.8,'طن ثمار','S8c',8],tomato:[1.3,.5,2.9,'طن ثمار','S8t',18],
+ lentil:[36.3,11.2,14.5,'طن بذور','S9',.6],chickpea:[36.3,11.2,14.5,'طن بذور','S9',.8],sugarcane:[1.6,.3,1.8,'طن سيقان','S10',51],sunflower:[27,9.7,9,'طن بذور','S11',.9],
+ pepper:[2,.7,2.8,'طن ثمار','S12',9],grapes:[1.8,1,2.4,'طن عنب','S13',9],strawberry:[1.35,.75,2.85,'طن ثمار','S14',14],mango:[6.7,1.7,6.7,'طن ثمار','S15',5],
  cabbage:[2,.73,3.1,'طن رؤوس','S4',18],onion:[1.8,.8,2.4,'طن بصل','S4',14],carrot:[1.5,.8,4.7,'طن جزر','S4',15],cucumber:[1.5,.69,2.4,'طن ثمار','S4',8],squash:[1.6,.6,2,'طن ثمار','S4',8],
  citrus:[1.5,.5,2.4,'طن ثمار','S5',12],banana:[1.97,.57,7.95,'طن ثمار','S6',25],
  alfalfa:[28,6.5,28,'طن مادة جافة','S7',10],berseem:[28,6.5,28,'طن مادة جافة','S7',3.5]};
-const RSRC={S1:['IPNI عبر OMAFRA أونتاريو','https://fieldcropnews.com/?p=28952'],S2:['IPNI عبر Univ. of Arkansas FSA-2176','https://www.uaex.uada.edu/publications/pdf/FSA-2176.pdf'],S3:['PDA/PPRC (المملكة المتحدة) — P وK فقط','https://www.pda.org.uk/wp/wp-content/uploads/2020/03/pda-pprc.pdf'],S4:['IGZ (ألمانيا) Nutrient Offtake Vegetables','https://www.igzev.de/publikationen/IGZ_Nutrient_Offtake_Vegetables.pdf'],S5:['ICL — حمل البرتقال (متوسط المدى)','https://icl-growingsolutions.com/en-us/agriculture/knowledge-hub/the-road-to-high-yielding-and-sustainable-citrus-production/'],S6:['Yara — Marchal & Mallessard 1979','https://english-master.yara.co.uk/crop-nutrition-master/bananas/nutritional-summary-for-bananas/'],S7:['OMAFRA legume hay (قيم البرسيم الحجازي، وتُطبَّق على البرسيم المصري كبديل)','https://fieldcropnews.com/?p=28952']};
+const RSRC={S1:['IPNI عبر OMAFRA أونتاريو','https://fieldcropnews.com/?p=28952'],S2:['IPNI عبر Univ. of Arkansas FSA-2176','https://www.uaex.uada.edu/publications/pdf/FSA-2176.pdf'],S3:['PDA/PPRC (المملكة المتحدة) — P وK فقط','https://www.pda.org.uk/wp/wp-content/uploads/2020/03/pda-pprc.pdf'],S4:['IGZ (ألمانيا) Nutrient Offtake Vegetables','https://www.igzev.de/publikationen/IGZ_Nutrient_Offtake_Vegetables.pdf'],S5:['ICL — حمل البرتقال (متوسط المدى)','https://icl-growingsolutions.com/en-us/agriculture/knowledge-hub/the-road-to-high-yielding-and-sustainable-citrus-production/'],S6:['Yara — Marchal & Mallessard 1979','https://english-master.yara.co.uk/crop-nutrition-master/bananas/nutritional-summary-for-bananas/'],S8:['IFA 2020 (جدول حمل العناصر) — قُرئ عبر مقتطفات بحث، راجع الجدول الأصلي · ثقة متوسطة','https://api.ifastat.org/reports/download/12965'],S8g:['IFA 2020 — ثقة متوسطة؛ مصدر Wilbur-Ellis يعطي N=7.5 (تباين في N)','https://api.ifastat.org/reports/download/12965'],S8c:['IFA 2020 (فئة الشمام ومنها الكانتالوب) — ثقة متوسطة–منخفضة؛ المصادر الأخرى تعطي أرقاماً أعلى','https://api.ifastat.org/reports/download/12965'],S8t:['IFA 2020 — يتفق مع Wilbur-Ellis (1.45/0.55/2.65)؛ NC State أعلى (3.0/0.5/4.0) · ثقة متوسطة–عالية','https://api.ifastat.org/reports/download/12965'],
+ S9:['MSU Extension Montana — جدول البقوليات (بسلة/عدس/حمص) محوّل من lb/bu · ثقة متوسطة','https://landresources.montana.edu/soilfertility/documents/PDF/sscoop/pulseCropSS.pdf'],S10:['ICL + دراسة Guangxi (1.67/0.32/1.85) · عالية لـN وK، متوسطة لـP','https://icl-growingsolutions.com/agriculture/crop_category/sugar-crops-beet-cane-sorghum-agronomy-nutrition/'],S11:['PhosAgro (عرض فني لشركة) · ثقة متوسطة','https://lectorium.phosagro.com/upload/iblock/d40/ykvdgy6qbjvfk0q80tlp3nd9131uef6a.pdf'],S12:['MSU Michigan E-2934 (محوّل من lb/ton) · ثقة عالية','https://www.canr.msu.edu/fertrec/uploads/E-2934-MSU-Nutrient-recomdns-veg-crops.pdf'],S13:['Wilbur-Ellis (N وK) + U. Maryland (P₂O₅؛ المصادر تتراوح 0.55–2.0) · ثقة متوسطة–منخفضة','https://extension.umd.edu/sites/extension.umd.edu/files/2021-04/NM-3.pdf'],S14:['Wilbur-Ellis Nutrition Manual (محوّل من lb/ton، مصدر واحد) · ثقة متوسطة–منخفضة','https://www.wilburellisagribusiness.com/wp-content/uploads/2024/10/Pages_from_Booklet_NutritionTechManual_4th_Ed_K_223550_1_.pdf'],S15:['Ganeshamurthy (مراجعة هندية) · يتسق مع 110 كجم K₂O/هكتار لمحصول 15 طن · ثقة متوسطة','https://www.researchgate.net/publication/277191647'],
+ S7:['OMAFRA legume hay (قيم البرسيم الحجازي، وتُطبَّق على البرسيم المصري كبديل)','https://fieldcropnews.com/?p=28952']};
 const LEGC=['soybean','faba','lentil','chickpea','peanut','alfalfa','berseem'];
 // دراسة مصرية: المعدلات الاقتصادية (كجم/فدان) N, P₂O₅, K₂O
 const EGB={wheat:[62.6,31.3,46.1],barley:[68.9,40.8,50.3],sugarbeet:[61.9,30.9,71.1],faba:[33.3,46.3,44.9],soybean:[34.2,41.6,30.2],cotton:[59.6,53.1,56.3],maize:[125.9,46.5,58.6],rice:[62.7,23.4,25.5]};
@@ -1585,6 +1595,7 @@ async function admRender(){
  try{ADM.rows=await A.adminUsers()}catch(e){console.error(e);b.innerHTML=`<div class="badge er">${L2('غير مصرّح أو القواعد غير منشورة. سجّل الدخول بحساب Google (إيميل موثّق) وتأكد من نشر قواعد Firestore الأخيرة.','Not authorized or rules not published. Sign in with Google (verified email) and publish the latest rules.')}</div>`;return}
  const R=ADM.rows,pr=R.filter(x=>x.pro).length;
  b.innerHTML=`<div class="kpis"><div class="kpi"><span>${L2('المستخدمون','Users')}</span><b>${R.length}</b></div><div class="kpi"><span>Pro</span><b>${pr}</b></div><div class="kpi"><span>${L2('محاولات صفرية','Out of trials')}</span><b>${R.filter(x=>!x.pro&&x.trials<=0).length}</b></div></div>
+ <h3 style="margin-top:14px">📊 ${L2('الزوار والنشاط','Visitors & activity')} <button type="button" class="sec" id="admRef" style="padding:2px 10px;font-size:.75rem">↻</button></h3><div id="admLive" class="mut">${L2('جارٍ التحميل…','Loading…')}</div>
  <div class="f" style="margin:10px 0"><label>${L2('بحث بالإيميل','Search by email')}</label><input id="admQ" type="text" dir="ltr" value="${escH(ADM.q)}"></div><div id="admList"></div>
  <h3 style="margin-top:18px">📢 ${L2('إعلان لكل المستخدمين','Announcement for all users')}</h3>
  <div class="f"><label>${L2('النص بالعربية','Arabic text')}</label><textarea id="anM" rows="2" maxlength="300"></textarea></div>
@@ -1592,10 +1603,22 @@ async function admRender(){
  <div class="f"><label>${L2('ينتهي في (اختياري)','Expires (optional)')}</label><input id="anU" type="date"></div>
  <div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="sec" id="anP">${L2('نشر الإعلان','Publish')}</button><button type="button" class="sec" id="anD">${L2('إيقاف الإعلان','Stop announcement')}</button></div><div id="anMsg" style="font-size:.8rem;margin-top:6px"></div>`;
  $('admQ').oninput=e=>{ADM.q=e.target.value;admList()};admList();
+ $('admRef').onclick=admLive;admLive();clearInterval(ADM.tm);ADM.tm=setInterval(()=>{if($('p-admin')&&$('p-admin').classList.contains('on')&&!document.hidden)admLive()},30000);
  const ann=async clear=>{const m=$('anM').value.trim();if(!clear&&!m){$('anMsg').textContent=L2('اكتب نص الإعلان','Enter text');return}
   const o=clear?{msg:'',msgEn:'',until:'',id:'off-'+Date.now()}:{msg:m.slice(0,300),msgEn:$('anE').value.trim().slice(0,300),until:$('anU').value||'',id:String(Date.now())};
   try{await A.adminAnn(o);$('anMsg').textContent=clear?L2('✅ تم إيقاف الإعلان','✅ Stopped'):L2('✅ تم النشر','✅ Published')}catch(e){console.error(e);$('anMsg').textContent=L2('تعذّر الحفظ — تأكد من القواعد','Failed — check rules')}};
  $('anP').onclick=()=>ann(false);$('anD').onclick=()=>ann(true)}
+async function admLive(){
+ const el=$('admLive');if(!el||!window.NamaaAuth||!NamaaAuth.adminStats)return;
+ try{const S=await NamaaAuth.adminStats(),td=new Date().toLocaleDateString('sv',{timeZone:'Africa/Cairo'}),by={},all=new Set();
+  S.visits.forEach(v=>{(by[v.day]=by[v.day]||new Set()).add(v.uid);all.add(v.uid)});
+  const days=[];for(let i=6;i>=0;i--)days.push(new Date(Date.now()-i*864e5).toLocaleDateString('sv',{timeZone:'Africa/Cairo'}));
+  const mx=Math.max(1,...days.map(d=>(by[d]||new Set()).size)),em=id=>{const r=ADM.rows.find(x=>x.id===id);return r&&r.email?r.email:id.slice(0,8)+'…'};
+  el.innerHTML=`<div class="kpis"><div class="kpi"><span>🟢 ${L2('نشطون الآن','Active now')}</span><b>${S.active.length}</b></div><div class="kpi"><span>${L2('زوار اليوم','Today')}</span><b>${(by[td]||new Set()).size}</b></div><div class="kpi"><span>${L2('آخر 7 أيام','Last 7 days')}</span><b>${all.size}</b></div></div>
+  ${S.active.length?`<div style="font-size:.78rem;margin:8px 0;word-break:break-all" dir="ltr">${S.active.map(id=>'🟢 '+escH(em(id))).join('<br>')}</div>`:''}
+  <div style="margin-top:8px">${days.map(d=>{const n=(by[d]||new Set()).size;return `<div style="display:flex;align-items:center;gap:8px;font-size:.75rem;margin:3px 0"><span dir="ltr" style="width:74px">${d.slice(5)}</span><div style="flex:1;background:#ffffff14;border-radius:4px;height:10px"><div style="width:${Math.round(n/mx*100)}%;height:10px;background:var(--gold,#c9a24a);border-radius:4px"></div></div><b style="width:24px;text-align:end">${n}</b></div>`}).join('')}</div>
+  <p class="mut" style="font-size:.7rem;margin-top:6px">${L2('يحسب المستخدمين المسجّلين فقط (نشط = فتح التطبيق خلال آخر دقيقتين ونصف). التحديث تلقائي كل 30 ثانية.','Signed-in users only (active = seen in the last 2.5 min). Auto-refresh every 30 s.')}</p>`}
+ catch(e){console.error(e);el.innerHTML=`<div class="badge er">${L2('تعذّر القراءة — انشر قواعد Firestore الأخيرة.','Cannot read — publish the latest Firestore rules.')}</div>`}}
 function admList(){
  const l=$('admList');if(!l)return;const q=ADM.q.trim().toLowerCase(),R=ADM.rows.filter(x=>!q||String(x.email||'').toLowerCase().includes(q)).slice(0,60);
  l.innerHTML=R.length?R.map(x=>`<div class="admU" data-u="${escH(x.id)}" style="padding:10px 0;border-bottom:1px solid var(--bd,#ffffff22)"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span dir="ltr" style="font-size:.82rem;word-break:break-all">${escH(x.email||x.id)}</span><span class="badge ${x.pro?'ok':'wn'}" style="margin:0;padding:2px 8px">${x.pro?'PRO':(x.trials||0)+' '+L2('محاولة','trials')}</span></div>
@@ -1611,7 +1634,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.12-15';
+const APP_VER='2026.11.13-3';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2706,7 +2729,7 @@ function homeRender(){
   else tip=`<div class="tp" id="hTipLoc"><div class="c">📍</div><div><b>${L2('فعّل موقعك لنصائح أدق','Enable location for sharper tips')}</b><small>${L2('نعرض الطقس والريّ والتسميد حسب مكان حقلك.','Weather, irrigation and fertilizer advice for your field’s location.')}</small></div></div>`;
   const h=hist()[0];let last='';
   if(h){const n=Object.prototype.hasOwnProperty.call(C,h.c)?C[h.c][0]:'';last=`<div class="tp" data-g="hist"><div class="c">📄</div><div><b>${L2('آخر تقرير','Last report')}: ${escH(tx(n))}</b><small>${+h.s||0}/100 · ${new Date(+h.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')}</small></div></div>`}
-  b.innerHTML=`<div class="top2"><button type="button" class="avr" data-g="acct" aria-label="account"><span>${escH(lxName().charAt(0).toUpperCase())}</span></button><div class="t"><small>${lxGreet()}</small><b>${escH(lxName())}</b></div></div>
+  b.innerHTML=`<div class="top2"><button type="button" class="avr" data-g="acct" aria-label="account">${avIn()}</button><div class="t"><small>${lxGreet()}</small><b>${escH(lxName())}</b></div></div>
   <div class="chs">${wx}${crn?`<div class="ch2">🌾 ${escH(tx(crn))}</div>`:''}${gv?`<div class="ch2">📌 ${escH(gname(gv))}</div>`:''}</div>
   ${hero}<div class="sc2"><span>${L2('أدواتك','Your tools')}</span><small data-g="tools">${L2('عرض الكل','All')}</small></div><div class="tg3">${tools}</div>${tip}${last}`;
   b.querySelectorAll('[data-g]').forEach(e=>e.onclick=()=>{const g=e.dataset.g;show(g==='hist2'?'crop':g)});
@@ -2716,11 +2739,21 @@ function homeRender(){
 function toolsRender(){const b=$('toolsBox');if(!b)return;
   b.innerHTML=`<div class="sc2" style="margin-top:4px"><span>${L2('كل الأدوات','All tools')}</span></div><div class="tg3">${TL.filter(t=>t[0]!=='hist').map(t=>`<button type="button" class="tl3${t[0]==='sat'&&!pro?' lk':''}" data-g="${t[0]}"><div class="c">${IC(t[0])}</div>${tn(t[0])}</button>`).join('')}</div>`;
   b.querySelectorAll('[data-g]').forEach(e=>e.onclick=()=>show(e.dataset.g))}
+const avIn=()=>phOk(UPH)?`<img src="${escH(UPH)}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block">`:`<span>${escH(lxName().charAt(0).toUpperCase())}</span>`;
+function phResize(f){return new Promise((res,rej)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const S=160,c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d'),m=Math.min(im.width,im.height);x.fillStyle='#fff';x.fillRect(0,0,S,S);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.78))};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('img'))};im.src=u})}
+async function phSave(v){const A=window.NamaaAuth;if(!USER||!A||!A.setPhoto)throw new Error('no');await A.setPhoto(v);try{localStorage.setItem('qPh'+USER.uid,v)}catch(e){}UPH=v||USER.photoURL||'';homeRender();acctRender()}
+function phBind(){const f=$('phF'),b=$('aPh'),c=$('phC'),d=$('phD');if(!f)return;
+ const pick=e=>{if(e)e.preventDefault();if(!USER){$('mAuth').classList.add('on');return}f.click()};
+ if(b)b.onclick=pick;if(c)c.onclick=pick;
+ f.onchange=async()=>{const file=f.files&&f.files[0];f.value='';if(!file)return;
+  if(!/^image\//.test(file.type)||file.size>15e6){toast(L2('اختر صورة أقل من 15 ميجا','Choose an image under 15 MB'));return}
+  try{const v=await phResize(file);await phSave(v);toast(L2('تم حفظ الصورة ✅','Photo saved ✅'))}catch(e){console.error(e);toast(L2('تعذّر حفظ الصورة — تأكد من الاتصال ونشر القواعد','Could not save the photo'))}};
+ if(d)d.onclick=async e=>{e.preventDefault();if(!confirm(L2('حذف صورتك؟','Remove your photo?')))return;try{await phSave('');toast(L2('تم الحذف','Removed'))}catch(er){console.error(er);toast(L2('تعذّر الحذف','Failed'))}}}
 function acctRender(){const b=$('acctBox');if(!b)return;const n=hist().length,mail=USER?(USER.email||''):'';
   const card=pro?`<div class="mcd"><div style="display:flex;justify-content:space-between;align-items:center"><div class="n">QOUT PRO</div><div style="width:34px;height:24px;border-radius:6px;background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(0,0,0,.12));border:1px solid rgba(0,0,0,.2)"></div></div><div class="s">${L2('العضوية المميّزة · الأقمار الصناعية وكل الأدوات','Premium membership · satellite & all tools')}</div><div class="id"><div>${escH(lxName())}</div><div style="font-size:1.8rem;font-weight:900;opacity:.45">Q</div></div></div>`
    :`<div class="mcd fr"><div class="n gt">QOUT</div><div class="s">${L2('الباقة المجانية','Free plan')} · ${L2('المحاولات المتبقية','Trials left')}: ${trials}</div><div class="id"><div>${escH(lxName())}</div><button type="button" class="up" id="aUp">${L2('الترقية إلى Pro','Upgrade to Pro')}</button></div></div>`;
   const rows=[['about','user',L2('عن المنصة وصاحبها','About the platform & its founder'),'','go'],['hist','hist',L2('تقاريري المحفوظة','Saved reports'),n+' '+L2('تقرير','reports'),'go'],['ct','ct',L2('تواصل مع المهندس','Contact the engineer'),'','go']];
-  b.innerHTML=`<div class="acv"><div class="avr"><span>${escH(lxName().charAt(0).toUpperCase())}</span></div><b>${escH(lxName())}</b><small>${escH(mail)}</small></div>${card}
+  b.innerHTML=`<div class="acv"><button type="button" class="avr" id="aPh" aria-label="${L2('تغيير الصورة','Change photo')}" style="display:block;cursor:pointer;position:relative">${avIn()}<i style="position:absolute;bottom:-2px;inset-inline-end:-2px;width:26px;height:26px;border-radius:50%;background:var(--gold,#c9a24a);color:#0b2a1e;display:grid;place-items:center;font-size:.8rem;font-style:normal">📷</i></button><input type="file" id="phF" accept="image/*" hidden><b>${escH(lxName())}</b><small>${escH(mail)}</small>${USER?`<div style="margin-top:6px;font-size:.74rem"><a href="#" id="phC" style="color:var(--gold)">${L2('تغيير الصورة','Change photo')}</a>${UPH&&UPH.startsWith('data:')?` · <a href="#" id="phD" style="color:var(--er)">${L2('حذف','Remove')}</a>`:''}</div>`:''}</div>${card}
   <div class="st3"><div><b>${pro?'∞':trials}</b>${L2('المحاولات','Trials')}</div><div><b>${n}</b>${L2('تقارير','Reports')}</div><div><b>${pro?'Pro':L2('مجانية','Free')}</b>${L2('الباقة','Plan')}</div></div>
   ${rows.map(r=>`<button type="button" class="rw2" data-go="${r[4]==='go'?r[0]:''}"><div class="c">${IC(r[1])}</div><div>${r[2]}${r[3]?`<small>${r[3]}</small>`:''}</div><span class="ar">‹</span></button>`).join('')}
   <div class="rw2" style="cursor:default"><div class="c">${IC('lang')}</div><div>${L2('اللغة','Language')}</div><span class="ar" style="margin-inline-start:auto;opacity:1"><select id="aLang"><option value="ar">العربية</option><option value="en">English</option></select></span></div>
@@ -2734,7 +2767,7 @@ function acctRender(){const b=$('acctBox');if(!b)return;const n=hist().length,ma
   $('aTh').onclick=()=>$('theme').click();$('aPr').onclick=()=>$('prt').click();
   const ib=$('installB');if(ib&&getComputedStyle(ib).display==='none')$('aIn').style.display='none';else $('aIn').onclick=()=>ib.click();
   $('aOut').onclick=()=>{if(USER)$('logout').click();else $('mAuth').classList.add('on')};
-  const up=$('aUp');if(up)up.onclick=()=>payOpen()}
+  const up=$('aUp');if(up)up.onclick=()=>payOpen();phBind()}
 function navUI(id){document.body.className=document.body.className.replace(/\bpg-\S+/g,'').trim()+' pg-'+id;
   const m=id==='home'?'home':id==='tools'?'tools':id==='hist'?'hist':id==='acct'?'acct':id==='crop'?'crop':'tools';
   document.querySelectorAll('#bnav button').forEach(x=>{x.classList.toggle('on',x.dataset.n===m&&!x.classList.contains('fb')||(m==='crop'&&x.classList.contains('fb')))});
@@ -2842,7 +2875,7 @@ s.onclick=hide;setTimeout(hide,4600);
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,signOut,sendPasswordResetEmail,updateProfile} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import {getFirestore,initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,getDoc,setDoc,updateDoc,serverTimestamp,collection,addDoc,query,orderBy,limit,getDocs,deleteDoc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import {getFirestore,initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,getDoc,setDoc,updateDoc,serverTimestamp,collection,addDoc,query,orderBy,limit,getDocs,deleteDoc,where} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // >>> الصق هنا إعدادات Firebase بتاعتك (Project settings > Your apps > Web app) <<<
 const firebaseConfig={
@@ -2876,7 +2909,11 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     delPrivate:id=>deleteDoc(doc(db,'season_private',id)),
     adminUsers:async()=>(await getDocs(query(collection(db,'users'),orderBy('createdAt','desc'),limit(300)))).docs.map(x=>({id:x.id,...x.data()})),
     adminSet:(uid,d)=>updateDoc(doc(db,'users',uid),d),
+    setPhoto:async v=>{if(!ref)throw new Error('no user');await updateDoc(ref,{photo:String(v).slice(0,40000)})},
     adminAnn:d=>setDoc(doc(db,'config','app'),d),
+    adminStats:async()=>{const cut=new Date(Date.now()-150000),d7=new Date(Date.now()-6*864e5).toLocaleDateString('sv',{timeZone:'Africa/Cairo'});
+      const [a,v]=await Promise.all([getDocs(query(collection(db,'presence'),where('t','>',cut))),getDocs(query(collection(db,'visits'),where('day','>=',d7),limit(5000)))]);
+      return {active:a.docs.map(x=>x.id),visits:v.docs.map(x=>x.data())}},
     pullPrivate:async()=>(await getDocs(query(collection(db,'season_private'),orderBy('createdAt','desc'),limit(500)))).docs.map(x=>x.data()),
     pullResults:async()=>(await getDocs(query(collection(db,'season_results'),orderBy('createdAt','desc'),limit(500)))).docs.map(x=>x.data())
   };
@@ -2889,10 +2926,17 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
       window.onUser(u,d);
     }catch(e){console.error(e);window.onUser(u,null,e)}
   }
+  const cairoDay=()=>new Date().toLocaleDateString('sv',{timeZone:'Africa/Cairo'});
+  function beat(){const u=auth.currentUser;if(!u||document.hidden)return;
+    setDoc(doc(db,'presence',u.uid),{t:serverTimestamp(),day:cairoDay()}).catch(()=>{});
+    try{const d=cairoDay(),k='qVis'+u.uid;if(localStorage.getItem(k)!==d){localStorage.setItem(k,d);
+      setDoc(doc(db,'visits',d+'_'+u.uid),{uid:u.uid,day:d,createdAt:serverTimestamp()}).catch(()=>{localStorage.removeItem(k)})}}catch(e){}}
+  setInterval(beat,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat()});
   onAuthStateChanged(auth,u=>{
+    if(!u&&cur){deleteDoc(doc(db,'presence',cur.uid)).catch(()=>{})}
     cur=u;
     if(!u){ref=null;window.onUser(null);return}
-    load(u);
+    load(u);beat();
   });
 }
 </script>
