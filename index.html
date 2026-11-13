@@ -1466,24 +1466,62 @@ const fbGet=()=>{try{const a=JSON.parse(store(FBK)||'[]');return Array.isArray(a
  $('ybRes').insertAdjacentElement('afterend',card);
  const list=document.createElement('div');list.className='card';list.id='fbList';
  $('hl').closest('.card').insertAdjacentElement('afterend',list);
+ const cm=document.createElement('div');cm.className='card';cm.id='fbCommCard';
+ cm.innerHTML=`<h3>🌍 ${L2('نتائج المستخدمين مجمّعة','Aggregated user results')}</h3><p style="font-size:.8rem;color:var(--mut);margin:0 0 8px;line-height:1.8">${L2('مقارنة الإنتاج الفعلي بالمستهدف وتقييم التوصيات من كل المستخدمين الذين شاركوا نتائجهم مجهولة.','Actual vs target yield and recommendation ratings from all users who shared anonymously.')}</p><button type="button" class="sec" id="fbCommB">${L2('تحديث الإحصائيات','Refresh stats')}</button> <button type="button" class="sec" id="fbAdmB" style="opacity:.8">${L2('عرض بالأسماء (مشرف)','Identified view (admin)')}</button><div id="fbCommBody" style="margin-top:10px"></div>`;
+ list.insertAdjacentElement('afterend',cm);$('fbCommB').onclick=fbComm;$('fbAdmB').onclick=fbAdmin;
 })();
 function fbForm(){const b=$('fbBox');if(!b)return;b.style.display='';const key=$('crop').value;
  b.innerHTML=`<h3>📈 ${L2('سجّل نتيجة الموسم (يرفع دقة المنصة)','Log the season result (improves accuracy)')}</h3><p style="font-size:.8rem;color:var(--mut);margin:0 0 8px;line-height:1.8">${L2('بعد الحصاد سجّل الإنتاج الفعلي ورأيك في التوصية. التسجيلات تتجمع في "تقاريري" وتُظهر الفرق بين المستهدف والفعلي.','After harvest, log actual yield and your view of the recommendation. Entries collect in "My reports" and show target vs actual.')}</p>
  <div class="g2"><div class="f"><label>${L2('الإنتاج الفعلي (طن لكل وحدة المساحة)','Actual yield (t per area unit)')}</label><input id="fbY" type="number" inputmode="decimal" step=".1"></div>
  <div class="f"><label>${L2('تقييمك للتوصية','Your rating')}</label><select id="fbE"><option value="ok">${L2('مناسبة','Appropriate')}</option><option value="over">${L2('تسميد زائد عن اللازم','Over-fertilized')}</option><option value="under">${L2('ظهرت أعراض نقص','Deficiency symptoms')}</option><option value="salt">${L2('مشكلة ملوحة / ري','Salinity / irrigation problem')}</option></select></div></div>
  <div class="f"><label>${L2('ملاحظات (اختياري)','Notes (optional)')}</label><input id="fbN" type="text" maxlength="200"></div>
+ <label style="display:flex;gap:8px;align-items:flex-start;margin-top:8px;font-size:.78rem;line-height:1.7"><input type="checkbox" id="fbSh" checked> <span>${L2('أشارك نتيجتي مع إدارة المنصة باسمي وإيميلي (للمتابعة والتحقق من دقة التوصيات). تظهر للمستخدمين الآخرين مجمّعة بدون أي هوية، ويمكنني حذف نسختي المعرّفة لاحقاً.','I share this result with the platform team under my name and email (for follow-up and accuracy checks). Other users see only anonymous aggregates, and I can delete my identified copy later.')}</span></label>
  <button type="button" id="fbS" class="sec" style="margin-top:8px">${L2('حفظ النتيجة','Save result')}</button><span id="fbM" style="margin-inline-start:10px;font-size:.8rem"></span>`;
  $('fbS').onclick=()=>{const ya=g('fbY');if(!(ya>0)){$('fbM').textContent=L2('أدخل الإنتاج الفعلي','Enter actual yield');return}
   const a=fbGet(),v=LASTCALC&&LASTCALC.v||{};a.unshift({d:Date.now(),c:key,yt:g('yT'),ya,e:$('fbE').value,n:($('fbN').value||'').slice(0,200),s:LAST?LAST.healthScore:null,ph:v.ph,ec:v.ec,pc:$('pcS').value,kN:window.LASTD?LASTD.nN:null,kP:window.LASTD?LASTD.nP:null,kK:window.LASTD?LASTD.nK:null});
-  store(FBK,JSON.stringify(a.slice(0,200)));$('fbM').textContent=L2('✅ تم الحفظ','✅ Saved');fbRender()}}
+  store(FBK,JSON.stringify(a.slice(0,200)));$('fbM').textContent=L2('✅ تم الحفظ على جهازك','✅ Saved on your device');fbRender();
+  if($('fbSh').checked)fbShare(a[0])}}
+async function fbSh256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('qout|'+t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,24)}
+async function fbShare(x){
+ const m=$('fbM'),A=window.NamaaAuth;if(!A||!A.pushResult||!USER||!A.uid||!A.uid()){m.textContent+=' · '+L2('سجّل دخولك للمشاركة','Sign in to share');return}
+ try{const uf=(parseFloat($('unit').value)||4200.83)/4200.83,num=v=>Number.isFinite(+v)?+(+v).toFixed(3):null,o={u:await fbSh256(A.uid()),crop:x.c,yaF:num(x.ya/uf),e:x.e};
+  if(x.yt>0)o.ytF=num(x.yt/uf);if(x.s!=null)o.sc=Math.round(x.s);if(x.ph>0)o.ph=num(x.ph);if(x.ec>=0&&x.ec!=null)o.ec=num(x.ec);if(x.pc)o.pc=String(x.pc).slice(0,12);
+  if(x.kN!=null){o.dN=num(x.kN/uf);o.dP=num(x.kP/uf);o.dK=num(x.kK/uf)}const gv=$('gov').value;if(gv)o.gov=gv.slice(0,30);
+  const pv={...o};delete pv.u;if(x.n)pv.n=String(x.n).slice(0,200);const fm=($('fname').value||'').slice(0,60);if(fm)pv.farm=fm;const pid=await A.pushResult(o,pv);const a=fbGet();if(a[0]&&a[0].d===x.d){a[0].sh=1;a[0].pid=pid;store(FBK,JSON.stringify(a))}m.textContent=L2('✅ تم الحفظ والمشاركة','✅ Saved and shared');fbRender()}
+ catch(e){console.error(e);m.textContent+=' · '+L2('تعذّرت المشاركة (تأكد من الإنترنت)','Sharing failed (check connection)')}}
+async function fbAdmin(){
+ const b=$('fbCommBody'),A=window.NamaaAuth;if(!A||!A.pullPrivate||!USER){b.innerHTML=`<div class="badge wn">${L2('سجّل دخولك كمشرف.','Sign in as admin.')}</div>`;return}
+ b.innerHTML=L2('جارٍ التحميل…','Loading…');
+ try{const rows=await A.pullPrivate(),nm=c=>Object.prototype.hasOwnProperty.call(C,c)?C[c][0]:c,el={ok:'مناسبة',over:'زائد',under:'نقص',salt:'ملوحة/ري'};window.FBADM=rows;
+  b.innerHTML=`<div style="font-size:.8rem;margin-bottom:6px">${L2('النتائج المعرّفة (للمشرف)','Identified results (admin)')}: <b>${rows.length}</b></div>
+  <div style="max-height:340px;overflow:auto;font-size:.76rem;line-height:1.8">${rows.slice(0,100).map(x=>`<div style="padding:6px 0;border-bottom:1px solid var(--bd,#ffffff22)"><b>${escH(x.name||'—')}</b> · <span dir="ltr">${escH(x.email||'')}</span><br>${escH(nm(x.crop))} · ${L2('مستهدف','target')} ${x.ytF??'—'} → ${L2('فعلي','actual')} <b>${x.yaF}</b> · ${el[x.e]||''}${x.gov?' · '+escH(x.gov):''}${x.farm?' · '+escH(x.farm):''}${x.n?'<br>'+escH(x.n):''}</div>`).join('')}</div>
+  <button type="button" class="sec" id="fbAdmCsv" style="margin-top:8px">${L2('تصدير CSV بالأسماء','Export identified CSV')}</button>`;
+  $('fbAdmCsv').onclick=()=>{const h=['name','email','crop','target_per_feddan','actual_per_feddan','rating','soil_score','ph','ec','dose_N','dose_P2O5','dose_K2O','prev_crop','governorate','farm','note'],q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+   const csv='\ufeff'+h.join(',')+'\n'+rows.map(x=>[x.name,x.email,x.crop,x.ytF,x.yaF,x.e,x.sc,x.ph,x.ec,x.dN,x.dP,x.dK,x.pc,x.gov,x.farm,x.n].map(q).join(',')).join('\n');
+   const u=URL.createObjectURL(new Blob([csv],{type:'text/csv'})),a=document.createElement('a');a.href=u;a.download='qout_identified_results.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}}
+ catch(e){console.error(e);b.innerHTML=`<div class="badge er">${L2('غير مصرّح — هذه الشاشة للمشرف فقط (إيميل المشرف في قواعد Firestore).','Not authorized — admin only (admin email set in Firestore rules).')}</div>`}}
+async function fbComm(){
+ const b=$('fbCommBody'),A=window.NamaaAuth;if(!b)return;
+ if(!A||!A.pullResults||!USER){b.innerHTML=`<div class="badge wn">${L2('سجّل دخولك لعرض إحصائيات المستخدمين.','Sign in to view community stats.')}</div>`;return}
+ b.innerHTML=L2('جارٍ التحميل…','Loading…');
+ try{const rows=(await A.pullResults()).filter(x=>x&&x.crop&&Object.prototype.hasOwnProperty.call(C,x.crop)&&x.yaF>0),by={};
+  rows.forEach(x=>{(by[x.crop]=by[x.crop]||[]).push(x)});
+  const med=a=>{const s=[...a].sort((p,q)=>p-q),n=s.length;return n?(n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2):null};
+  const out=Object.entries(by).sort((p,q)=>q[1].length-p[1].length).map(([k,a])=>{
+   const rt=a.filter(x=>x.ytF>0).map(x=>x.yaF/x.ytF).filter(r=>r>=.2&&r<=3),n=a.length,ok=a.filter(x=>x.e==='ok').length,ov=a.filter(x=>x.e==='over').length,un=a.filter(x=>x.e==='under').length,sa=a.filter(x=>x.e==='salt').length;
+   const md=med(rt),cf=n>=10?L2('ثقة مقبولة','fair'):n>=5?L2('ثقة منخفضة','low'):L2('عدد قليل جداً','very few'),cl=n>=10?'ok':n>=5?'wn':'er';
+   const flag=n>=5&&un/n>=.3?`<div style="font-size:.76rem;color:var(--er)">⚠️ ${L2('أكثر من 30% أبلغوا عن نقص — قد تكون التوصية منخفضة لهذا المحصول.','Over 30% report deficiency — the recommendation may be low for this crop.')}</div>`:n>=5&&ov/n>=.3?`<div style="font-size:.76rem;color:var(--er)">⚠️ ${L2('أكثر من 30% أبلغوا عن تسميد زائد — قد تكون التوصية عالية.','Over 30% report over-fertilization — the recommendation may be high.')}</div>`:'';
+   return`<div style="padding:8px 0;border-bottom:1px solid var(--bd,#ffffff22)"><div style="display:flex;justify-content:space-between;align-items:center"><b>${escH(C[k][0])}</b><span class="badge ${cl}" style="padding:2px 8px;margin:0">${n} · ${cf}</span></div><div style="font-size:.8rem;margin:3px 0">${L2('الفعلي ÷ المستهدف (وسيط)','Actual ÷ target (median)')}: <b>${md==null?'—':Math.round(md*100)+'%'}</b> · ${L2('مناسبة','appropriate')} ${Math.round(ok/n*100)}% · ${L2('زائد','over')} ${ov} · ${L2('نقص','deficiency')} ${un} · ${L2('ملوحة/ري','salt/irrig.')} ${sa}</div>${flag}</div>`}).join('');
+  b.innerHTML=out?`<div style="font-size:.8rem;margin-bottom:6px">${L2('إجمالي النتائج المشاركة','Total shared results')}: <b>${rows.length}</b> (${L2('آخر 500 كحد أقصى','latest 500 max')})</div>${out}<p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('بيانات مشاركة من مستخدمين ولم تُراجع؛ تُعرض كمؤشر فقط وتُستبعد القيم الشاذة (أقل من 20% أو أكثر من 300% من المستهدف).','User-shared, unreviewed data shown as an indicator only; outliers (<20% or >300% of target) excluded.')}</p>`:`<p style="font-size:.82rem;color:var(--mut)">${L2('لا توجد نتائج مشتركة بعد.','No shared results yet.')}</p>`}
+ catch(e){console.error(e);b.innerHTML=`<div class="badge er">${L2('تعذّر التحميل — تأكد من نشر قواعد Firestore الجديدة.','Load failed — make sure the new Firestore rules are published.')}</div>`}}
 function fbRender(){const l=$('fbList');if(!l)return;const a=fbGet();
  if(!a.length){l.innerHTML=`<h3>📈 ${L2('نتائج المواسم المسجّلة','Logged season results')}</h3><p style="font-size:.82rem;color:var(--mut)">${L2('لا توجد نتائج بعد. بعد كل موسم سجّل الإنتاج الفعلي من صفحة النتائج.','Nothing logged yet.')}</p>`;return}
  const rr=a.filter(x=>x.yt>0).map(x=>x.ya/x.yt),avg=rr.length?rr.reduce((s,x)=>s+x,0)/rr.length:0,ok=a.filter(x=>x.e==='ok').length;
  const nm=c=>Object.prototype.hasOwnProperty.call(C,c)?C[c][0]:c,el={ok:L2('مناسبة','Appropriate'),over:L2('زائد','Over'),under:L2('نقص','Deficiency'),salt:L2('ملوحة/ري','Salt/irrig.')};
  l.innerHTML=`<h3>📈 ${L2('نتائج المواسم المسجّلة','Logged season results')}</h3><div class="kpis"><div class="kpi"><span>${L2('عدد النتائج','Entries')}</span><b>${a.length}</b></div><div class="kpi"><span>${L2('الفعلي ÷ المستهدف','Actual ÷ target')}</span><b>${rr.length?Math.round(avg*100)+'%':'—'}</b></div><div class="kpi"><span>${L2('توصية مناسبة','Rated appropriate')}</span><b>${Math.round(ok/a.length*100)}%</b></div></div>
  <ul style="padding:0 18px 0 0;font-size:.82rem;line-height:1.9">${a.slice(0,20).map((x,i)=>`<li>${escH(nm(x.c))} · ${L2('مستهدف','target')} ${x.yt||'—'} → ${L2('فعلي','actual')} <b>${x.ya}</b> · ${el[x.e]||''} · ${new Date(x.d).toLocaleDateString(lang==='en'?'en-GB':'ar-EG')}${x.n?' · '+escH(x.n):''} <a href="#" data-fd="${i}" style="color:var(--er)">✕</a></li>`).join('')}</ul>
- <button type="button" class="sec" id="fbCsv">${L2('تصدير CSV','Export CSV')}</button><p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('محفوظة على جهازك فقط. لتجميع نتائج كل المستخدمين لتحسين المنصة يلزم ربطها بقاعدة بيانات (خطوة لاحقة).','Stored on this device only. Pooling results across users needs a database (later step).')}</p>`;
- l.querySelectorAll('[data-fd]').forEach(e=>e.onclick=ev=>{ev.preventDefault();const b=fbGet();b.splice(+e.dataset.fd,1);store(FBK,JSON.stringify(b));fbRender()});
+ <button type="button" class="sec" id="fbCsv">${L2('تصدير CSV','Export CSV')}</button><p style="font-size:.74rem;color:var(--mut);margin:8px 0 0">${L2('الحذف (✕) يمسح نسختك المعرّفة من قاعدة البيانات أيضاً؛ النسخة المجمّعة المجهولة لا يمكن ربطها بك ولا حذفها.','Delete (✕) also removes your identified copy from the database; the anonymous aggregate copy cannot be linked to you or deleted.')}</p>`;
+ l.querySelectorAll('[data-fd]').forEach(e=>e.onclick=ev=>{ev.preventDefault();const b=fbGet(),x=b[+e.dataset.fd];if(x&&x.pid&&window.NamaaAuth&&NamaaAuth.delPrivate)NamaaAuth.delPrivate(x.pid).catch(()=>{});b.splice(+e.dataset.fd,1);store(FBK,JSON.stringify(b));fbRender()});
  $('fbCsv').onclick=()=>{const h=['date','crop','target_yield','actual_yield','rating','prev_crop','soil_score','ph','ec','dose_N','dose_P2O5','dose_K2O','note'],q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
   const csv='﻿'+h.join(',')+'\n'+fbGet().map(x=>[new Date(x.d).toISOString().slice(0,10),x.c,x.yt,x.ya,x.e,x.pc,x.s,x.ph,x.ec,x.kN,x.kP,x.kK,x.n].map(q).join(',')).join('\n');
   const u=URL.createObjectURL(new Blob([csv],{type:'text/csv'})),A=document.createElement('a');A.href=u;A.download='qout_season_results.csv';A.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}}
@@ -1536,7 +1574,7 @@ function dpFlags(){
 {const oc=$('crop').onchange;$('crop').onchange=function(){oc.apply(this,arguments);if(!DPT[$('crop').value]){DPS.on=false}dpLock();dpRender()}}
 {const r0=run;run=function(c,m){r0(c,m);if(DPS.on&&DPT[$('crop').value]){const f=dpFlags().filter(x=>x[0]!=='ok'),el=$('warns');if(el&&f.length)el.innerHTML=el.innerHTML.replace(/<div class="badge ok">[^<]*لا تحذيرات حرجة[^<]*<\/div>/,'')+f.map(x=>`<div class="badge ${x[0]}">${x[1]}</div>`).join('')}}}
 dpRender();
-const APP_VER='2026.11.12-12';
+const APP_VER='2026.11.12-14';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2767,7 +2805,7 @@ s.onclick=hide;setTimeout(hide,4600);
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,signOut,sendPasswordResetEmail,updateProfile} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import {getFirestore,initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,getDoc,setDoc,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import {getFirestore,initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,getDoc,setDoc,updateDoc,serverTimestamp,collection,addDoc,query,orderBy,limit,getDocs,deleteDoc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // >>> الصق هنا إعدادات Firebase بتاعتك (Project settings > Your apps > Web app) <<<
 const firebaseConfig={
@@ -2792,7 +2830,15 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     token:()=>auth.currentUser?auth.currentUser.getIdToken():Promise.resolve(null),
     setTrials:n=>{if(ref)updateDoc(ref,{trials:n}).catch(()=>{})},
     retry:()=>{if(cur)load(cur)},
-    config:async()=>{const s=await getDoc(doc(db,'config','app'));return s.exists()?s.data():null}
+    config:async()=>{const s=await getDoc(doc(db,'config','app'));return s.exists()?s.data():null},
+    uid:()=>auth.currentUser?auth.currentUser.uid:null,
+    pushResult:async(pub,priv)=>{const u=auth.currentUser;if(!u)throw new Error('no user');
+      const p=await addDoc(collection(db,'season_private'),{...priv,uid:u.uid,email:String(u.email||'').toLowerCase(),name:String(u.displayName||'').slice(0,60),createdAt:serverTimestamp()});
+      try{await addDoc(collection(db,'season_results'),{...pub,createdAt:serverTimestamp()})}catch(e){console.error(e)}
+      return p.id},
+    delPrivate:id=>deleteDoc(doc(db,'season_private',id)),
+    pullPrivate:async()=>(await getDocs(query(collection(db,'season_private'),orderBy('createdAt','desc'),limit(500)))).docs.map(x=>x.data()),
+    pullResults:async()=>(await getDocs(query(collection(db,'season_results'),orderBy('createdAt','desc'),limit(500)))).docs.map(x=>x.data())
   };
   async function load(u){
     ref=doc(db,'users',u.uid);
