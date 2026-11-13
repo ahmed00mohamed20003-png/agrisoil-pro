@@ -1574,7 +1574,44 @@ function dpFlags(){
 {const oc=$('crop').onchange;$('crop').onchange=function(){oc.apply(this,arguments);if(!DPT[$('crop').value]){DPS.on=false}dpLock();dpRender()}}
 {const r0=run;run=function(c,m){r0(c,m);if(DPS.on&&DPT[$('crop').value]){const f=dpFlags().filter(x=>x[0]!=='ok'),el=$('warns');if(el&&f.length)el.innerHTML=el.innerHTML.replace(/<div class="badge ok">[^<]*لا تحذيرات حرجة[^<]*<\/div>/,'')+f.map(x=>`<div class="badge ${x[0]}">${x[1]}</div>`).join('')}}}
 dpRender();
-const APP_VER='2026.11.12-14';
+// ===== لوحة تحكم المشرف =====
+const ADMINS=['ahmed00mohamed20003@gmail.com'];
+const isAdm=()=>!!(USER&&USER.email&&ADMINS.includes(String(USER.email).toLowerCase()));
+let ADM={rows:[],q:''};
+async function admRender(){
+ const b=$('admBox');if(!b)return;const A=window.NamaaAuth;
+ if(!isAdm()||!A||!A.adminUsers){b.innerHTML=`<div class="badge er">${L2('هذه الصفحة للمشرف فقط.','Admin only.')}</div>`;return}
+ b.innerHTML=`<div id="admStat" class="mut">${L2('جارٍ التحميل…','Loading…')}</div>`;
+ try{ADM.rows=await A.adminUsers()}catch(e){console.error(e);b.innerHTML=`<div class="badge er">${L2('غير مصرّح أو القواعد غير منشورة. سجّل الدخول بحساب Google (إيميل موثّق) وتأكد من نشر قواعد Firestore الأخيرة.','Not authorized or rules not published. Sign in with Google (verified email) and publish the latest rules.')}</div>`;return}
+ const R=ADM.rows,pr=R.filter(x=>x.pro).length;
+ b.innerHTML=`<div class="kpis"><div class="kpi"><span>${L2('المستخدمون','Users')}</span><b>${R.length}</b></div><div class="kpi"><span>Pro</span><b>${pr}</b></div><div class="kpi"><span>${L2('محاولات صفرية','Out of trials')}</span><b>${R.filter(x=>!x.pro&&x.trials<=0).length}</b></div></div>
+ <div class="f" style="margin:10px 0"><label>${L2('بحث بالإيميل','Search by email')}</label><input id="admQ" type="text" dir="ltr" value="${escH(ADM.q)}"></div><div id="admList"></div>
+ <h3 style="margin-top:18px">📢 ${L2('إعلان لكل المستخدمين','Announcement for all users')}</h3>
+ <div class="f"><label>${L2('النص بالعربية','Arabic text')}</label><textarea id="anM" rows="2" maxlength="300"></textarea></div>
+ <div class="f"><label>${L2('النص بالإنجليزية (اختياري)','English text (optional)')}</label><textarea id="anE" rows="2" maxlength="300"></textarea></div>
+ <div class="f"><label>${L2('ينتهي في (اختياري)','Expires (optional)')}</label><input id="anU" type="date"></div>
+ <div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="sec" id="anP">${L2('نشر الإعلان','Publish')}</button><button type="button" class="sec" id="anD">${L2('إيقاف الإعلان','Stop announcement')}</button></div><div id="anMsg" style="font-size:.8rem;margin-top:6px"></div>`;
+ $('admQ').oninput=e=>{ADM.q=e.target.value;admList()};admList();
+ const ann=async clear=>{const m=$('anM').value.trim();if(!clear&&!m){$('anMsg').textContent=L2('اكتب نص الإعلان','Enter text');return}
+  const o=clear?{msg:'',msgEn:'',until:'',id:'off-'+Date.now()}:{msg:m.slice(0,300),msgEn:$('anE').value.trim().slice(0,300),until:$('anU').value||'',id:String(Date.now())};
+  try{await A.adminAnn(o);$('anMsg').textContent=clear?L2('✅ تم إيقاف الإعلان','✅ Stopped'):L2('✅ تم النشر','✅ Published')}catch(e){console.error(e);$('anMsg').textContent=L2('تعذّر الحفظ — تأكد من القواعد','Failed — check rules')}};
+ $('anP').onclick=()=>ann(false);$('anD').onclick=()=>ann(true)}
+function admList(){
+ const l=$('admList');if(!l)return;const q=ADM.q.trim().toLowerCase(),R=ADM.rows.filter(x=>!q||String(x.email||'').toLowerCase().includes(q)).slice(0,60);
+ l.innerHTML=R.length?R.map(x=>`<div class="admU" data-u="${escH(x.id)}" style="padding:10px 0;border-bottom:1px solid var(--bd,#ffffff22)"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span dir="ltr" style="font-size:.82rem;word-break:break-all">${escH(x.email||x.id)}</span><span class="badge ${x.pro?'ok':'wn'}" style="margin:0;padding:2px 8px">${x.pro?'PRO':(x.trials||0)+' '+L2('محاولة','trials')}</span></div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button type="button" class="sec" data-a="+5">+5</button><button type="button" class="sec" data-a="+20">+20</button><button type="button" class="sec" data-a="set">${L2('تحديد رقم','Set')}</button><button type="button" class="sec" data-a="pro">${x.pro?L2('إلغاء Pro','Remove Pro'):L2('تفعيل Pro','Make Pro')}</button></div></div>`).join(''):`<p class="mut">${L2('لا نتائج','No results')}</p>`;
+ l.querySelectorAll('.admU').forEach(d=>d.querySelectorAll('[data-a]').forEach(btn=>btn.onclick=async()=>{
+  const x=ADM.rows.find(r=>r.id===d.dataset.u);if(!x)return;let up=null;const a=btn.dataset.a;
+  if(a==='+5'||a==='+20')up={trials:Math.min(100000,(x.trials||0)+(a==='+5'?5:20))};
+  else if(a==='set'){const v=prompt(L2('عدد المحاولات الجديد:','New trials number:'),String(x.trials||0));if(v===null)return;const n=Math.round(+v);if(!(n>=0&&n<=100000)){alert(L2('رقم غير صحيح','Invalid'));return}up={trials:n}}
+  else{if(!confirm((x.pro?L2('إلغاء Pro عن ','Remove Pro from '):L2('تفعيل Pro لـ ','Make Pro: '))+(x.email||x.id)+'؟'))return;up={pro:!x.pro}}
+  try{await NamaaAuth.adminSet(x.id,up);Object.assign(x,up);admList()}catch(e){console.error(e);alert(L2('تعذّر الحفظ — تأكد من نشر القواعد وأنك مسجّل بحساب Google موثّق.','Failed — check rules and that you are signed in with a verified account.'))}}));
+}
+{const p=document.createElement('div');p.className='pn';p.id='p-admin';p.innerHTML=`<div class="card"><h3>🛠️ ${L2('لوحة تحكم المشرف','Admin panel')}</h3><div id="admBox"></div></div>`;$('p-about').insertAdjacentElement('afterend',p)}
+{const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
+{const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
+  const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
+const APP_VER='2026.11.12-15';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2837,6 +2874,9 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
       try{await addDoc(collection(db,'season_results'),{...pub,createdAt:serverTimestamp()})}catch(e){console.error(e)}
       return p.id},
     delPrivate:id=>deleteDoc(doc(db,'season_private',id)),
+    adminUsers:async()=>(await getDocs(query(collection(db,'users'),orderBy('createdAt','desc'),limit(300)))).docs.map(x=>({id:x.id,...x.data()})),
+    adminSet:(uid,d)=>updateDoc(doc(db,'users',uid),d),
+    adminAnn:d=>setDoc(doc(db,'config','app'),d),
     pullPrivate:async()=>(await getDocs(query(collection(db,'season_private'),orderBy('createdAt','desc'),limit(500)))).docs.map(x=>x.data()),
     pullResults:async()=>(await getDocs(query(collection(db,'season_results'),orderBy('createdAt','desc'),limit(500)))).docs.map(x=>x.data())
   };
