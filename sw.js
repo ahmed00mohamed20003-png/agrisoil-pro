@@ -52,6 +52,14 @@ async function setBadge(n) {
   try { if (self.navigator && self.navigator.setAppBadge) { if (n > 0) await self.navigator.setAppBadge(n); else await self.navigator.clearAppBadge(); } } catch (e) {}
 }
 
+// الرقم = عدد الإشعارات الظاهرة فعلاً (يزيد مع كل إشعار، وينقص لما المستخدم يمسح)
+async function syncBadge() {
+  try { const l = await self.registration.getNotifications(); await setBadge(l.length); }
+  catch (e) { await setBadge((await getBadge()) + 1); }
+}
+
+self.addEventListener('notificationclose', e => { e.waitUntil(syncBadge()); });
+
 self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (err) { d = { b: e.data ? e.data.text() : '' }; }
@@ -61,16 +69,17 @@ self.addEventListener('push', e => {
       wins.forEach(c => c.postMessage({ type: 'nload' }));
       return;
     }
-    await setBadge((await getBadge()) + 1);
     await self.registration.showNotification(d.t || 'قوت', {
-      body: d.b || '', icon: 'apple-touch-icon.png', tag: 'qout-notice', renotify: true, dir: 'auto', data: { url: self.registration.scope }
+      body: d.b || '', icon: 'apple-touch-icon.png', tag: 'qout-' + Date.now(), dir: 'auto', data: { url: self.registration.scope }
     });
+    await syncBadge();
   })());
 });
 
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   e.waitUntil((async () => {
+    await syncBadge();
     const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     for (const c of wins) { if ('focus' in c) { await c.focus(); c.postMessage({ type: 'nopen' }); return; } }
     if (self.clients.openWindow) await self.clients.openWindow((e.notification.data && e.notification.data.url) || self.registration.scope);
