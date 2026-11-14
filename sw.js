@@ -32,3 +32,52 @@ self.addEventListener('fetch', e => {
     })());
     return;
   }
+
+  e.respondWith((async () => {
+    try {
+      const res = await fetch(r);
+      if (res.ok) { const copy = res.clone(); (await caches.open(CACHE)).put(r, copy); }
+      return res;
+    } catch (err) {
+      return (await caches.match(r)) || Response.error();
+    }
+  })());
+});
+
+// ===== عدّاد الأيقونة (يُحفظ في الكاش لأن الـ SW قد يُغلق في أي وقت) =====
+async function getBadge() { try { const r = await (await caches.open(META)).match('badge'); return r ? (parseInt(await r.text(), 10) || 0) : 0; } catch (e) { return 0; } }
+async function setBadge(n) {
+  n = Math.max(0, n | 0);
+  try { await (await caches.open(META)).put('badge', new Response(String(n))); } catch (e) {}
+  try { if (self.navigator && self.navigator.setAppBadge) { if (n > 0) await self.navigator.setAppBadge(n); else await self.navigator.clearAppBadge(); } } catch (e) {}
+}
+
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (err) { d = { b: e.data ? e.data.text() : '' }; }
+  e.waitUntil((async () => {
+    const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    if (wins.some(c => c.visibilityState === 'visible')) {      // التطبيق مفتوح أمامه: حدّث الجرس فقط
+      wins.forEach(c => c.postMessage({ type: 'nload' }));
+      return;
+    }
+    await setBadge((await getBadge()) + 1);
+    await self.registration.showNotification(d.t || 'قوت', {
+      body: d.b || '', icon: 'apple-touch-icon.png', tag: 'qout-notice', renotify: true, dir: 'auto', data: { url: self.registration.scope }
+    });
+  })());
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil((async () => {
+    const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const c of wins) { if ('focus' in c) { await c.focus(); c.postMessage({ type: 'nopen' }); return; } }
+    if (self.clients.openWindow) await self.clients.openWindow((e.notification.data && e.notification.data.url) || self.registration.scope);
+  })());
+});
+
+self.addEventListener('message', e => {
+  const m = e.data || {};
+  if (m.type === 'badge') e.waitUntil(setBadge(m.n));
+});
