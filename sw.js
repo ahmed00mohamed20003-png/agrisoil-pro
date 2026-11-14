@@ -89,4 +89,8 @@ self.addEventListener('notificationclick', e => {
 self.addEventListener('message', e => {
   const m = e.data || {};
   if (m.type === 'badge') e.waitUntil(setBadge(m.n));
+  if (m.type === 'clear') e.waitUntil((async () => {       // المستخدم شاف الإشعارات جوه التطبيق: امسحها من بره
+    try { for (const n of await self.registration.getNotifications()) n.close(); } catch (err) {}
+    await setBadge(0);
+  })());
 });
