@@ -1662,7 +1662,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.14-3';
+const APP_VER='2026.11.14-4';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1731,7 +1731,6 @@ function nOpen(){const seen=nSeen(),un=new Set(nUnread().map(n=>n.id));
     if(P==='default')pm.innerHTML=`<button type="button" class="sec" id="nAsk" style="width:100%">🔔 ${L2('تفعيل تنبيهات الجهاز','Enable device alerts')}</button><p class="mut" style="font-size:.7rem;margin:6px 0 0">${L2('يصلك تنبيه ورقم على أيقونة التطبيق حتى لو التطبيق مقفول. على الآيفون: ثبّت التطبيق على الشاشة الرئيسية أولاً.','You get an alert and a badge on the app icon even when the app is closed. On iPhone: add the app to your Home Screen first.')}</p>`;
     else if(P==='granted')pm.innerHTML=`<p class="mut" style="font-size:.74rem;margin:0">✅ ${L2('تنبيهات الجهاز مفعّلة.','Device alerts are on.')}</p>`;
     else pm.innerHTML=`<p class="mut" style="font-size:.74rem;margin:0">🔕 ${L2('التنبيهات محظورة من إعدادات المتصفح — فعّلها من إعدادات الموقع.','Alerts are blocked — enable them in the site settings.')}</p>`;
-    pm.insertAdjacentHTML('beforeend',`<div style="margin-top:8px"><a href="#" id="nDg" style="color:var(--gold);font-size:.76rem">🔍 ${L2('فحص التنبيهات','Check alerts')}</a><div id="nDiag" style="margin-top:6px"></div></div>`);$('nDg').onclick=e=>{e.preventDefault();pushDiag()};
     if($('nAsk'))$('nAsk').onclick=async()=>{try{await Notification.requestPermission()}catch(e){}if(Notification.permission==='granted')await pushEnsure();nOpen()}}
   $('mNot').classList.add('on')}
 $('bellB').onclick=nOpen;$('nX').onclick=()=>$('mNot').classList.remove('on');$('mNot').addEventListener('click',e=>{if(e.target===$('mNot'))$('mNot').classList.remove('on')});
@@ -1750,18 +1749,6 @@ async function pushSend(title,body){const A=window.NamaaAuth,tk=await A.token();
     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));sent+=j.sent||0;fail+=j.failed||0;(j.dead||[]).forEach(x=>dead.push(x));if(j.next==null)break;off=j.next}
   if(A.delPush)dead.forEach(id=>A.delPush(id).catch(()=>{}));return{sent,fail}}
 if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',e=>{const t=e.data&&e.data.type;if(t==='nload'&&USER)nLoad();else if(t==='nopen'&&USER){nLoad().then(()=>nOpen())}});
-async function pushDiag(){const box=$('nDiag'),L=[],ok=(b,t)=>L.push((b?'✅ ':'❌ ')+t);box.innerHTML='<span class="spn"></span>'+L2('جارٍ الفحص…','Checking…');
-  try{ok(location.protocol==='https:',L2('الموقع HTTPS','HTTPS site'));ok(('serviceWorker' in navigator)&&('PushManager' in window)&&('Notification' in window),L2('المتصفح يدعم التنبيهات','Browser supports push'));
-    ok(Notification.permission==='granted',L2('إذن الإشعارات: ','Permission: ')+Notification.permission);
-    const reg=await navigator.serviceWorker.getRegistration();ok(!!reg,L2('sw.js مسجّل','sw.js registered'));ok(!!navigator.serviceWorker.controller,L2('sw.js يتحكم في الصفحة (أعد فتح التطبيق لو ❌)','sw.js controls the page (reopen the app if ❌)'));
-    try{const t=await(await fetch('sw.js?_v='+Date.now(),{cache:'no-store'})).text();ok(/showNotification/.test(t),L2('نسخة sw.js الجديدة مرفوعة على GitHub','New sw.js is on GitHub'))}catch(e){ok(false,L2('تعذّر قراءة sw.js','Cannot read sw.js'))}
-    let sub=reg&&await reg.pushManager.getSubscription();
-    if(!sub&&reg&&Notification.permission==='granted'){try{sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID_PUB)})}catch(e){L.push('❌ subscribe: '+String(e.message||e).slice(0,90))}}
-    ok(!!sub,L2('الجهاز مشترك في Push','Device is subscribed'));
-    if(sub){try{await NamaaAuth.savePush(await pushId(sub.endpoint),JSON.stringify(sub.toJSON()));ok(true,L2('الجهاز محفوظ في قاعدة البيانات','Device saved in database'))}
-      catch(e){const c=String(e.code||e.message||e);ok(false,L2('فشل حفظ الجهاز: ','Saving failed: ')+c.slice(0,60)+(/permission/i.test(c)?L2(' ← انشر قواعد Firestore الأخيرة',' ← publish the latest Firestore rules'):''))}}
-  }catch(e){L.push('❌ '+String(e.message||e).slice(0,90))}
-  box.innerHTML=L.map(x=>`<div style="font-size:.78rem;line-height:1.9">${escH(x)}</div>`).join('')}
 function annCheck(){NFIRST=true;NOTS=[];nLoad();pushEnsure()}
 setInterval(()=>{if(USER)nLoad()},180000);
 addEventListener('offline',()=>{NET_OK=false;gateUI()});
