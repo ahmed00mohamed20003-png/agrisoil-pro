@@ -266,6 +266,12 @@ body:not(.pg-home):not(.pg-tools):not(.pg-acct) #qtb,body.pg-tools #qtb,body.pg-
 .hf .in{position:absolute;bottom:14px;inset-inline:16px;display:flex;justify-content:space-between;align-items:flex-end;color:#f3ecd8}
 .hf .lb{font-size:.72rem;opacity:.8}.hf .nm{font-size:2.5rem;font-weight:900;line-height:1.05}.hf .dl{font-size:.78rem;margin-top:2px}
 .hf .cta{align-self:center;padding:9px 16px;border-radius:99px;background:linear-gradient(135deg,#f6e3a6,#c9a24a);color:#1f1500;font-weight:800;font-size:.8rem}
+.hf .hv{position:absolute;inset:0;display:grid;grid-template:1fr 1fr/1fr 1fr;gap:2px;background:#f6e3a6aa}
+.hf.big{height:340px}
+.hf .hv>div{position:relative;overflow:hidden;background:linear-gradient(160deg,#143a22,#0a1f13)}
+.hf .cta2{position:absolute;bottom:14px;inset-inline:0;margin:auto;width:max-content;padding:9px 18px;border-radius:99px;background:rgba(4,18,11,.72);border:1px solid rgba(246,227,166,.55);color:#f6e3a6;font-weight:800;font-size:.8rem;backdrop-filter:blur(4px)}
+.hf .hv video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s}
+.hf .hv video.on{opacity:1}
 .sc2{display:flex;justify-content:space-between;align-items:center;margin:18px 2px 9px;font-weight:800;font-size:.95rem}.sc2 small{color:var(--gold);font-weight:600;font-size:.74rem;cursor:pointer}
 .tg3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .tl3{border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:22px;padding:14px 6px;text-align:center;font-size:.76rem;font-weight:700;cursor:pointer;min-height:92px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
@@ -1662,7 +1668,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.14-5';
+const APP_VER='2026.11.14-8';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2779,6 +2785,16 @@ function lxField(w,h,seed){const cols=['#2f7d3b','#3c9446','#4aa850','#8a9a2f','
  for(let i=0;i<6;i++)for(let j=0;j<5;j++){const x=i*w/6-8+r()*8,y=j*h/5-8+r()*8,ww=w/6+12,hh=h/5+12;o+=`<polygon points="${x},${y+r()*7} ${x+ww},${y+r()*7} ${x+ww-r()*7},${y+hh} ${x+r()*7},${y+hh-r()*5}" fill="${cols[Math.floor(r()*cols.length)]}"/>`;for(let k=0;k<8;k++)o+=`<line x1="${x}" y1="${y+k*hh/8+3}" x2="${x+ww}" y2="${y+k*hh/8+3}" stroke="#00000018"/>`}
  o+=`<path d="M0 ${h*.62} C ${w*.3} ${h*.5} ${w*.6} ${h*.78} ${w} ${h*.58}" stroke="#d9c9a0" stroke-width="5" fill="none" opacity=".5"/>`;
  o+=`<polygon points="${w*.2},${h*.2} ${w*.76},${h*.16} ${w*.84},${h*.6} ${w*.32},${h*.72}" fill="#f6e3a622" stroke="#f6e3a6" stroke-width="2.4"/>`+[[.2,.2],[.76,.16],[.84,.6],[.32,.72]].map(p=>`<circle cx="${w*p[0]}" cy="${h*p[1]}" r="5" fill="#06100b" stroke="#f6e3a6" stroke-width="2"/>`).join('');return o}
+const HV_SRC=['vid/hv1.mp4.mp4','vid/hv2.mp4.mp4','vid/hv3.mp4.mp4','vid/hv4.mp4.mp4'];
+function lxHv(){return `<div class="hv">${[0,1,2,3].map(i=>`<div><video muted loop playsinline preload="none" data-s="${HV_SRC[i]}" aria-hidden="true"></video></div>`).join('')}</div>`}
+let HV_IO=null;
+function lxVid(){try{if(HV_IO){HV_IO.disconnect();HV_IO=null}
+ const root=document.getElementById('hHero');if(!root)return;const vs=[...root.querySelectorAll('.hv video')];if(!vs.length)return;
+ const cn=navigator.connection||{};if(matchMedia('(prefers-reduced-motion:reduce)').matches||cn.saveData||/(^|-)2g$/.test(cn.effectiveType||''))return;
+ vs.forEach(v=>{v.muted=true;v.defaultMuted=true;v.addEventListener('canplay',()=>v.classList.add('on'),{once:true});v.addEventListener('error',()=>v.classList.remove('on'))});
+ const go=v=>{if(!v.src&&v.dataset.s){v.src=v.dataset.s;v.load()}const p=v.play();if(p&&p.catch)p.catch(()=>{})};
+ if('IntersectionObserver' in window){HV_IO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!document.hidden)go(e.target);else e.target.pause()}),{threshold:.25});vs.forEach(v=>HV_IO.observe(v))}else vs.forEach(go)}catch(e){}}
+document.addEventListener('visibilitychange',()=>{document.querySelectorAll('#hHero .hv video').forEach(v=>{if(document.hidden)v.pause();else if(v.src&&v.classList.contains('on')){const p=v.play();if(p&&p.catch)p.catch(()=>{})}})});
 function lxNdvi(){try{if(SATR&&SATR.d&&(SATR.d.series||[]).length){const P=SATR.d.series,v=sv(P[P.length-1]),pv=P.length>1?sv(P[P.length-2]):null;const o={v:+v.toFixed(2),pv:pv==null?null:+pv.toFixed(2),d:P[P.length-1].to||''};localStorage.setItem('qNdvi',JSON.stringify(o));return o}}catch(e){}try{return JSON.parse(localStorage.getItem('qNdvi')||'null')}catch(e){return null}}
 const lxLbl=v=>v<.2?L2('شبه معدوم','Bare'):v<.4?L2('ضعيف','Low'):v<.6?L2('متوسط','Moderate'):v<.75?L2('جيد جداً','Very good'):L2('ممتاز','Excellent');
 function lxName(){return USER?(USER.displayName||(USER.email||'').split('@')[0]):L2('ضيف','Guest')}
@@ -2789,8 +2805,7 @@ function homeRender(){
   const nd=lxNdvi();let wx='';
   if(WX&&WX.cur){const w=wxInfo(WX.cur.weather_code);wx=`<div class="ch2">${w[0]} <b dir="ltr">${(+WX.cur.temperature_2m).toFixed(0)}°</b> ${L2(w[1],w[2])}</div><div class="ch2">💧 ${Math.round(WX.cur.relative_humidity_2m)}%</div>`}
   else wx=`<button type="button" class="ch2" id="hLoc">📍 ${L2('حدّد موقعك','Set location')}</button>`;
-  const hero=nd?`<div class="hf" id="hHero"><svg viewBox="0 0 316 238" preserveAspectRatio="xMidYMid slice">${lxField(316,238,7)}</svg><div class="ov"></div><div class="tg"><span class="dt"></span>${L2('آخر قراءة','Last reading')}${nd.d?' · '+escH(String(nd.d).slice(0,10)):''}</div><div class="in"><div><div class="lb">${L2('مؤشر صحة المحصول NDVI','Crop health NDVI')}</div><div class="nm gt">${nd.v.toFixed(2)}</div><div class="dl" style="color:#3ff0a8">${lxLbl(nd.v)}${nd.pv!=null?` · ${nd.v>=nd.pv?'▲':'▼'} ${Math.abs(nd.v-nd.pv).toFixed(2)}`:''}</div></div></div></div>`
-   :`<div class="hf" id="hHero"><svg viewBox="0 0 316 238" preserveAspectRatio="xMidYMid slice">${lxField(316,238,7)}</svg><div class="ov"></div><div class="tg"><span class="dt"></span>Sentinel-2 · 10 m</div><div class="in"><div><div class="lb">${L2('تابع صحة حقلك من الفضاء','Track your field from space')}</div><div class="nm gt" style="font-size:1.5rem">${L2('الأقمار الصناعية','Satellite')}</div></div><div class="cta">${L2('ابدأ','Start')}</div></div></div>`;
+  const hero=`<div class="hf big" id="hHero">${lxHv()}<div class="cta2">🛰️ ${L2('الأقمار الصناعية','Satellite')} ‹</div></div>`;
   const TL6=['soil','water','fert','sat','pest','cal'];
   const tools=TL6.map(k=>`<button type="button" class="tl3${k==='sat'&&!pro?' lk':''}" data-g="${k}"><div class="c">${IC(k)}</div>${tn(k)}</button>`).join('');
   let tip;const tips=WX&&typeof wxTips==='function'?wxTips(WX):[];
@@ -2802,6 +2817,7 @@ function homeRender(){
   <div class="chs">${wx}${crn?`<div class="ch2">🌾 ${escH(tx(crn))}</div>`:''}${gv?`<div class="ch2">📌 ${escH(gname(gv))}</div>`:''}</div>
   ${hero}<div class="sc2"><span>${L2('أدواتك','Your tools')}</span><small data-g="tools">${L2('عرض الكل','All')}</small></div><div class="tg3">${tools}</div>${tip}${last}`;
   b.querySelectorAll('[data-g]').forEach(e=>e.onclick=()=>{const g=e.dataset.g;show(g==='hist2'?'crop':g)});
+  lxVid();
   const hh=$('hHero');if(hh)hh.onclick=()=>show('sat');
   const hl=$('hLoc'),ht=$('hTipLoc');[hl,ht].forEach(x=>{if(x)x.onclick=()=>{show('crop');setTimeout(()=>$('locBtn')&&$('locBtn').click(),300)}});
 }
