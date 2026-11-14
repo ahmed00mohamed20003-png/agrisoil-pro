@@ -1662,7 +1662,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.14-4';
+const APP_VER='2026.11.14-5';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -1725,7 +1725,7 @@ async function nLoad(){if(!USER||!window.NamaaAuth||!NamaaAuth.notices)return;
 function nOpen(){const seen=nSeen(),un=new Set(nUnread().map(n=>n.id));
   $('nT').textContent='🔔 '+L2('الإشعارات','Notifications');
   $('nL').innerHTML=NOTS.length?NOTS.map(n=>`<div class="nIt${un.has(n.id)?' nw':''}"><small>${n.t?new Date(+n.t).toLocaleString(lang==='en'?'en-GB':'ar-EG',{dateStyle:'medium',timeStyle:'short'}):''}${un.has(n.id)?' · '+L2('جديد','New'):''}</small>${escH(nTxt(n))}</div>`).join(''):`<p class="mut" style="font-size:.85rem">${L2('لا توجد إشعارات.','No notifications.')}</p>`;
-  NOTS.forEach(n=>seen.add(n.id));store('qSeenN',JSON.stringify([...seen].slice(-100)));nBadge();
+  NOTS.forEach(n=>seen.add(n.id));store('qSeenN',JSON.stringify([...seen].slice(-100)));nBadge();try{if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.controller.postMessage({type:'clear'})}catch(e){}
   const pm=$('nPerm');pm.innerHTML='';
   if(pushOk()){const P=Notification.permission;
     if(P==='default')pm.innerHTML=`<button type="button" class="sec" id="nAsk" style="width:100%">🔔 ${L2('تفعيل تنبيهات الجهاز','Enable device alerts')}</button><p class="mut" style="font-size:.7rem;margin:6px 0 0">${L2('يصلك تنبيه ورقم على أيقونة التطبيق حتى لو التطبيق مقفول. على الآيفون: ثبّت التطبيق على الشاشة الرئيسية أولاً.','You get an alert and a badge on the app icon even when the app is closed. On iPhone: add the app to your Home Screen first.')}</p>`;
