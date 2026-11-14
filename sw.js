@@ -18,6 +18,7 @@ self.addEventListener('fetch', e => {
   const u = new URL(r.url);
   if (u.origin !== location.origin) return;       // Firebase / الطقس / الخطوط: لا نتدخل
   if (u.searchParams.has('_v')) return;           // فحص التحديث: دائماً من الشبكة مباشرة
+  if (r.headers.has('range') || r.destination === 'video' || /\.(mp4|webm)$/i.test(u.pathname)) return;   // الفيديو: المتصفح يتعامل معه مباشرة (لا كاش ولا Range)
 
   if (r.mode === 'navigate') {
     e.respondWith((async () => {
