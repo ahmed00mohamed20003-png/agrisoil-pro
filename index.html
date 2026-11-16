@@ -359,8 +359,41 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
 .dxBar{height:8px;border-radius:6px;background:rgba(255,255,255,.1);margin:6px 0 2px;overflow:hidden}.dxBar i{display:block;height:100%;background:linear-gradient(90deg,#fc8d59,#1a9850)}.dxA ul{margin:6px 0;padding-inline-start:18px;font-size:.84rem;line-height:1.9}
 </style>
 <script>try{if(sessionStorage.getItem('qSp')==='1')document.documentElement.className+=' nosp'}catch(e){}</script>
+<style id="qbgCss">
+#qbg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:block}
+@media print{#qbg{display:none!important}}
+</style>
+<style id="qbgCss2">
+:root:not([data-theme="dark"]) .card{background:rgba(255,253,247,.8)}
+</style>
+<style id="qfxCss">
+/* ===== تطوير الشكل ===== */
+.card{background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,0) 38%),var(--card);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),inset 0 0 0 1px rgba(255,255,255,.04),var(--sh)}
+:root:not([data-theme="dark"]) .card{background:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 45%),rgba(255,253,247,.8)}
+.pn>.card:first-child{border-top:2px solid var(--cc,var(--bd))}
+.hf.big{box-shadow:0 0 0 1px var(--cc,transparent),0 16px 44px -14px var(--cc,rgba(0,0,0,.4))}
+@keyframes qIn{from{opacity:0;transform:translateY(24px) scale(.985)}to{opacity:1;transform:none}}
+#p-res.on>.card{animation:qIn .65s cubic-bezier(.2,.8,.2,1) both}
+#p-res.on>.card:nth-child(2){animation-delay:.05s}#p-res.on>.card:nth-child(3){animation-delay:.12s}#p-res.on>.card:nth-child(4){animation-delay:.2s}#p-res.on>.card:nth-child(5){animation-delay:.28s}#p-res.on>.card:nth-child(6){animation-delay:.36s}#p-res.on>.card:nth-child(7){animation-delay:.44s}#p-res.on>.card:nth-child(n+8){animation-delay:.5s}
+.kpi{transition:transform .25s}.kpi:hover{transform:translateY(-2px)}
+.qst{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.qst>div{padding:12px 6px;text-align:center;border-radius:20px;border:1px solid var(--bd);background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,0) 40%),var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.qst b{display:block;font-size:1.7rem;line-height:1.1;color:var(--gold);font-variant-numeric:tabular-nums}
+.qst small{color:var(--mut);font-size:.72rem}
+/* تحميل: سنبلة تنمو */
+.spn{width:22px!important;height:24px!important;border:0!important;border-radius:0!important;vertical-align:-6px!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 26'%3E%3Cpath d='M12 25V10' stroke='%2334b87c' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 14C6 14 3 10 3 5c6 0 9 3 9 9z' fill='%234ade80'/%3E%3Cpath d='M12 11c5 0 8-3 9-8-6 0-9 3-9 8z' fill='%23f5c451'/%3E%3C/svg%3E") center/contain no-repeat!important;transform-origin:50% 100%;animation:qGrow 1.3s ease-in-out infinite!important}
+@keyframes qGrow{0%{transform:scale(.25);opacity:.4}60%{transform:scale(1);opacity:1}100%{transform:scale(1.08);opacity:.5}}
+/* وضع العرض */
+body.pm #bnav,body.pm .tiles,body.pm #runb,body.pm .noprint,body.pm #bellB{display:none!important}
+body.pm .pn{font-size:1.1em}body.pm .kpi b{font-size:1.55rem}body.pm .card{padding:20px}
+.qpmx{display:none;position:fixed;inset-inline-start:14px;bottom:14px;z-index:60;padding:10px 16px;border-radius:99px;background:rgba(4,18,11,.78);border:1px solid rgba(246,227,166,.6);color:#f6e3a6;font-weight:800;min-height:42px;backdrop-filter:blur(6px)}
+body.pm .qpmx{display:block}
+@media print{.qpmx,.qst{display:none!important}}
+@media(prefers-reduced-motion:reduce){#p-res.on>.card{animation:none}.spn{animation:none!important}}
+</style>
 </head>
 <body>
+<canvas id="qbg" aria-hidden="true"></canvas>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <linearGradient id="gG" gradientUnits="userSpaceOnUse" x1="4" y1="4" x2="28" y2="28"><stop offset="0" stop-color="#34D399"/><stop offset="1" stop-color="#14B8A6"/></linearGradient>
 <linearGradient id="gY" gradientUnits="userSpaceOnUse" x1="4" y1="4" x2="28" y2="28"><stop offset="0" stop-color="#FBD36B"/><stop offset="1" stop-color="#E0A21A"/></linearGradient></defs>
@@ -403,7 +436,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
   <div class="menu noprint" id="menuP" role="menu">
     <div class="mi" style="cursor:default"><svg class="ic ic-s" aria-hidden="true"><use href="#i-lang"/></svg><select id="lang" style="flex:1;min-height:36px;padding:4px 8px"><option value="ar">العربية</option><option value="en">English</option></select></div>
     <button class="mi" id="theme"><svg class="ic ic-s" aria-hidden="true"><use href="#i-theme"/></svg><span id="menuThemeT"></span></button>
-    <button class="mi" id="prt"><svg class="ic ic-s" aria-hidden="true"><use href="#i-print"/></svg><span id="menuPrtT"></span></button>
+    <button class="mi" id="prt" style="display:none"><svg class="ic ic-s" aria-hidden="true"><use href="#i-print"/></svg><span id="menuPrtT"></span></button>
     <button class="mi" id="installB"><svg class="ic ic-s" aria-hidden="true"><use href="#i-install"/></svg><span id="installT"></span></button>
     <button class="mi" id="logout"></button>
     <div id="acct" style="display:none;flex-direction:column;gap:6px;padding:6px 12px 8px;border-top:1px solid var(--bd);margin-top:4px"><span class="chip" id="acctMail" style="direction:ltr;text-align:center"></span><button class="mi" id="logout2" style="padding:8px 10px"></button></div>
@@ -482,6 +515,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
   <div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-crop"/></svg>توصيات الإصلاح</h3><ul id="org"></ul>
     <div class="row noprint" style="margin-top:12px"><button class="sec" id="save">💾 حفظ</button><button class="sec" id="csvB">📊 CSV</button><button class="sec" id="share">📤 مشاركة</button></div>
     <div id="err" class="badge er" style="display:none"></div></div>
+  <div class="card noprint" id="prtEnd" style="padding:14px"><button type="button" id="prt2" style="width:100%"><svg class="ic ic-s" aria-hidden="true"><use href="#i-print"/></svg> <span id="prt2T">طباعة / حفظ PDF</span></button></div>
 </div>
 
 <div class="pn" id="p-cal"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-cal"/></svg><span id="calT"></span></h3><div id="calBox"></div></div></div>
@@ -494,7 +528,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
   <div class="row"><input id="aiIn" placeholder="اكتب سؤالك…" style="flex:1"><button id="aiSend">➤</button></div></div></div>
 
 <div class="pn" id="p-ct"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-ct"/></svg>تواصل مع المهندس أحمد</h3><div style="display:grid;gap:10px">
-  <select id="ctType"><option>شكوى</option><option>مشكلة فنية</option><option>اقتراح</option></select>
+  <select id="ctType"><option>اقتراح</option><option>مشكلة فنية</option><option>شكوى</option></select>
   <input id="ctName" placeholder="اسمك (اختياري)"><textarea id="ctMsg" rows="4" placeholder="اكتب رسالتك هنا…"></textarea>
   <a id="ctMail" class="btn" target="_blank" rel="noopener noreferrer">📧 إرسال بالبريد</a><a id="ctWa" class="btn wa" target="_blank" rel="noopener noreferrer">💬 إرسال واتساب</a>
   <p style="font-size:.75rem;color:var(--mut);text-align:center;direction:ltr;margin:0">ahmed00mohamed20003@gmail.com · 01113276215</p></div></div></div>
@@ -930,6 +964,7 @@ $('csvB').onclick=()=>{if(!LAST)return;const csv='\ufeffParameter,Value\n'+Objec
 $('share').onclick=()=>{if(!LAST)return;const a=LAST,t=`قوت | Qout — ${a.crop} (${a.variety})\nالصحة ${a.healthScore}/100 · pH ${a.ph} · EC ${a.ec} · SAR ${a.sar}\nالمحصول النسبي ${a.relativeYieldPct}% · غسيل ${a.leachingReqPct}%\nلكل ${a.unit}: N ${a.N_kg} · P₂O₅ ${a.P_kg} · K₂O ${a.K_kg} كجم\nالتكلفة ${a.totalCost_EGP} ج.م`;
   if(navigator.share)navigator.share({text:tx(t)}).catch(()=>{});else window.open('https://wa.me/?text='+encodeURIComponent(tx(t)),'_blank','noopener,noreferrer')};
 $('prt').onclick=()=>{if(!pro&&trials<=0){$('mPay').classList.add('on');return}show('res');setTimeout(()=>window.print(),150)};
+$('prt2').onclick=()=>$('prt').onclick();
 
 // ===== المساعد والتواصل =====
 function addMsg(c,t){const m=$('msgs'),d=document.createElement('div');d.className='m '+c;d.textContent=t;m.appendChild(d);m.scrollTop=m.scrollHeight;if(lang!=='ar')tr()}
@@ -1313,7 +1348,7 @@ locUI();
 // ⚠️ غيّر رقم الإصدار هذا مع كل نسخة جديدة ترفعها — المستخدمون يتلقون إشعار التحديث عندما يختلف عن الموجود على الموقع.
 // ===== pH لكل محصول + مرجعية الأرقام =====
 // [أدنى مثالي, أعلى مثالي, حد التحمل العملي, المصدر: H=جامعة هاواي CTAHR GHGS-18 (بنفس النطاق) / E=تقدير إرشادي]
-const PHR={wheat:[6,7.5,8.3,'E'],barley:[6,8,8.6,'E'],maize:[5.5,7,8,'H'],rice:[5,6.5,8,'H'],sorghum:[5.5,7.5,8,'F'],oat:[5,6,7.5,'F'],faba:[6,7,8.6,'F'],soybean:[5.5,6.5,8.4,'F'],peanut:[5.5,6.5,7.8,'H'],lentil:[5.5,7.5,8.2,'F'],chickpea:[6,8.5,9.5,'F'],cotton:[5.8,8,8.8,'E'],sugarbeet:[6,8,8.6,'E'],sugarcane:[6,7,8.5,'H'],sunflower:[6,7,8.3,'H'],sesame:[5.5,7.5,8.3,'E'],alfalfa:[6.5,7.5,8.5,'H'],berseem:[6,7.5,8.3,'E'],tomato:[5.5,6.8,8,'H'],potato:[5,6.5,7.8,'E'],onion:[6,7,8,'E'],garlic:[6,7.5,8.2,'E'],pepper:[5.5,6.5,8,'H'],cucumber:[5.5,6.5,8,'H'],eggplant:[5.5,6.5,8,'H'],squash:[5.5,6.5,8,'H'],watermelon:[5,6.5,8,'H'],cantaloupe:[5.5,6.5,8,'H'],okra:[6,7.5,8.2,'H'],cabbage:[6,7,8,'H'],carrot:[5.5,6.5,8,'H'],sweetpotato:[5,6,7.8,'H'],citrus:[6,7,8.2,'H'],dates:[6.5,8,8.8,'H'],grapes:[6,7.5,8.3,'E'],olive:[6.5,8,8.6,'E'],strawberry:[5,6.5,7.8,'H'],banana:[6,7.5,8.2,'H'],mango:[5.5,6.5,8,'H'],pomegranate:[6,7.5,8.3,'H']};
+const PHR={wheat:[6,7.5,8.3,'E'],barley:[6,8,8.6,'E'],maize:[5.5,7,8,'H'],rice:[5,6.5,8,'H'],sorghum:[5.5,7.5,8,'F'],oat:[5,6,7.5,'F'],faba:[6,7,8.6,'F'],soybean:[5.5,6.5,8.4,'F'],peanut:[5.5,6.5,7.8,'H'],lentil:[5.5,7.5,8.2,'F'],chickpea:[6,8.5,9.5,'F'],cotton:[5.8,8,8.8,'E'],sugarbeet:[6,8,8.6,'E'],sugarcane:[5,8,9,'F'],sunflower:[6,7,8.3,'H'],sesame:[5.5,7.5,8,'F'],alfalfa:[6.5,7.5,8.5,'H'],berseem:[6,7.5,8.3,'E'],tomato:[5.5,6.8,8,'H'],potato:[5,6.5,7.8,'E'],onion:[6,7,8.3,'F'],garlic:[6,6.6,8.5,'F'],pepper:[5.5,6.5,8,'H'],cucumber:[5.5,6.5,8,'H'],eggplant:[5.5,6.5,8,'H'],squash:[5.5,6.5,8,'H'],watermelon:[5,6.5,8,'H'],cantaloupe:[5.5,6.5,8,'H'],okra:[6,7.5,8.2,'H'],cabbage:[6,7,8,'H'],carrot:[5.5,6.5,8,'H'],sweetpotato:[5,6,7.8,'H'],citrus:[5,6,8.3,'F'],dates:[6.5,8,8.5,'F'],grapes:[6,7.5,8.3,'E'],olive:[6,7,8.5,'F'],strawberry:[5,6.5,7.8,'H'],banana:[6,7.5,8.2,'H'],mango:[5.5,7.5,8.5,'F'],pomegranate:[6,7.5,8.3,'H']};
 // محاصيل ملوحتها تقدير (غير موجودة بأرقام في FAO Paper 29)
 const ECO={sorghum:48747,oat:481,faba:2146,soybean:1150,lentil:7209,chickpea:2479};
 const SALCLS={oat:'T',chickpea:'MS',sesame:'S',watermelon:'MS',okra:'MS',olive:'MT',banana:'S',mango:'S',pomegranate:'MS'},SALN={S:'حساس',MS:'متوسط الحساسية',MT:'متوسط التحمل',T:'متحمل'};
@@ -1427,21 +1462,22 @@ function mulderRender(key,kK,un,r){
 // ===== الإنتاج المستهدف + المحصول السابق + تسجيل نتيجة الموسم =====
 // حمل المحصول (كجم لكل طن منتج): [N, P₂O₅, K₂O, وحدة الإنتاج, مصدر, إنتاج نموذجي طن/فدان]
 const RMV={
- wheat:[20,9.7,6,'طن حبوب','S1',2.8],barley:[20,6.8,6,'طن حبوب','S1',1.8],oat:[21,7.5,6,'طن حبوب','S1',1.8],maize:[13,7.3,4.9,'طن حبوب','S1',3.5],soybean:[64.5,14,23.2,'طن بذور','S1',1.3],
- rice:[12.7,6.7,3.6,'طن أرز شعير','S2',3.8],sorghum:[11.8,7,4.8,'طن حبوب','S2',1.9],cotton:[25,11,15,'طن قطن زهر','S2',1.2],
- potato:[null,1,5.8,'طن درنات','S3',12],sugarbeet:[null,.8,1.7,'طن جذور','S3',22],
+ wheat:[20,9.7,6,'طن حبوب','S1',2.85],barley:[20,6.8,6,'طن حبوب','S1',1.8],oat:[21,7.5,6,'طن حبوب','S1',1.8],maize:[13,7.3,4.9,'طن حبوب','S1',3.19],soybean:[64.5,14,23.2,'طن بذور','S1',1.3],
+ rice:[12.7,6.7,3.6,'طن أرز شعير','S2',3.83],sorghum:[11.8,7,4.8,'طن حبوب','S2',1.9],cotton:[25,11,15,'طن قطن زهر','S2',1.18],
+ potato:[3.6,1,5.8,'طن درنات','S3',12.6],sugarbeet:[null,.8,1.7,'طن جذور','S3',22],
  peanut:[35,5.5,8.5,'طن قرون بقشرة','S8',1.2],sesame:[18.9,9.4,15.1,'طن بذور','S8',.45],garlic:[4,2,3.2,'طن رؤوس','S8g',5],cantaloupe:[2.2,1.1,1.8,'طن ثمار','S8c',8],tomato:[1.3,.5,2.9,'طن ثمار','S8t',18],
- lentil:[36.3,11.2,14.5,'طن بذور','S9',.6],chickpea:[36.3,11.2,14.5,'طن بذور','S9',.8],sugarcane:[1.6,.3,1.8,'طن سيقان','S10',51],sunflower:[27,9.7,9,'طن بذور','S11',.9],
- pepper:[2,.7,2.8,'طن ثمار','S12',9],grapes:[1.8,1,2.4,'طن عنب','S13',9],strawberry:[1.35,.75,2.85,'طن ثمار','S14',14],mango:[6.7,1.7,6.7,'طن ثمار','S15',5],
- cabbage:[2,.73,3.1,'طن رؤوس','S4',18],onion:[1.8,.8,2.4,'طن بصل','S4',14],carrot:[1.5,.8,4.7,'طن جزر','S4',15],cucumber:[1.5,.69,2.4,'طن ثمار','S4',8],squash:[1.6,.6,2,'طن ثمار','S4',8],
- citrus:[1.5,.5,2.4,'طن ثمار','S5',12],banana:[1.97,.57,7.95,'طن ثمار','S6',25],
- alfalfa:[28,6.5,28,'طن مادة جافة','S7',10],berseem:[28,6.5,28,'طن مادة جافة','S7',3.5]};
+ lentil:[36.3,11.2,14.5,'طن بذور','S9',.6],chickpea:[36.3,11.2,14.5,'طن بذور','S9',.8],sugarcane:[1.6,.3,1.8,'طن سيقان','S10',45],sunflower:[27,9.7,9,'طن بذور','S11',.9],
+ pepper:[2,.7,2.8,'طن ثمار','S12',9],grapes:[1.8,1,2.4,'طن عنب','S13',8.9],strawberry:[1.35,.75,2.85,'طن ثمار','S14',14],mango:[6.7,1.7,6.7,'طن ثمار','S15',4.68],
+ cabbage:[2,.73,3.1,'طن رؤوس','S4',18],onion:[1.8,.8,2.4,'طن بصل','S4',14.86],carrot:[1.5,.8,4.7,'طن جزر','S4',15],cucumber:[1.5,.69,2.4,'طن ثمار','S4',8],squash:[1.6,.6,2,'طن ثمار','S4',8.3],
+ citrus:[1.5,.5,2.4,'طن ثمار','S5',10.16],banana:[1.97,.57,7.95,'طن ثمار','S6',18.3],
+ alfalfa:[28,6.5,28,'طن مادة جافة','S7',10],berseem:[28,6.5,28,'طن مادة جافة','S7',3.5],
+ faba:[46,10,12,'طن بذور','S16',1.2],eggplant:[2.5,2.1,4,'طن ثمار','S17',12.4],watermelon:[1.1,.5,2.2,'طن ثمار','S18',10],sweetpotato:[16,13.7,21.7,'طن درنات','S19',10]};
 const UNE={"طن حبوب": "t grain", "طن بذور": "t seed", "طن أرز شعير": "t paddy rice", "طن قطن زهر": "t seed cotton", "طن درنات": "t tubers", "طن جذور": "t roots", "طن رؤوس": "t heads", "طن بصل": "t onions", "طن جزر": "t carrots", "طن ثمار": "t fruit", "طن عنب": "t grapes", "طن مادة جافة": "t dry matter", "طن قرون بقشرة": "t pods in shell", "طن سيقان": "t stalks"};
 const UT=x=>lang==='ar'?x:(UNE[x]||x);
 const RSE={"S1": "IPNI via OMAFRA Ontario", "S2": "IPNI via Univ. of Arkansas FSA-2176", "S3": "PDA/PPRC (UK) — P and K only", "S4": "IGZ (Germany) Nutrient Offtake Vegetables", "S5": "ICL — orange removal (mid-range)", "S6": "Yara — Marchal & Mallessard 1979", "S8": "IFA 2020 (nutrient removal table) — read via search snippets, check the original table · medium confidence", "S8g": "IFA 2020 — medium confidence; Wilbur-Ellis gives N=7.5 (N varies between sources)", "S8c": "IFA 2020 (melon class, incl. cantaloupe) — medium–low confidence; other sources give higher figures", "S8t": "IFA 2020 — agrees with Wilbur-Ellis (1.45/0.55/2.65); NC State is higher (3.0/0.5/4.0) · medium–high confidence", "S9": "MSU Extension Montana — pulse table (pea/lentil/chickpea), converted from lb/bu · medium confidence", "S10": "ICL + Guangxi study (1.67/0.32/1.85) · high for N and K, medium for P", "S11": "PhosAgro (company technical presentation) · medium confidence", "S12": "MSU Michigan E-2934 (converted from lb/ton) · high confidence", "S13": "Wilbur-Ellis (N and K) + U. Maryland (P₂O₅; sources range 0.55–2.0) · medium–low confidence", "S14": "Wilbur-Ellis Nutrition Manual (converted from lb/ton, single source) · medium–low confidence", "S15": "Ganeshamurthy (Indian review) · consistent with 110 kg K₂O/ha for a 15 t crop · medium confidence", "S7": "OMAFRA legume hay (alfalfa values, applied to berseem as a proxy)"};
 const RSRC={S1:['IPNI عبر OMAFRA أونتاريو','https://fieldcropnews.com/?p=28952'],S2:['IPNI عبر Univ. of Arkansas FSA-2176','https://www.uaex.uada.edu/publications/pdf/FSA-2176.pdf'],S3:['PDA/PPRC (المملكة المتحدة) — P وK فقط','https://www.pda.org.uk/wp/wp-content/uploads/2020/03/pda-pprc.pdf'],S4:['IGZ (ألمانيا) Nutrient Offtake Vegetables','https://www.igzev.de/publikationen/IGZ_Nutrient_Offtake_Vegetables.pdf'],S5:['ICL — حمل البرتقال (متوسط المدى)','https://icl-growingsolutions.com/en-us/agriculture/knowledge-hub/the-road-to-high-yielding-and-sustainable-citrus-production/'],S6:['Yara — Marchal & Mallessard 1979','https://english-master.yara.co.uk/crop-nutrition-master/bananas/nutritional-summary-for-bananas/'],S8:['IFA 2020 (جدول حمل العناصر) — قُرئ عبر مقتطفات بحث، راجع الجدول الأصلي · ثقة متوسطة','https://api.ifastat.org/reports/download/12965'],S8g:['IFA 2020 — ثقة متوسطة؛ مصدر Wilbur-Ellis يعطي N=7.5 (تباين في N)','https://api.ifastat.org/reports/download/12965'],S8c:['IFA 2020 (فئة الشمام ومنها الكانتالوب) — ثقة متوسطة–منخفضة؛ المصادر الأخرى تعطي أرقاماً أعلى','https://api.ifastat.org/reports/download/12965'],S8t:['IFA 2020 — يتفق مع Wilbur-Ellis (1.45/0.55/2.65)؛ NC State أعلى (3.0/0.5/4.0) · ثقة متوسطة–عالية','https://api.ifastat.org/reports/download/12965'],
  S9:['MSU Extension Montana — جدول البقوليات (بسلة/عدس/حمص) محوّل من lb/bu · ثقة متوسطة','https://landresources.montana.edu/soilfertility/documents/PDF/sscoop/pulseCropSS.pdf'],S10:['ICL + دراسة Guangxi (1.67/0.32/1.85) · عالية لـN وK، متوسطة لـP','https://icl-growingsolutions.com/agriculture/crop_category/sugar-crops-beet-cane-sorghum-agronomy-nutrition/'],S11:['PhosAgro (عرض فني لشركة) · ثقة متوسطة','https://lectorium.phosagro.com/upload/iblock/d40/ykvdgy6qbjvfk0q80tlp3nd9131uef6a.pdf'],S12:['MSU Michigan E-2934 (محوّل من lb/ton) · ثقة عالية','https://www.canr.msu.edu/fertrec/uploads/E-2934-MSU-Nutrient-recomdns-veg-crops.pdf'],S13:['Wilbur-Ellis (N وK) + U. Maryland (P₂O₅؛ المصادر تتراوح 0.55–2.0) · ثقة متوسطة–منخفضة','https://extension.umd.edu/sites/extension.umd.edu/files/2021-04/NM-3.pdf'],S14:['Wilbur-Ellis Nutrition Manual (محوّل من lb/ton، مصدر واحد) · ثقة متوسطة–منخفضة','https://www.wilburellisagribusiness.com/wp-content/uploads/2024/10/Pages_from_Booklet_NutritionTechManual_4th_Ed_K_223550_1_.pdf'],S15:['Ganeshamurthy (مراجعة هندية) · يتسق مع 110 كجم K₂O/هكتار لمحصول 15 طن · ثقة متوسطة','https://www.researchgate.net/publication/277191647'],
- S7:['OMAFRA legume hay (قيم البرسيم الحجازي، وتُطبَّق على البرسيم المصري كبديل)','https://fieldcropnews.com/?p=28952']};
+ S7:['OMAFRA legume hay (قيم البرسيم الحجازي، وتُطبَّق على البرسيم المصري كبديل)','https://fieldcropnews.com/?p=28952'],S16:['GRDC / PAMI / PDA — الفول البلدي (حبوب جافة)؛ N بين 41 و51 وP₂O₅ ≈10 وK₂O ≈12 · الإنتاج تقدير تقريبي','https://grdc.com.au/__data/assets/pdf_file/0026/369143/GrowNote-Faba-Bean-West-5-Nutrition.pdf'],S17:['Phytojournal 2019 (الهند) + Univ. of Delaware — الباذنجان · ثقة منخفضة-متوسطة','https://www.phytojournal.com/archives/2019/vol8issue3/PartBE/8-3-288-865.pdf'],S18:['MDPI Agronomy 2020 (QUEFTS ميداني) + Delaware — البطيخ · الإنتاج تقدير تقريبي','https://www.mdpi.com/2073-4395/10/11/1776'],S19:['FAO AGRIS — البطاطا: احتياج النبات (نموذج QUEFTS) وليس حمل الجذور فقط، فاعتبرها حداً أعلى · ثقة منخفضة · الإنتاج تقدير تقريبي','https://agris.fao.org/search/en/records/65dfad3763b8185d9cadf313']};
 const LEGC=['soybean','faba','lentil','chickpea','peanut','alfalfa','berseem'];
 // دراسة مصرية: المعدلات الاقتصادية (كجم/فدان) N, P₂O₅, K₂O
 const EGB={wheat:[62.6,31.3,46.1],barley:[68.9,40.8,50.3],sugarbeet:[61.9,30.9,71.1],faba:[33.3,46.3,44.9],soybean:[34.2,41.6,30.2],cotton:[59.6,53.1,56.3],maize:[125.9,46.5,58.6],rice:[62.7,23.4,25.5]};
@@ -1470,9 +1506,10 @@ function pcAdj(key,A){
  build();LANGCARDS.push(build);
  const yb=document.createElement('div');yb.className='card';yb.id='ybRes';yb.style.display='none';$('mxRes').insertAdjacentElement('afterend',yb);
 })();
+const YFAO=['wheat','maize','rice','cotton','sugarbeet','sugarcane','tomato','potato','onion','citrus','grapes','mango','banana','squash','eggplant'];
 function ytDef(force){const key=$('crop').value,r=RMV[key],e=$('yT');if(!e)return;const A=parseFloat($('unit').value)||4200.83,uf=A/4200.83;
  $('yTl').textContent=L2('الإنتاج المستهدف (طن لكل وحدة المساحة)','Target yield (t per area unit)');
- if(r){if(force||!e.dataset.u)e.value=+(r[5]*uf).toFixed(2);$('yTh').textContent=L2(`القيمة الافتراضية إنتاج نموذجي تقريبي (${r[5]} طن/فدان ${r[3]}) — عدّلها لإنتاجك المتوقع.`,`Default is a rough typical yield (${r[5]} t/feddan) — set your expected yield.`)}
+ if(r){if(force||!e.dataset.u)e.value=+(r[5]*uf).toFixed(2);$('yTh').textContent=L2(`القيمة الافتراضية ${YFAO.includes(key)?'متوسط إنتاج مصر 2024 (FAOSTAT)':'إنتاج نموذجي تقريبي'} (${r[5]} طن/فدان ${r[3]}) — عدّلها لإنتاجك المتوقع.`,`Default is a rough typical yield (${r[5]} t/feddan) — set your expected yield.`)}
  else{if(force||!e.dataset.u)e.value=0;$('yTh').textContent=L2('لا توجد بيانات موثقة لحمل هذا المحصول بعد، لذلك لا يُحسب ميزان الإنتاج له (لكن يعمل المحصول السابق).','No documented nutrient-removal data for this crop yet, so no yield balance (previous-crop effect still works).')}}
 {const oc=$('crop').onchange;$('crop').onchange=function(){oc.apply(this,arguments);if($('yT'))$('yT').dataset.u='';ytDef(true)}}
 $('unit').addEventListener('change',()=>{ytDef(false)});
@@ -1668,7 +1705,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.14-8';
+const APP_VER='2026.11.16-4';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2815,9 +2852,9 @@ function homeRender(){
   if(h){const n=Object.prototype.hasOwnProperty.call(C,h.c)?C[h.c][0]:'';last=`<div class="tp" data-g="hist"><div class="c">📄</div><div><b>${L2('آخر تقرير','Last report')}: ${escH(tx(n))}</b><small>${+h.s||0}/100 · ${new Date(+h.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')}</small></div></div>`}
   b.innerHTML=`<div class="top2"><button type="button" class="avr" data-g="acct" aria-label="account">${avIn()}</button><div class="t"><small>${lxGreet()}</small><b>${escH(lxName())}</b></div></div>
   <div class="chs">${wx}${crn?`<div class="ch2">🌾 ${escH(tx(crn))}</div>`:''}${gv?`<div class="ch2">📌 ${escH(gname(gv))}</div>`:''}</div>
-  ${hero}<div class="sc2"><span>${L2('أدواتك','Your tools')}</span><small data-g="tools">${L2('عرض الكل','All')}</small></div><div class="tg3">${tools}</div>${tip}${last}`;
+  ${hero}<div class="qst"><div><b data-n="${Object.keys(C).length}">0</b><small>${L2('محصول','crops')}</small></div><div><b data-n="27">0</b><small>${L2('محافظة','governorates')}</small></div><div><b data-n="${hist().length}">0</b><small>${L2('تقرير محفوظ','saved reports')}</small></div></div><div class="sc2"><span>${L2('أدواتك','Your tools')}</span><small data-g="tools">${L2('عرض الكل','All')}</small></div><div class="tg3">${tools}</div>${tip}${last}`;
   b.querySelectorAll('[data-g]').forEach(e=>e.onclick=()=>{const g=e.dataset.g;show(g==='hist2'?'crop':g)});
-  lxVid();
+  lxVid();if(window.qCountUp)qCountUp(b);
   const hh=$('hHero');if(hh)hh.onclick=()=>show('sat');
   const hl=$('hLoc'),ht=$('hTipLoc');[hl,ht].forEach(x=>{if(x)x.onclick=()=>{show('crop');setTimeout(()=>$('locBtn')&&$('locBtn').click(),300)}});
 }
@@ -2844,12 +2881,11 @@ function acctRender(){const b=$('acctBox');if(!b)return;const n=hist().length,ma
   <div class="rw2" style="cursor:default"><div class="c">${IC('lang')}</div><div>${L2('اللغة','Language')}</div><span class="ar" style="margin-inline-start:auto;opacity:1"><select id="aLang"><option value="ar">العربية</option><option value="en">English</option></select></span></div>
   <button type="button" class="rw2" id="aTh"><div class="c">${IC('theme')}</div><div>${L2('تبديل المظهر (فاتح / غامق)','Switch theme (light / dark)')}</div><span class="ar">‹</span></button>
   <button type="button" class="rw2" id="aIn"><div class="c">${IC('install')}</div><div>${L2('تثبيت التطبيق على الشاشة','Install the app')}</div><span class="ar">‹</span></button>
-  <button type="button" class="rw2" id="aPr"><div class="c">${IC('print')}</div><div>${L2('طباعة / حفظ PDF','Print / save PDF')}</div><span class="ar">‹</span></button>
   <button type="button" class="rw2" id="aOut" style="color:var(--er)"><div class="c">${IC('user')}</div><div>${USER?L2('تسجيل الخروج','Sign out'):L2('تسجيل الدخول','Sign in')}</div><span class="ar">‹</span></button>
   <p class="mut" style="text-align:center;font-size:.72rem;margin:16px 0 4px;line-height:1.8">${L2('م/ أحمد محمد سعيد عبد العال — كلية الزراعة · جامعة المنوفية · الأراضي والمياه','Eng. Ahmed Mohamed Saeed — Faculty of Agriculture, Menoufia University · Soil & Water')}</p>`;
   b.querySelectorAll('[data-go]').forEach(e=>{if(e.dataset.go)e.onclick=()=>show(e.dataset.go)});
   const L=$('aLang');L.value=lang;L.onchange=()=>{const s=$('lang');s.value=L.value;s.dispatchEvent(new Event('change',{bubbles:true}))};
-  $('aTh').onclick=()=>$('theme').click();$('aPr').onclick=()=>$('prt').click();
+  $('aTh').onclick=()=>$('theme').click();
   const ib=$('installB');if(ib&&getComputedStyle(ib).display==='none')$('aIn').style.display='none';else $('aIn').onclick=()=>ib.click();
   $('aOut').onclick=()=>{if(USER)$('logout').click();else $('mAuth').classList.add('on')};
   const up=$('aUp');if(up)up.onclick=()=>payOpen();phBind()}
@@ -2910,6 +2946,7 @@ const ICO=n=>`<svg class="ic ic-s" aria-hidden="true"><use href="#i-${n}"/></svg
 function menuUI(){
   $('menuThemeT').textContent=L2('تبديل المظهر (فاتح / داكن)','Switch theme (light / dark)');
   $('menuPrtT').textContent=L2('طباعة / حفظ PDF','Print / Save PDF');
+  $('prt2T').textContent=L2('طباعة / حفظ PDF','Print / Save PDF');
   $('installT').textContent=L2('تثبيت التطبيق على الجهاز','Install app on device');
   $('logout').innerHTML=ICO('user')+'<span>'+L2('تسجيل الدخول','Sign in')+'</span>';
   $('logout2').innerHTML=ICO('user')+'<span>'+L2('تسجيل الخروج','Sign out')+'</span>';
@@ -3035,5 +3072,109 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
   });
 }
 </script>
+<script id="qbgJs">
+(function(){
+var cv=document.getElementById('qbg');if(!cv||!cv.getContext)return;
+var ctx=cv.getContext('2d'),W=0,H=0,dpr=1;
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var LOW=(navigator.deviceMemory&&navigator.deviceMemory<=2)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=2);
+var K=LOW?.5:1,INT=LOW?60:33;
+function R(a,b){return a+Math.random()*(b-a)}
+function rgba(h,a){var n=parseInt(h.slice(1),16);return'rgba('+(n>>16)+','+((n>>8)&255)+','+(n&255)+','+a+')'}
+function dark(){var t=document.documentElement.getAttribute('data-theme');return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches}
+var drops=[],rip=[],nodes=[],grains=[],stars=[],flies=[];
+function seed(){var i;drops=[];nodes=[];grains=[];stars=[];flies=[];
+for(i=0;i<30*K;i++)drops.push({x:R(0,W),y:R(0,H),v:R(5,9)});
+for(i=0;i<28*K;i++)nodes.push({x:R(0,W),y:R(0,H),vx:R(-.4,.4),vy:R(-.4,.4)});
+for(i=0;i<46*K;i++)grains.push({x:R(0,W),y:R(0,H),v:R(.2,.7),r:R(1,2.4)});
+for(i=0;i<36*K;i++)stars.push({x:R(0,W),y:R(0,H),p:R(0,6.3),s:R(3,7),v:R(.1,.35)});
+for(i=0;i<22*K;i++)flies.push({x:R(0,W),y:R(0,H),p:R(0,6.3),s:R(.3,.9)})}
+function size(){dpr=Math.min(window.devicePixelRatio||1,1.5);W=window.innerWidth;H=window.innerHeight;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);seed()}
+size();window.addEventListener('resize',size);
+function comp(dk){ctx.globalCompositeOperation=dk?'lighter':'source-over'}
+function band(t,k,y0,col,al,h){ctx.beginPath();ctx.moveTo(0,H);for(var x=0;x<=W;x+=10){ctx.lineTo(x,y0+Math.sin(x*.008+t*.5+k*1.7)*h+Math.sin(x*.005-t*.35+k)*h*.7)}ctx.lineTo(W,H);ctx.closePath();var g=ctx.createLinearGradient(0,y0-h,0,H);g.addColorStop(0,rgba(col,al));g.addColorStop(1,rgba(col,0));ctx.fillStyle=g;ctx.fill()}
+function net(t,dk,c1,c2){comp(dk);var i,j,a,b,d;nodes.forEach(function(n){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1});
+ctx.lineWidth=1;for(i=0;i<nodes.length;i++){a=nodes[i];for(j=i+1;j<nodes.length;j++){b=nodes[j];d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.strokeStyle=rgba(c1,(1-d/120)*(dk?.38:.3));ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}
+nodes.forEach(function(n,i){var r=3+Math.sin(t*2+i)*1.6;ctx.beginPath();ctx.arc(n.x,n.y,r,0,6.3);ctx.fillStyle=rgba(i%2?c2:c1,dk?.55:.4);ctx.fill()})}
+var S={};
+S.aurora=function(t,dk){comp(dk);var c=dk?['#2DD4BF','#4ADE80','#F5C451','#22C55E']:['#34B87C','#E0A21A','#2DD4BF','#9BD37A'],al=dk?.26:.16;if(window.QCC)c[2]=window.QCC;for(var k=0;k<4;k++)band(t,k,H*(.2+k*.13),c[k],al,46)};
+S.crop=function(t,dk){comp(dk);band(t,0,H*.3,dk?'#E0A21A':'#E0A21A',dk?.16:.12,40);var col=dk?'#E0A21A':'#B8860B',L,i,n,h,x,sw;ctx.lineWidth=1.4;ctx.lineCap='round';
+for(L=0;L<3;L++){h=H*(.2-L*.05);n=Math.floor(W/(7+L*2));ctx.strokeStyle=rgba(col,(dk?.34:.26)-L*.06);ctx.beginPath();for(i=0;i<=n;i++){x=i*(W/n);sw=Math.sin(t*1.1+x*.012+L)*16;ctx.moveTo(x,H);ctx.quadraticCurveTo(x+sw*.3,H-h*.6,x+sw,H-h-Math.sin(i*3.1+L)*h*.15)}ctx.stroke()}
+grains.forEach(function(g){g.y-=g.v*.6;if(g.y<0)g.y=H;ctx.beginPath();ctx.arc(g.x+Math.sin(t+g.y*.02)*8,g.y,g.r,0,6.3);ctx.fillStyle=rgba('#F5C451',dk?.5:.4);ctx.fill()})};
+S.soil=function(t,dk){comp(dk);var c=['#8B5E34','#A9712F','#6B4423','#C2873A','#7A4F2B'],k;for(k=0;k<5;k++)band(t,k,H*(.4+k*.1),c[k],dk?.24:.2,12);
+grains.forEach(function(g){g.y-=g.v;if(g.y<0)g.y=H;ctx.beginPath();ctx.arc(g.x+Math.sin(t+g.y*.02)*6,g.y,g.r,0,6.3);ctx.fillStyle=rgba('#F59E0B',dk?.6:.45);ctx.fill()})};
+S.water=function(t,dk){comp(dk);var sy=H*.82;ctx.lineWidth=1.5;ctx.strokeStyle=dk?'rgba(125,211,252,.5)':'rgba(43,138,196,.4)';
+drops.forEach(function(d){d.y+=d.v;ctx.beginPath();ctx.moveTo(d.x,d.y-12);ctx.lineTo(d.x,d.y);ctx.stroke();if(d.y>sy+R(0,H*.1)){rip.push({x:d.x,y:d.y,r:2});d.y=-10;d.x=R(0,W)}});
+rip=rip.filter(function(r){return r.r<50});rip.forEach(function(r){r.r+=.9;ctx.strokeStyle=rgba(dk?'#7DD3FC':'#2B8AC4',(1-r.r/50)*.55);ctx.beginPath();ctx.ellipse(r.x,r.y,r.r,r.r*.35,0,0,6.3);ctx.stroke()});
+band(t,1,sy,'#38BDF8',dk?.22:.16,8)};
+S.salt=function(t,dk){comp(dk);var col=dk?'#E6FBFF':'#2B8AC4';stars.forEach(function(s){s.y+=s.v;if(s.y>H+10)s.y=-10;var tw=.5+.5*Math.sin(t*2+s.p),z=s.s*(.5+.5*tw);ctx.beginPath();ctx.moveTo(s.x,s.y-z);ctx.lineTo(s.x+z*.7,s.y);ctx.lineTo(s.x,s.y+z);ctx.lineTo(s.x-z*.7,s.y);ctx.closePath();ctx.fillStyle=rgba(col,(dk?.55:.4)*(.3+.7*tw));ctx.fill()})};
+S.fert=function(t,dk){net(t,dk,dk?'#A3E635':'#3B8F2E',dk?'#F5C451':'#B8860B')};
+S.ai=function(t,dk){net(t,dk,dk?'#A78BFA':'#6D4AD6',dk?'#38BDF8':'#1E7FB8')};
+S.sat=function(t,dk){comp(dk);var cx=W/2,cy=H*.4,Rr=Math.min(W,H)*.48,a=t*1.3,k,r,col=dk?'#22E5FF':'#0E7C95';
+ctx.lineWidth=1;ctx.strokeStyle=rgba(col,.22);for(r=1;r<=3;r++){ctx.beginPath();ctx.arc(cx,cy,Rr*r/3,0,6.3);ctx.stroke()}
+for(k=0;k<28;k++){ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,Rr,a-k*.04-.04,a-k*.04);ctx.closePath();ctx.fillStyle=rgba(col,(1-k/28)*(dk?.2:.14));ctx.fill()}
+[[.3,.25],[-.5,.1],[.2,-.4],[-.25,-.2],[.55,-.1],[-.1,.45]].forEach(function(b){var bx=cx+b[0]*Rr*1.6,by=cy+b[1]*Rr*1.6,df=((a-Math.atan2(by-cy,bx-cx))%6.283+6.283)%6.283,al=Math.max(0,1-df/3);ctx.beginPath();ctx.arc(bx,by,3+al*3,0,6.3);ctx.fillStyle=rgba('#FFB020',.12+al*.6);ctx.fill()})};
+S.pest=function(t,dk){comp(dk);flies.forEach(function(f){f.x+=Math.sin(t*f.s+f.p)*.6;f.y+=Math.cos(t*f.s*.8+f.p)*.5;if(f.x<0)f.x=W;if(f.x>W)f.x=0;if(f.y<0)f.y=H;if(f.y>H)f.y=0;var fl=.35+.65*Math.abs(Math.sin(t*f.s*2+f.p)),g=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,16);g.addColorStop(0,rgba(dk?'#FDE68A':'#D9A400',(dk?.6:.45)*fl));g.addColorStop(1,rgba(dk?'#FDE68A':'#D9A400',0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(f.x,f.y,16,0,6.3);ctx.fill()})};
+S.map=function(t,dk){comp(dk);ctx.lineWidth=1.2;var k,x;for(k=0;k<10;k++){ctx.strokeStyle=rgba(k%2?(dk?'#E0A21A':'#B8860B'):(dk?'#2DD4BF':'#1E8F7A'),dk?.24:.2);ctx.beginPath();for(x=0;x<=W;x+=10){var y=H*(.1+k*.09)+Math.sin(x*.012+t*.4+k*.6)*18+Math.sin(x*.03-t*.3+k)*6;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}};
+S.hist=function(t,dk){comp(dk);var k,p;ctx.lineWidth=1.4;for(k=0;k<5;k++){p=(t*.12+k/5)%1;ctx.strokeStyle=rgba(dk?'#E8C872':'#9A6200',(1-p)*(dk?.34:.26));ctx.beginPath();ctx.arc(W/2,H*.4,p*Math.max(W,H)*.7,0,6.3);ctx.stroke()}};
+
+S.res=function(t,dk){comp(dk);var n=Math.max(8,Math.floor(W/26)),i,x,h,w=W/n;for(i=0;i<n;i++){x=i*w;h=H*(.12+.2*(.5+.5*Math.sin(t*.9+i*.55)))*(.6+.4*Math.sin(i*1.7));var g=ctx.createLinearGradient(0,H-h,0,H);g.addColorStop(0,rgba(i%3?(dk?'#4ADE80':'#1C8A57'):(dk?'#F5C451':'#B8860B'),dk?.3:.2));g.addColorStop(1,rgba('#4ADE80',0));ctx.fillStyle=g;ctx.fillRect(x+3,H-h,w-6,h)}
+grains.forEach(function(g){g.y-=g.v*.8;if(g.y<0)g.y=H;ctx.beginPath();ctx.arc(g.x,g.y,g.r,0,6.3);ctx.fillStyle=rgba('#F5C451',dk?.5:.35);ctx.fill()})};
+S.ct=function(t,dk){comp(dk);stars.forEach(function(s,i){s.y-=s.v*1.6;if(s.y<-30)s.y=H+30;var r=6+s.s*2.2,a=(dk?.2:.14)+.12*Math.sin(t*1.5+s.p);ctx.beginPath();ctx.arc(s.x+Math.sin(t*.6+s.p)*14,s.y,r,0,6.3);ctx.strokeStyle=rgba(i%2?(dk?'#2DD4BF':'#1E8F7A'):(dk?'#F5C451':'#B8860B'),a+.12);ctx.lineWidth=1.3;ctx.stroke();ctx.fillStyle=rgba(i%2?'#2DD4BF':'#F5C451',a*.35);ctx.fill()})};
+S.about=function(t,dk){net(t,dk,dk?'#F5C451':'#B8860B',dk?'#2DD4BF':'#1E8F7A')};
+S.tools=function(t,dk){comp(dk);var gap=34,x,y,d,cx=W/2,cy=H*.35;for(y=gap/2;y<H;y+=gap)for(x=gap/2;x<W;x+=gap){d=Math.hypot(x-cx,y-cy);var w=.5+.5*Math.sin(d*.02-t*1.6);ctx.beginPath();ctx.arc(x,y,1+w*2.2,0,6.3);ctx.fillStyle=rgba(((x+y)/gap|0)%5?(dk?'#4ADE80':'#1C8A57'):(dk?'#F5C451':'#B8860B'),(dk?.14:.1)+w*(dk?.34:.22));ctx.fill()}};
+S.acct=function(t,dk){comp(dk);var c=dk?['#F5C451','#2DD4BF','#E8C872']:['#E0A21A','#34B87C','#B8860B'],k;for(k=0;k<3;k++)band(t,k+2,H*(.25+k*.17),c[k],dk?.22:.14,38)};
+var MAP={home:'aurora',tools:'tools',crop:'crop',soil:'soil',water:'water',salt:'salt',fert:'fert',res:'res',hist:'hist',ai:'ai',ct:'ct',cal:'crop',sat:'sat',pest:'pest',map:'map',acct:'ct',about:'about'};
+function pg(){var m=/\bpg-(\S+)/.exec(document.body.className);return MAP[m?m[1]:'home']||'aurora'}
+var cur=pg(),prev=null,mix=1,last=0,t0=performance.now(),done=false;
+function frame(ts){requestAnimationFrame(frame);if(document.hidden||ts-last<INT)return;var dtm=ts-last;last=ts;
+if(reduce&&mix>=1&&done)return;
+ctx.clearRect(0,0,W,H);var t=reduce?5:(ts-t0)/1000,dk=dark();
+if(mix<1){mix=Math.min(1,mix+dtm/700);if(prev){ctx.globalAlpha=1-mix;S[prev](t,dk)}ctx.globalAlpha=mix;S[cur](t,dk)}else{ctx.globalAlpha=1;S[cur](t,dk)}
+ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';done=true}
+new MutationObserver(function(){var n=pg();if(n!==cur){prev=cur;cur=n;mix=0;done=false}}).observe(document.body,{attributes:true,attributeFilter:['class']});
+requestAnimationFrame(frame);
+})();
+</script>
+<script id="qfxJs">
+(function(){
+var CC={wheat:'#E0A21A',barley:'#D9B44A',maize:'#F2C230',rice:'#8FCB6B',sorghum:'#C0612B',oat:'#CDB77A',faba:'#6DB36A',soybean:'#A6C25A',peanut:'#C98E57',lentil:'#D2793B',chickpea:'#D8B070',cotton:'#EDEAE2',sugarbeet:'#B04A8C',sugarcane:'#7FBF4D',sunflower:'#F5C518',sesame:'#D9C7A0',alfalfa:'#4FA86A',berseem:'#5EBF7A',tomato:'#E5483A',potato:'#C9A26A',onion:'#C9638C',garlic:'#E8E0D0',pepper:'#E0382B',cucumber:'#55B86A',eggplant:'#7B4BA0',squash:'#8CC152',watermelon:'#E5546B',cantaloupe:'#F2A65A',okra:'#7DB84A',cabbage:'#7FD08A',carrot:'#F08A1C',sweetpotato:'#C46A3A',citrus:'#F59A1F',dates:'#A8672F',grapes:'#8A4FB5',olive:'#8A9A3B',strawberry:'#E83F5B',banana:'#F2D43A',mango:'#F5A623',pomegranate:'#C21F3A'};
+function g(id){return document.getElementById(id)}
+function sget(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}
+function sset(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+/* 1) لون المحصول */
+function crop(){var s=g('crop');if(!s)return;var c=CC[s.value];if(c){document.documentElement.style.setProperty('--cc',c);window.QCC=c}}
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='crop')crop()},true);
+setTimeout(crop,1200);setInterval(crop,4000);
+/* 2) صوت واهتزاز */
+var AC=null;function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}catch(e){return null}}
+function snd(){return sget('qSnd','1')==='1'}
+function note(f,t0,d,v){var a=ac();if(!a)return;var o=a.createOscillator(),gn=a.createGain();o.type='sine';o.frequency.value=f;gn.gain.setValueAtTime(0,a.currentTime+t0);gn.gain.linearRampToValueAtTime(v,a.currentTime+t0+.015);gn.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t0+d);o.connect(gn);gn.connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.05)}
+function tick(){if(snd())note(880,0,.06,.04)}
+function chime(){if(snd()){note(660,0,.35,.06);note(990,.12,.45,.05)}}
+function vib(n){try{if(navigator.vibrate)navigator.vibrate(n)}catch(e){}}
+document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('button,.btn,.tl3,.tile,.mi');if(!t)return;vib(8);if(/^(runb|save|csvB|share|prt2)$/.test(t.id||''))tick()},true);
+/* 3) عدّ الأرقام */
+function fmt(n,d,c){return c?n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}):n.toFixed(d)}
+function countEl(el){if(el.__q)return;var s=el.textContent,m=/-?\d[\d,]*(?:\.\d+)?/.exec(s);if(!m)return;var raw=m[0],c=raw.indexOf(',')>-1,d=(raw.split('.')[1]||'').length,to=parseFloat(raw.replace(/,/g,''));if(!isFinite(to)||to===0)return;
+var pre=s.slice(0,m.index),suf=s.slice(m.index+raw.length),t0=performance.now(),dur=900;el.__q=1;
+(function st(now){var p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+fmt(to*e,d,c)+suf;if(p<1)requestAnimationFrame(st);else{el.textContent=s;el.__q=0}})(t0)}
+function watch(id){var el=g(id);if(!el)return;var last=el.textContent;new MutationObserver(function(){if(el.__q)return;var now=el.textContent;if(now!==last&&!/^[—\-\s]*$/.test(now)){var wasEmpty=/^[—\-\s]*$/.test(last);last=now;countEl(el);if(id==='score'&&wasEmpty)chime()}else last=now}).observe(el,{childList:true,characterData:true,subtree:true})}
+['rPH','rIR','rVOL','rSEA','rINT','rDF','rCOST','score'].forEach(function(i){setTimeout(function(){watch(i)},300)});
+window.qCountUp=function(root){(root||document).querySelectorAll('.qst b[data-n]').forEach(function(b,i){var to=+b.dataset.n,t0=performance.now()+i*120,dur=1100;(function st(now){var p=Math.max(0,Math.min(1,(now-t0)/dur)),e=1-Math.pow(1-p,3);b.textContent=Math.round(to*e);if(p<1)requestAnimationFrame(st)})(performance.now())})};
+/* 4) وضع العرض + قائمة */
+var x=document.createElement('button');x.type='button';x.className='qpmx';x.id='pmX';document.body.appendChild(x);
+function pm(on){document.body.classList.toggle('pm',on);if(on){try{if(window.show&&!/\bpg-res\b/.test(document.body.className))window.show('res')}catch(e){}}menu()}
+x.onclick=function(){pm(false)};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('pm'))pm(false)});
+function L(a,b){return(document.documentElement.lang==='en'||(window.lang==='en'))?b:a}
+function menu(){var s=g('sndT'),p=g('pmT');if(s)s.textContent=snd()?L('الصوت: شغّال 🔊','Sound: on 🔊'):L('الصوت: مقفول 🔇','Sound: off 🔇');if(p)p.textContent=L('وضع العرض','Presentation mode');x.textContent=L('✕ خروج من وضع العرض','✕ Exit presentation')}
+var mp=g('menuP');if(mp){var a=document.createElement('button');a.className='mi';a.id='sndB';a.innerHTML='<span id="sndT"></span>';var b=document.createElement('button');b.className='mi';b.id='pmB';b.innerHTML='<span>🖥️</span> <span id="pmT"></span>';var th=g('theme');if(th&&th.parentNode){th.insertAdjacentElement('afterend',b);th.insertAdjacentElement('afterend',a)}
+a.onclick=function(){sset('qSnd',snd()?'0':'1');menu();tick()};b.onclick=function(){var m=g('menuP');if(m)m.classList.remove('on','open','show');var mb=g('menuB');if(mb)mb.setAttribute('aria-expanded','false');pm(true)}}
+menu();var lg=g('lang');if(lg)lg.addEventListener('change',function(){setTimeout(menu,50)});
+var om=window.menuUI;if(typeof om==='function'){window.menuUI=function(){var r=om.apply(this,arguments);menu();return r}}
+})();
+</script>
+
 </body>
 </html>
