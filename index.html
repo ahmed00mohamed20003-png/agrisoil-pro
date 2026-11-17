@@ -537,6 +537,7 @@ body.pm .qpmx{display:block}
 <footer>قوت | Qout © 2026 — النتائج تقديرية وتسترشد بمعايير FAO وUSDA وIPNI، والأصناف حسب المنطقة إرشادية</footer>
 </div>
 
+<div id="mVer" class="modal"><div class="card" style="max-width:390px;width:100%;text-align:center"><div style="font-size:2.4rem">📧</div><h3 id="vTitle">فعّل بريدك الإلكتروني</h3><p id="vTxt" style="font-size:.88rem;color:var(--mut);line-height:1.8"></p><p style="font-size:.95rem;font-weight:800;direction:ltr;margin:4px 0;word-break:break-all" id="vMail"></p><p id="vHint" style="font-size:.78rem;color:var(--mut)"></p><div id="vMsg" style="min-height:20px;font-size:.82rem;margin:6px 0"></div><div class="row" style="justify-content:center;flex-wrap:wrap"><button id="vOk">✅ فعّلت — متابعة</button><button class="sec" id="vRe">إعادة الإرسال</button><button class="sec" id="vOut">خروج</button></div></div></div>
 <div id="mPay" class="modal"><div class="card" style="max-width:380px;width:100%;text-align:center"><h3>انتهت المحاولات المجانية</h3><p style="font-size:.85rem;color:var(--mut)">حوّل عبر InstaPay ثم أرسل الإيصال مع بريد حسابك ليتم تفعيله</p><p style="font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:2px;margin:6px 0">01113276215</p><p style="font-size:.78rem;color:var(--mut);direction:ltr;margin:0 0 10px">حسابك: <b id="payMail"></b></p><div class="row" style="justify-content:center"><button id="payWa">📲 إرسال الإيصال</button><button class="sec" id="cPay">✕</button></div><p style="font-size:.72rem;color:var(--mut)">ahmed00mohamed20003@gmail.com</p></div></div>
 <div id="mHow" class="modal"><div class="card" style="max-width:540px;width:100%;max-height:86vh;overflow:auto"><div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0" id="howH"></h3><button class="sec" id="howX" style="min-height:34px;padding:2px 12px">✕</button></div><div id="howBody"></div></div></div>
 <div id="mRun" class="modal"><div class="card" role="alertdialog" aria-modal="true" style="max-width:380px;width:100%;text-align:center"><div style="font-size:2.4rem;line-height:1">🚀</div><h3 id="rT" style="margin:8px 0"></h3><p id="rB" style="color:var(--mut);line-height:1.9;margin:0"></p><div id="rBal" class="badge wn" style="margin:10px 0"></div><div class="row" style="justify-content:center"><button id="rOk" style="font-size:.9rem;padding:10px 18px"></button><button class="sec" id="rNo" style="font-size:.9rem;padding:10px 18px"></button></div></div></div>
@@ -705,8 +706,20 @@ $('cPay').onclick=()=>{$('mPay').classList.remove('on');setTimeout(()=>{PAYH.tex
 let UPH='';
 function phSet(u,d){const k='qPh'+(u?u.uid:'');let p=null;if(d&&typeof d.photo==='string'){p=d.photo;try{localStorage.setItem(k,p)}catch(e){}}else{try{p=localStorage.getItem(k)}catch(e){}}UPH=p||(u&&u.photoURL)||''}
 const phOk=x=>/^(data:image\/jpeg;base64,[A-Za-z0-9+\/=]+|https:\/\/[^\s"'<>]+)$/.test(x||'');
+let VPOLL=0,VCD=0;
+function verClose(){clearInterval(VPOLL);VPOLL=0;$('mVer').classList.remove('on')}
+function verTxt(){$('vTitle').textContent=L2('فعّل بريدك الإلكتروني','Verify your email');$('vTxt').textContent=L2('بعتنالك رسالة تفعيل على بريدك. افتحها واضغط على الرابط، وبعدها ارجع هنا.','We sent a verification link to your email. Open it, tap the link, then come back here.');$('vHint').textContent=L2('مش لاقيها؟ شوف مجلد الرسائل غير المرغوبة (Spam).','Not there? Check your Spam folder.');$('vOk').textContent=L2('✅ فعّلت — متابعة','✅ Verified — continue');$('vOut').textContent=L2('خروج','Sign out');if(!VCD)$('vRe').textContent=L2('إعادة الإرسال','Resend')}
+window.onVerify=u=>{AUTH_READY=true;USER=null;UPH='';pro=false;trials=0;badge();greet();$('mAuth').classList.remove('on');$('acct').style.display='none';
+  $('vMail').textContent=u.email||'';$('vMsg').textContent='';verTxt();$('mVer').classList.add('on');
+  clearInterval(VPOLL);VPOLL=setInterval(()=>{if(document.hidden||!window.NamaaAuth)return;NamaaAuth.recheck().then(ok=>{if(ok)verClose()}).catch(()=>{})},5000)};
+$('vOk').onclick=async()=>{const m=$('vMsg');m.style.color='var(--mut)';m.textContent=L2('جارٍ التحقق…','Checking…');
+  try{if(await NamaaAuth.recheck()){verClose();return}m.style.color='var(--er)';m.textContent=L2('لسه ما اتفعّلش — اضغط على الرابط في الرسالة أولاً.','Not verified yet — tap the link in the email first.')}catch(e){m.style.color='var(--er)';m.textContent=L2('تعذر التحقق، حاول مرة أخرى','Could not check, try again')}};
+$('vRe').onclick=async()=>{if(VCD)return;const m=$('vMsg');
+  try{await NamaaAuth.resend();m.style.color='var(--ok)';m.textContent=L2('تم إرسال رسالة جديدة ✅','New email sent ✅');VCD=60;const t=setInterval(()=>{VCD--;if(VCD<=0){VCD=0;clearInterval(t);verTxt()}else $('vRe').textContent=L2('إعادة الإرسال بعد ','Resend in ')+VCD},1000)}
+  catch(e){m.style.color='var(--er)';m.textContent=(e&&e.code==='auth/too-many-requests')?L2('محاولات كتير — استنى شوية وجرب تاني','Too many tries — wait a bit'):L2('تعذر الإرسال، حاول لاحقاً','Could not send, try later')}};
+$('vOut').onclick=()=>{verClose();if(window.NamaaAuth)NamaaAuth.out()};
 window.onUser=(u,d,err)=>{
-  AUTH_READY=true;
+  AUTH_READY=true;if(VPOLL||$('mVer').classList.contains('on'))verClose();
   if(!u||!d){USER=null;UPH='';pro=false;trials=0;NOTS=[];nBadge();badge();greet();
     $('mAuth').classList.add('on');
     $('acct').style.display='none';authUI();
@@ -715,7 +728,7 @@ window.onUser=(u,d,err)=>{
     return}
   USER=u;phSet(u,d);trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
   $('payMail').textContent=u.email||'';$('acctMail').textContent=u.email||u.displayName||'';$('acct').style.display='flex';$('mAuth').classList.remove('on');authMsg('');
-  authUI();badge();greet();staleUI();annCheck()};
+  authUI();badge();greet();staleUI();annCheck();if(window.qRestoreRes)window.qRestoreRes()};
 
 // ===== قوام التربة (مثلث USDA — 12 قواماً) =====
 const L2=(a,e)=>lang==='ar'?a:e;
@@ -1191,13 +1204,9 @@ function showHow(){
 }
 $('howBtn').onclick=showHow;$('howX').onclick=()=>$('mHow').classList.remove('on');
 function texPickInit(){const pk=$('texPick'),cur=pk.value;pk.innerHTML='<option value="">'+L2('— اختر —','— choose —')+'</option>'+TEX.map(a=>`<option value="${a[0]}">${L2(a[1],a[2])} (${a[3]})</option>`).join('');pk.value=cur||''}
-function texLive(){const sm=$('texSum'),T0=texInfo();
-  drawTri(null);
-  if(!T0){sm.className='badge er';sm.textContent=L2('⚠️ أدخل نسب الرمل والسلت والطين (قيم موجبة).','⚠️ Enter sand, silt and clay percentages (positive values).');return}
-  const ok=Math.abs(T0.sum-100)<=1;sm.className='badge '+(ok?'ok':'wn');
-  sm.textContent=ok?L2('✅ المجموع '+T0.sum.toFixed(0)+'%','✅ Total '+T0.sum.toFixed(0)+'%'):L2('⚠️ المجموع '+T0.sum.toFixed(1)+'% وليس 100% — سيتم تطبيع النسب تلقائياً عند التحليل','⚠️ Total is '+T0.sum.toFixed(1)+'%, not 100% — it will be normalized at analysis')}
-function dirty(){DIRTY=true;if(RESULT_READY)updTex();else texLive();staleUI()}
-function staleUI(){const rc=$('texK')&&$('texK').parentNode;if(rc)rc.style.display=RESULT_READY?'':'none';const el=$('stale');if(!el)return;
+function texLive(){updTex()}
+function dirty(){DIRTY=true;updTex();staleUI()}
+function staleUI(){const rc=$('texK')&&$('texK').parentNode;if(rc)rc.style.display='';const el=$('stale');if(!el)return;
   if(!RESULT_READY){el.textContent=L2('اضغط «تشغيل التحليل الشامل» لعرض النتائج.','Press “Run full analysis” to see the results.');el.style.display='block'}
   else if(DIRTY){el.textContent=L2('عدّلت المُدخلات — اضغط «تشغيل التحليل الشامل» لتحديث النتائج.','Inputs changed — press “Run full analysis” to update the results.');el.style.display='block'}
   else el.style.display='none'}
@@ -1705,7 +1714,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.16-4';
+const APP_VER='2026.11.17-2';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2987,6 +2996,28 @@ $('instX').onclick=()=>$('mInst').classList.remove('on');
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 howLabel();authUI();badge();greet();fnameLang();fillVr();renderHist();if(lang!=='ar')tr.dirty=true;texPickInit();texLive();staleUI();tr();
 setTimeout(()=>{if(!AUTH_READY){AUTH_READY=true;if(!USER)$('mAuth').classList.add('on')}},7000);
+// ===== حفظ المسودة والصفحة الحالية (تفضل زي ما هي بعد إعادة التشغيل) =====
+(function(){
+ const K='qDraft',TTL=12*36e5;let t=0,pend=false;
+ function snap(){try{const v={vr:$('vr').value};FIELDS.forEach(f=>{const e=$(f);if(e)v[f]=e.value});const pn=document.querySelector('.pn.on');return{t:Date.now(),v,p:pn?pn.id.slice(2):'home',r:RESULT_READY?1:0,fm:fcManual?1:0}}catch(e){return null}}
+ function save(){clearTimeout(t);t=setTimeout(()=>{const x=snap();if(x)store(K,JSON.stringify(x))},400)}
+ ['input','change'].forEach(n=>document.addEventListener(n,e=>{if(e.target&&e.target.closest&&e.target.closest('.pn'))save()},true));
+ addEventListener('pagehide',()=>{clearTimeout(t);const x=snap();if(x)store(K,JSON.stringify(x))});
+ const _show=show;show=function(id){const r=_show.apply(this,arguments);save();return r};
+ window.qRestoreRes=function(){if(!pend)return;pend=false;try{run(false,'load')}catch(e){}if(RESULT_READY)show('res');else show('home')};
+ try{
+  const x=JSON.parse(store(K)||'null');
+  if(x&&x.v&&Date.now()-(+x.t||0)<TTL){
+   FIELDS.forEach(f=>{const e=$(f);if(e&&x.v[f]!==undefined)e.value=String(x.v[f]).slice(0,200)});
+   if(!C[$('crop').value]){$('crop').selectedIndex=0}
+   fillVr();if(x.v.vr)$('vr').value=x.v.vr;try{vrChg()}catch(e){}
+   fcManual=!!x.fm;updTex();staleUI();
+   const pg=String(x.p||'home');
+   if(pg==='res'){if(x.r)pend=true}
+   else if(pg!=='home'&&document.getElementById('p-'+pg))show(pg);
+  }
+ }catch(e){console.error(e)}
+})();
 
 </script>
 <script>
@@ -3000,7 +3031,7 @@ s.onclick=hide;setTimeout(hide,4600);
 </script>
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,signOut,sendPasswordResetEmail,updateProfile} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,signOut,sendPasswordResetEmail,updateProfile,sendEmailVerification,reload} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {getFirestore,initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,getDoc,setDoc,updateDoc,serverTimestamp,collection,addDoc,query,orderBy,limit,getDocs,deleteDoc,where} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // >>> الصق هنا إعدادات Firebase بتاعتك (Project settings > Your apps > Web app) <<<
@@ -3017,9 +3048,14 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
   const app=initializeApp(firebaseConfig),auth=getAuth(app);
   let db;try{db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})})}catch(e){db=getFirestore(app)}
   let ref=null,cur=null;
+  try{auth.languageCode=(localStorage.getItem('agriLang')==='en')?'en':'ar'}catch(e){auth.languageCode='ar'}
+  const VER_FROM=Date.parse('2026-11-17T00:00:00Z');
+  const needVer=u=>!!u&&!u.emailVerified&&u.providerData.some(p=>p.providerId==='password')&&Date.parse(u.metadata.creationTime)>=VER_FROM;
   window.NamaaAuth={
     login:(e,p)=>signInWithEmailAndPassword(auth,e,p),
-    signup:async(n,e,p)=>{const c=await createUserWithEmailAndPassword(auth,e,p);if(n)await updateProfile(c.user,{displayName:n});return c},
+    signup:async(n,e,p)=>{const c=await createUserWithEmailAndPassword(auth,e,p);if(n)await updateProfile(c.user,{displayName:n});try{await sendEmailVerification(c.user)}catch(x){console.error(x)}return c},
+    resend:async()=>{const u=auth.currentUser;if(!u)throw new Error('no user');await sendEmailVerification(u)},
+    recheck:async()=>{const u=auth.currentUser;if(!u)return false;await reload(u);if(needVer(u))return false;cur=u;load(u);beat();return true},
     google:()=>signInWithPopup(auth,new GoogleAuthProvider()),
     reset:e=>sendPasswordResetEmail(auth,e),
     out:()=>signOut(auth),
@@ -3043,7 +3079,7 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     savePush:async(id,sub)=>{const u=auth.currentUser;if(!u)throw new Error('no user');await setDoc(doc(db,'push_subs',id),{uid:u.uid,sub:String(sub).slice(0,1400),createdAt:serverTimestamp()})},
     delPush:id=>deleteDoc(doc(db,'push_subs',id)),
     pushCount:async()=>(await getDocs(query(collection(db,'push_subs'),limit(1000)))).size,
-    adminStats:async()=>{const cut=new Date(Date.now()-150000),d7=new Date(Date.now()-6*864e5).toLocaleDateString('sv',{timeZone:'Africa/Cairo'});
+    adminStats:async()=>{const cut=new Date(Date.now()-420000),d7=new Date(Date.now()-6*864e5).toLocaleDateString('sv',{timeZone:'Africa/Cairo'});
       const [a,v]=await Promise.all([getDocs(query(collection(db,'presence'),where('t','>',cut))),getDocs(query(collection(db,'visits'),where('day','>=',d7),limit(5000)))]);
       return {active:a.docs.map(x=>x.id),visits:v.docs.map(x=>x.data())}},
     pullPrivate:async()=>(await getDocs(query(collection(db,'season_private'),orderBy('createdAt','desc'),limit(500)))).docs.map(x=>x.data()),
@@ -3063,11 +3099,12 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     setDoc(doc(db,'presence',u.uid),{t:serverTimestamp(),day:cairoDay()}).catch(()=>{});
     try{const d=cairoDay(),k='qVis'+u.uid;if(localStorage.getItem(k)!==d){localStorage.setItem(k,d);
       setDoc(doc(db,'visits',d+'_'+u.uid),{uid:u.uid,day:d,createdAt:serverTimestamp()}).catch(()=>{localStorage.removeItem(k)})}}catch(e){}}
-  setInterval(beat,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat()});
+  setInterval(beat,180000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat()});
   onAuthStateChanged(auth,u=>{
     if(!u&&cur){deleteDoc(doc(db,'presence',cur.uid)).catch(()=>{})}
     cur=u;
     if(!u){ref=null;window.onUser(null);return}
+    if(needVer(u)){ref=null;window.onVerify(u);return}
     load(u);beat();
   });
 }
