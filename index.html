@@ -366,7 +366,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
 <style id="qbgCss2">
 :root:not([data-theme="dark"]) .card{background:rgba(255,253,247,.8)}
 </style>
-<style id="libCss">
+<style id="libCss">.lbAd{display:flex;gap:8px;margin-top:8px}.lbAd button{padding:6px 12px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:inherit;font:inherit;cursor:pointer}.lbRd{margin-top:8px;padding:8px 14px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}.lbBd{margin-top:8px;font-size:.88rem;line-height:2}.lbBd p{margin:0 0 .7em}
 .lbH{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.lbH input,.lbH select{flex:1;min-width:130px;min-height:42px}
 .lbT{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.lbT button{border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:99px;padding:6px 13px;font-size:.78rem;font-weight:700;cursor:pointer}.lbT button.on{background:var(--gold,#c9a227);color:#1a1a1a;border-color:transparent}
 .lbC{border:1px solid var(--bd);background:var(--card);border-radius:18px;padding:13px 14px;margin:9px 0;display:flex;gap:12px;align-items:flex-start}
@@ -1728,7 +1728,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.22-2';
+const APP_VER='2026.11.22-4';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -3090,6 +3090,9 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     notices:async()=>(await getDocs(query(collection(db,'notices'),orderBy('t','desc'),limit(20)))).docs.map(x=>({id:x.id,...x.data()})),
     adminNoticeAdd:d=>addDoc(collection(db,'notices'),d),
     adminNoticeDel:id=>deleteDoc(doc(db,'notices',id)),
+    articles:async()=>(await getDocs(query(collection(db,'articles'),orderBy('t','desc'),limit(30)))).docs.map(x=>({id:x.id,...x.data()})),
+    artSave:(id,d)=>setDoc(doc(db,'articles',id),d),
+    artDel:id=>deleteDoc(doc(db,'articles',id)),
     savePush:async(id,sub)=>{const u=auth.currentUser;if(!u)throw new Error('no user');await setDoc(doc(db,'push_subs',id),{uid:u.uid,sub:String(sub).slice(0,1400),createdAt:serverTimestamp()})},
     delPush:id=>deleteDoc(doc(db,'push_subs',id)),
     pushCount:async()=>(await getDocs(query(collection(db,'push_subs'),limit(1000)))).size,
@@ -3194,21 +3197,29 @@ requestAnimationFrame(frame);
  const EMPTY={book:['لسه مفيش كتب — هتتضاف قريباً.','No books yet — coming soon.'],paper:['لسه مفيش أبحاث — هتتضاف قريباً.','No research yet — coming soon.'],bulletin:['لسه مفيش نشرات — هتتضاف قريباً.','No bulletins yet — coming soon.'],article:['لسه مفيش مقالات — هتتضاف قريباً.','No articles yet — coming soon.']};
  let DATA=null,ST={q:'',t:'all',c:'all'};
  async function load(){if(DATA)return DATA;try{const r=await fetch('library/index.json?_v='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;const j=await r.json();DATA=Array.isArray(j.items)?j.items.filter(x=>x&&typeof x.title==='string').map(x=>Object.assign({},x,{type:TY[x.type]?x.type:(ALIAS[x.type]||'article')})):[]}catch(e){DATA=[]}return DATA}
+ let ART=null;
+ async function loadArt(force){if(ART&&!force)return ART;const A=window.NamaaAuth;if(!A||!A.articles||typeof USER==='undefined'||!USER)return [];try{ART=(await A.articles()).map(x=>({id:x.id,title:String(x.title||''),author:x.author,body:String(x.body||''),lang:x.lang||'ar',type:'article',_fs:1}))}catch(e){console.error(e);return []}return ART}
  const okF=f=>typeof f==='string'&&/^library\/[^?#]+$/.test(f)&&!/\.\./.test(f);
  const okU=u=>typeof u==='string'&&/^https:\/\//.test(u);
  window.libRender=async function(){const b=$('libBox');if(!b)return;
   b.innerHTML='<div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-lib"/></svg> '+L2('المكتبة الزراعية','Agricultural library')+'</h3><p style="color:var(--mut);font-size:.84rem;line-height:1.8">'+L2('كتب وأبحاث ونشرات ومقالات المراجع اللي بنعتمد عليها في أرقام المنصة.','Books, research, bulletins and articles that back the platform’s numbers.')+'</p><div id="lbBody"></div></div>';
-  const items=await load(),body=$('lbBody');if(!body)return;
+  const items=[...await load(),...await loadArt()],body=$('lbBody');if(!body)return;
   const crops=[...new Set(items.flatMap(x=>Array.isArray(x.crops)?x.crops:[]))].filter(k=>C[k]);
   const draw=()=>{const q=ST.q.trim().toLowerCase();
    const f=items.filter(x=>(ST.t==='all'||x.type===ST.t)&&(ST.c==='all'||(x.crops||[]).includes(ST.c))&&(!q||[x.title,x.author,x.note].join(' ').toLowerCase().includes(q)));
    $('lbList').innerHTML=f.length?f.map(x=>{const t=TY[x.type]||TY.other,cs=(x.crops||[]).filter(k=>C[k]).map(k=>'<span>'+escH(tx(C[k][0]))+'</span>').join('');
-    return '<div class="lbC"><svg class="ic" aria-hidden="true"><use href="#i-lib"/></svg><div style="min-width:0"><h4>'+escH(x.title)+'</h4><small>'+t[0]+' '+L2(t[1],t[2])+(x.author?' · '+escH(x.author):'')+(x.year?' · '+escH(String(x.year)):'')+(x.lang?' · '+(x.lang==='ar'?'عربي':'English'):'')+'</small>'+(cs?'<div class="tg">'+cs+'</div>':'')+(x.note?'<small>'+escH(x.note)+'</small>':'')+(okF(x.file)?'<a href="'+escH(x.file)+'" target="_blank" rel="noopener">'+L2('فتح / تحميل','Open / Download')+'</a>':'')+(okU(x.url)?'<a href="'+escH(x.url)+'" target="_blank" rel="noopener noreferrer">'+L2('المصدر الأصلي','Original source')+'</a>':'')+'</div></div>'}).join(''):'<div class="lbE"><b>📚</b>'+(items.length===0||(ST.t!=='all'&&!items.some(x=>x.type===ST.t))?L2(...(EMPTY[ST.t]||['المكتبة قيد الإعداد — هيتم رفع الكتب والأبحاث والنشرات والمقالات قريباً بإذن الله.','The library is being prepared — coming soon.'])):L2('لا نتائج بهذا الفلتر.','No results for this filter.'))+'</div>'};
+    return '<div class="lbC"><svg class="ic" aria-hidden="true"><use href="#i-lib"/></svg><div style="min-width:0"><h4>'+escH(x.title)+'</h4><small>'+t[0]+' '+L2(t[1],t[2])+(x.author?' · '+escH(x.author):'')+(x.year?' · '+escH(String(x.year)):'')+(x.lang?' · '+(x.lang==='ar'?'عربي':'English'):'')+'</small>'+(cs?'<div class="tg">'+cs+'</div>':'')+(x.note?'<small>'+escH(x.note)+'</small>':'')+(x._fs&&isAdm()?'<div class="lbAd"><button type="button" class="lbEd" data-id="'+escH(x.id)+'">✏️ '+L2('تعديل','Edit')+'</button><button type="button" class="lbDl" data-id="'+escH(x.id)+'">🗑 '+L2('حذف','Delete')+'</button></div>':'')+(x.type==='article'&&x.body?'<button type="button" class="lbRd">'+L2('اقرأ المقال','Read article')+'</button><div class="lbBd" hidden>'+(Array.isArray(x.body)?x.body:String(x.body).split('\n')).filter(z=>String(z).trim()).map(z=>'<p>'+escH(String(z))+'</p>').join('')+'</div>':'')+(okF(x.file)?'<a href="'+escH(x.file)+'" target="_blank" rel="noopener">'+L2('فتح / تحميل','Open / Download')+'</a>':'')+(okU(x.url)?'<a href="'+escH(x.url)+'" target="_blank" rel="noopener noreferrer">'+L2('المصدر الأصلي','Original source')+'</a>':'')+'</div></div>'}).join(''):'<div class="lbE"><b>📚</b>'+(items.length===0||(ST.t!=='all'&&!items.some(x=>x.type===ST.t))?L2(...(EMPTY[ST.t]||['المكتبة قيد الإعداد — هيتم رفع الكتب والأبحاث والنشرات والمقالات قريباً بإذن الله.','The library is being prepared — coming soon.'])):L2('لا نتائج بهذا الفلتر.','No results for this filter.'))+'</div>'};
    const types=['all',...Object.keys(TY)];
-   body.innerHTML='<div class="lbH"><input id="lbQ" type="search" placeholder="'+L2('ابحث بالعنوان أو المؤلف…','Search title or author…')+'"><select id="lbC"><option value="all">'+L2('كل المحاصيل','All crops')+'</option>'+crops.map(k=>'<option value="'+k+'">'+escH(tx(C[k][0]))+'</option>').join('')+'</select></div><div class="lbT" id="lbT">'+types.map(k=>'<button type="button" data-t="'+k+'" class="'+(ST.t===k?'on':'')+'">'+(k==='all'?L2('الكل','All'):TY[k][0]+' '+L2(TY[k][1],TY[k][2]))+'</button>').join('')+'</div><div id="lbList"></div>';
-   $('lbQ').value=ST.q;$('lbC').value=ST.c;
-   $('lbQ').oninput=e=>{ST.q=e.target.value;draw()};$('lbC').onchange=e=>{ST.c=e.target.value;draw()};
+   body.innerHTML='<div class="lbT" id="lbT">'+types.map(k=>'<button type="button" data-t="'+k+'" class="'+(ST.t===k?'on':'')+'">'+(k==='all'?L2('الكل','All'):TY[k][0]+' '+L2(TY[k][1],TY[k][2]))+'</button>').join('')+'</div>'+(isAdm()?'<div id="lbAdm"><button type="button" class="lbNew">✍️ '+L2('مقال جديد','New article')+'</button></div><div id="lbForm"></div>':'')+'<div id="lbList"></div>';
    $('lbT').querySelectorAll('button').forEach(x=>x.onclick=()=>{ST.t=x.dataset.t;$('lbT').querySelectorAll('button').forEach(y=>y.classList.toggle('on',y===x));draw()});
+   const A=window.NamaaAuth,form=(a)=>{const f=$('lbForm');if(!f)return;f.innerHTML='<div class="card" style="margin:8px 0"><input id="arT" maxlength="150" placeholder="'+L2('عنوان المقال','Title')+'" value="'+escH(a?a.title:'')+'"><input id="arA" maxlength="60" placeholder="'+L2('اسم الكاتب','Author')+'" value="'+escH(a?(a.author||''):'')+'" style="margin-top:8px"><textarea id="arB" rows="10" maxlength="20000" placeholder="'+L2('اكتب المقال هنا — سطر فاضي بين كل فقرة','Write the article — blank line between paragraphs')+'" style="margin-top:8px;width:100%">'+escH(a?a.body:'')+'</textarea><div style="display:flex;gap:8px;margin-top:8px"><button type="button" id="arS">'+L2('حفظ ونشر','Save & publish')+'</button><button type="button" class="sec" id="arX">'+L2('إلغاء','Cancel')+'</button></div></div>';f.scrollIntoView({block:'nearest'});$('arX').onclick=()=>{f.innerHTML=''};
+    $('arS').onclick=async()=>{const t=$('arT').value.trim(),bd=$('arB').value.trim();if(!t||!bd){toast(L2('اكتب العنوان والنص.','Enter title and text.'));return}
+     $('arS').disabled=true;try{await A.artSave(a?a.id:Date.now().toString(36),{title:t,author:$('arA').value.trim().slice(0,60),body:bd,t:Date.now(),lang:'ar'});toast(L2('اتنشر ✓','Published ✓'));ST.t='article';await loadArt(true);libRender()}catch(er){console.error(er);$('arS').disabled=false;toast(L2('فشل الحفظ — اتأكد من نشر القواعد وتسجيل الدخول بإيميل المشرف.','Save failed — check rules & admin login.'))}}};
+   const nb=b.querySelector('.lbNew');if(nb)nb.onclick=()=>form(null);
+   $('lbList').addEventListener('click',async e=>{const ed=e.target.closest('.lbEd'),dl=e.target.closest('.lbDl');
+    if(ed){const a=ART.find(z=>z.id===ed.dataset.id);if(a)form(a)}
+    if(dl&&confirm(L2('حذف المقال نهائياً؟','Delete this article permanently?'))){try{await A.artDel(dl.dataset.id);toast(L2('اتحذف','Deleted'));await loadArt(true);ST.t='article';libRender()}catch(er){console.error(er);toast(L2('فشل الحذف','Delete failed'))}}});
+   $('lbList').onclick=e=>{const b=e.target.closest('.lbRd');if(!b)return;const d=b.nextElementSibling;d.hidden=!d.hidden;b.textContent=d.hidden?L2('اقرأ المقال','Read article'):L2('إخفاء المقال','Hide article')};
    draw()};
  const _sl=show;show=function(id,pop){const r=_sl(id,pop);if(id==='lib'){libRender();const T=$('qtbT');if(T)T.textContent=L2('المكتبة الزراعية','Agricultural library')}return r};
 })();
