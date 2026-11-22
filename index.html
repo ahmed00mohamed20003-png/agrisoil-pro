@@ -1728,7 +1728,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.22-1';
+const APP_VER='2026.11.22-2';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -3189,21 +3189,22 @@ requestAnimationFrame(frame);
 </script>
 <script id="libJs">
 (function(){
- const TY={book:['📘','كتاب','Book'],paper:['📄','بحث','Paper'],fao:['🌐','نشرة الفاو','FAO'],ministry:['🏛️','وزارة الزراعة','Ministry'],other:['📎','أخرى','Other']};
+ const TY={book:['📘','كتب','Books'],paper:['🔬','أبحاث','Research'],bulletin:['📰','نشرات','Bulletins'],article:['✍️','مقالات','Articles']};
+ const ALIAS={fao:'bulletin',ministry:'bulletin',other:'article'};
+ const EMPTY={book:['لسه مفيش كتب — هتتضاف قريباً.','No books yet — coming soon.'],paper:['لسه مفيش أبحاث — هتتضاف قريباً.','No research yet — coming soon.'],bulletin:['لسه مفيش نشرات — هتتضاف قريباً.','No bulletins yet — coming soon.'],article:['لسه مفيش مقالات — هتتضاف قريباً.','No articles yet — coming soon.']};
  let DATA=null,ST={q:'',t:'all',c:'all'};
- async function load(){if(DATA)return DATA;try{const r=await fetch('library/index.json?_v='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;const j=await r.json();DATA=Array.isArray(j.items)?j.items.filter(x=>x&&typeof x.title==='string'):[]}catch(e){DATA=[]}return DATA}
+ async function load(){if(DATA)return DATA;try{const r=await fetch('library/index.json?_v='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;const j=await r.json();DATA=Array.isArray(j.items)?j.items.filter(x=>x&&typeof x.title==='string').map(x=>Object.assign({},x,{type:TY[x.type]?x.type:(ALIAS[x.type]||'article')})):[]}catch(e){DATA=[]}return DATA}
  const okF=f=>typeof f==='string'&&/^library\/[^?#]+$/.test(f)&&!/\.\./.test(f);
  const okU=u=>typeof u==='string'&&/^https:\/\//.test(u);
  window.libRender=async function(){const b=$('libBox');if(!b)return;
-  b.innerHTML='<div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-lib"/></svg> '+L2('المكتبة الزراعية','Agricultural library')+'</h3><p style="color:var(--mut);font-size:.84rem;line-height:1.8">'+L2('كتب وأبحاث ونشرات المراجع اللي بنعتمد عليها في أرقام المنصة.','Books, papers and bulletins that back the platform’s numbers.')+'</p><div id="lbBody"></div></div>';
+  b.innerHTML='<div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-lib"/></svg> '+L2('المكتبة الزراعية','Agricultural library')+'</h3><p style="color:var(--mut);font-size:.84rem;line-height:1.8">'+L2('كتب وأبحاث ونشرات ومقالات المراجع اللي بنعتمد عليها في أرقام المنصة.','Books, research, bulletins and articles that back the platform’s numbers.')+'</p><div id="lbBody"></div></div>';
   const items=await load(),body=$('lbBody');if(!body)return;
-  if(!items.length){body.innerHTML='<div class="lbE"><b>📚</b>'+L2('المكتبة قيد الإعداد — هيتم رفع الكتب والأبحاث والنشرات قريباً بإذن الله.','The library is being prepared — books, papers and bulletins will be added soon.')+'</div>';return}
   const crops=[...new Set(items.flatMap(x=>Array.isArray(x.crops)?x.crops:[]))].filter(k=>C[k]);
   const draw=()=>{const q=ST.q.trim().toLowerCase();
    const f=items.filter(x=>(ST.t==='all'||x.type===ST.t)&&(ST.c==='all'||(x.crops||[]).includes(ST.c))&&(!q||[x.title,x.author,x.note].join(' ').toLowerCase().includes(q)));
    $('lbList').innerHTML=f.length?f.map(x=>{const t=TY[x.type]||TY.other,cs=(x.crops||[]).filter(k=>C[k]).map(k=>'<span>'+escH(tx(C[k][0]))+'</span>').join('');
-    return '<div class="lbC"><svg class="ic" aria-hidden="true"><use href="#i-lib"/></svg><div style="min-width:0"><h4>'+escH(x.title)+'</h4><small>'+t[0]+' '+L2(t[1],t[2])+(x.author?' · '+escH(x.author):'')+(x.year?' · '+escH(String(x.year)):'')+(x.lang?' · '+(x.lang==='ar'?'عربي':'English'):'')+'</small>'+(cs?'<div class="tg">'+cs+'</div>':'')+(x.note?'<small>'+escH(x.note)+'</small>':'')+(okF(x.file)?'<a href="'+escH(x.file)+'" target="_blank" rel="noopener">'+L2('فتح / تحميل','Open / Download')+'</a>':'')+(okU(x.url)?'<a href="'+escH(x.url)+'" target="_blank" rel="noopener noreferrer">'+L2('المصدر الأصلي','Original source')+'</a>':'')+'</div></div>'}).join(''):'<div class="lbE">'+L2('لا نتائج بهذا الفلتر.','No results for this filter.')+'</div>'};
-   const types=['all',...Object.keys(TY).filter(k=>items.some(x=>x.type===k))];
+    return '<div class="lbC"><svg class="ic" aria-hidden="true"><use href="#i-lib"/></svg><div style="min-width:0"><h4>'+escH(x.title)+'</h4><small>'+t[0]+' '+L2(t[1],t[2])+(x.author?' · '+escH(x.author):'')+(x.year?' · '+escH(String(x.year)):'')+(x.lang?' · '+(x.lang==='ar'?'عربي':'English'):'')+'</small>'+(cs?'<div class="tg">'+cs+'</div>':'')+(x.note?'<small>'+escH(x.note)+'</small>':'')+(okF(x.file)?'<a href="'+escH(x.file)+'" target="_blank" rel="noopener">'+L2('فتح / تحميل','Open / Download')+'</a>':'')+(okU(x.url)?'<a href="'+escH(x.url)+'" target="_blank" rel="noopener noreferrer">'+L2('المصدر الأصلي','Original source')+'</a>':'')+'</div></div>'}).join(''):'<div class="lbE"><b>📚</b>'+(items.length===0||(ST.t!=='all'&&!items.some(x=>x.type===ST.t))?L2(...(EMPTY[ST.t]||['المكتبة قيد الإعداد — هيتم رفع الكتب والأبحاث والنشرات والمقالات قريباً بإذن الله.','The library is being prepared — coming soon.'])):L2('لا نتائج بهذا الفلتر.','No results for this filter.'))+'</div>'};
+   const types=['all',...Object.keys(TY)];
    body.innerHTML='<div class="lbH"><input id="lbQ" type="search" placeholder="'+L2('ابحث بالعنوان أو المؤلف…','Search title or author…')+'"><select id="lbC"><option value="all">'+L2('كل المحاصيل','All crops')+'</option>'+crops.map(k=>'<option value="'+k+'">'+escH(tx(C[k][0]))+'</option>').join('')+'</select></div><div class="lbT" id="lbT">'+types.map(k=>'<button type="button" data-t="'+k+'" class="'+(ST.t===k?'on':'')+'">'+(k==='all'?L2('الكل','All'):TY[k][0]+' '+L2(TY[k][1],TY[k][2]))+'</button>').join('')+'</div><div id="lbList"></div>';
    $('lbQ').value=ST.q;$('lbC').value=ST.c;
    $('lbQ').oninput=e=>{ST.q=e.target.value;draw()};$('lbC').onchange=e=>{ST.c=e.target.value;draw()};
