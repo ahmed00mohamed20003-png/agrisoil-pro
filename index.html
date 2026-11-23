@@ -366,7 +366,8 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
 <style id="qbgCss2">
 :root:not([data-theme="dark"]) .card{background:rgba(255,253,247,.8)}
 </style>
-<style id="libCss">.lbIm{display:block;max-width:100%;max-height:220px;border-radius:12px;margin:8px 0;object-fit:cover}.lbAd{display:flex;gap:8px;margin-top:8px}.lbAd button{padding:6px 12px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:inherit;font:inherit;cursor:pointer}.lbRd{margin-top:8px;padding:8px 14px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}.lbBd{margin-top:8px;font-size:.88rem;line-height:2}.lbBd p{margin:0 0 .7em}
+<style id="libCss">#hl li{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}#arOv{position:fixed;left:0;right:0;top:0;height:100dvh;z-index:9999;display:flex;flex-direction:column;background:var(--bg);color:var(--fg)}#arOv .arHd{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--bd);flex:none}#arOv .arHd b{font-size:1rem}#arOv .arBd{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;padding:10px 12px;overflow:auto}#arOv .arBd textarea{flex:1;min-height:160px;width:100%;resize:none;line-height:1.9}#arOv .arFt{display:flex;gap:8px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid var(--bd);flex:none}#arOv .arImg{display:inline-block;padding:9px 14px;border:1px solid var(--bd);border-radius:12px;cursor:pointer}
+.lbIm{display:block;max-width:100%;max-height:220px;border-radius:12px;margin:8px 0;object-fit:cover}.lbAd{display:flex;gap:8px;margin-top:8px}.lbAd button{padding:6px 12px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:inherit;font:inherit;cursor:pointer}.lbRd{margin-top:8px;padding:8px 14px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}.lbBd{margin-top:8px;font-size:.88rem;line-height:2}.lbBd p{margin:0 0 .7em}
 .lbH{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.lbH input,.lbH select{flex:1;min-width:130px;min-height:42px}
 .lbT{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.lbT button{border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:99px;padding:6px 13px;font-size:.78rem;font-weight:700;cursor:pointer}.lbT button.on{background:var(--gold,#c9a227);color:#1a1a1a;border-color:transparent}
 .lbC{border:1px solid var(--bd);background:var(--card);border-radius:18px;padding:13px 14px;margin:9px 0;display:flex;gap:12px;align-items:flex-start}
@@ -980,8 +981,21 @@ function run(click,mode){
 // ===== حفظ / تصدير / مشاركة =====
 const FIELDS=['xCa','xMg','fname','gov','crop','area','unit','sand','silt','clay','caco3','vrC','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR','yT','pcS','pcR'];
 const hist=()=>{try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h.filter(x=>x&&typeof x==='object'&&x.v&&typeof x.v==='object').slice(0,12):[]}catch(e){return[]}};
-function renderHist(){const h=hist();$('hl').innerHTML=h.length?h.map((x,i)=>`<li><b>${(Object.prototype.hasOwnProperty.call(C,x.c)?tx(C[x.c][0]):'')}</b> · ${(+x.s||0)}/100 · ${new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')} · <a data-l="${i}">${L2('فتح','Open')}</a> · <a data-d="${i}">✕</a></li>`).join(''):'<li>'+L2('لا توجد تقارير محفوظة','No saved reports')+'</li>'}
-$('hl').onclick=e=>{const a=e.target.closest('a');if(!a)return;const h=hist();
+function renderHist(){const h=hist();$('hl').innerHTML=h.length?h.map((x,i)=>`<li data-i="${i}"><b>${(Object.prototype.hasOwnProperty.call(C,x.c)?tx(C[x.c][0]):'')}</b> · ${(+x.s||0)}/100 · ${new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')} · <a data-l="${i}">${L2('فتح','Open')}</a></li>`).join('')+`<li class="mut" style="font-size:.78rem">${L2('💡 اضغط مطوّلًا على أي تقرير لحذفه','💡 Press and hold a report to delete it')}</li>`:'<li>'+L2('لا توجد تقارير محفوظة','No saved reports')+'</li>'}
+let LPT=0,LPF=false,LPX=0,LPY=0;
+function askDel(i){const x=hist()[i];if(!x)return;
+  $('rT').textContent=L2('حذف التقرير','Delete report');
+  $('rB').innerHTML=escH(Object.prototype.hasOwnProperty.call(C,x.c)?tx(C[x.c][0]):'')+' · '+escH(new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB'))+'<br>'+L2('هل تريد حذف هذا التقرير؟','Delete this report?');
+  const b=$('rBal');b.className='badge wn';b.textContent=L2('لا يمكن التراجع بعد الحذف','This cannot be undone');
+  $('rOk').textContent=L2('🗑 حذف','🗑 Delete');$('rNo').textContent=L2('إلغاء','Cancel');
+  RUN_CB=()=>{const h=hist();h.splice(i,1);store('agriHist',JSON.stringify(h));renderHist();toast(L2('تم حذف التقرير','Report deleted'))};
+  RUN_T=Date.now();$('mRun').classList.add('on')}
+{const hl=$('hl'),stop=()=>clearTimeout(LPT);
+ hl.addEventListener('pointerdown',e=>{const li=e.target.closest('li[data-i]');if(!li)return;LPF=false;LPX=e.clientX;LPY=e.clientY;stop();LPT=setTimeout(()=>{LPF=true;try{navigator.vibrate&&navigator.vibrate(30)}catch(_){}askDel(+li.dataset.i)},600)});
+ hl.addEventListener('pointermove',e=>{if(Math.abs(e.clientX-LPX)>10||Math.abs(e.clientY-LPY)>10)stop()});
+ ['pointerup','pointerleave','pointercancel'].forEach(t=>hl.addEventListener(t,stop));
+ hl.addEventListener('contextmenu',e=>{if(e.target.closest('li[data-i]'))e.preventDefault()})}
+$('hl').onclick=e=>{if(LPF){LPF=false;return}const a=e.target.closest('a');if(!a)return;const h=hist();
   if(a.dataset.l!==undefined){const x=h[+a.dataset.l];if(x&&!ACT.includes(x.v.crop)){toast(L2('هذا المحصول غير متاح حالياً في المنصة','This crop is not available right now'));return}
   if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=String(x.v[f]).slice(0,200)});fcManual=true;fillVr();if(x.v.vr)$('vr').value=x.v.vr;vrChg();run(false,'load');show('res')}}
   else if(a.dataset.d!==undefined){h.splice(+a.dataset.d,1);store('agriHist',JSON.stringify(h));renderHist()}};
@@ -1015,10 +1029,10 @@ function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg
 document.querySelectorAll('#p-crop input,#p-crop select,#p-soil input,#p-water input,#p-water select,#p-fert input').forEach(el=>{if(!['gov','crop'].includes(el.id))el.addEventListener('input',()=>dirty())});
 document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PRE[b.dataset.p];for(const k in p)$(k).value=p[k];fcManual=false;dirty();toast('تم تطبيق النموذج')});
 // ===== تأكيد قبل التحليل الشامل (لمنع الضغط بالخطأ وخصم محاولة) =====
-let RUN_T=0;
-function runClose(){$('mRun').classList.remove('on')}
+let RUN_T=0,RUN_CB=null;
+function runClose(){$('mRun').classList.remove('on');RUN_CB=null}
 function askRun(){
-  if(!NET_OK){gateUI();return}
+  RUN_CB=null;if(!NET_OK){gateUI();return}
   if(!USER||(!pro&&trials<=0)){run(true);show('res');return}   // تسجيل الدخول / انتهاء المحاولات: نفس السلوك القديم
   const cr=C[$('crop').value],gv=$('gov').value,u=$('unit').selectedOptions[0].textContent,ar=$('area').value;
   $('rT').textContent=L2('تأكيد التحليل الشامل','Confirm full analysis');
@@ -1028,7 +1042,7 @@ function askRun(){
   $('rOk').textContent=L2('✅ موافق، ابدأ التحليل','✅ Yes, run it');$('rNo').textContent=L2('إلغاء','Cancel');
   RUN_T=Date.now();$('mRun').classList.add('on')}
 $('runb').onclick=askRun;
-$('rOk').onclick=()=>{if(Date.now()-RUN_T<500)return;runClose();run(true);show('res')};   // تجاهل الضغطة المزدوجة السريعة
+$('rOk').onclick=()=>{if(Date.now()-RUN_T<500)return;const cb=RUN_CB;runClose();if(cb)cb();else{run(true);show('res')}};   // تجاهل الضغطة المزدوجة السريعة
 $('rNo').onclick=runClose;
 $('mRun').addEventListener('click',e=>{if(e.target===$('mRun'))runClose()});
 addEventListener('keydown',e=>{if(e.key==='Escape'){runClose();cmpClose()}});
@@ -1728,7 +1742,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.22-5';
+const APP_VER='2026.11.23-1';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -2200,7 +2214,7 @@ function satUI(){
  $('satMode').onchange=()=>{SATS.mode=$('satMode').value;satUI()};
  $('satFed').oninput=()=>SATS.fed=$('satFed').value;$('satDays').oninput=()=>SATS.days=$('satDays').value;
  const la=$('satLat'),lo=$('satLon');la.oninput=()=>SATS.lat=la.value;lo.oninput=()=>SATS.lon=lo.value;
- $('satGo').onclick=satRun;
+ $('satGo').onclick=askSat;
  $('satCrop').onchange=()=>{SATS.crop=$('satCrop').value;if(SATR)satShow()};$('satPd').onchange=()=>{SATS.pd=$('satPd').value;try{localStorage.setItem('qSatPd',SATS.pd)}catch(e){}if(SATR)satShow()};
  if(SATS.mode==='map'){SM.el=$('satMap');SM.ptr.clear();SM.tiles.clear();smBind(SM.el);
   $('smAt').textContent=SM.layer==='map'?'© OpenStreetMap contributors':'Tiles © Esri — Maxar, Earthstar Geographics';
@@ -2221,6 +2235,14 @@ async function satPos(force){
  if(!navigator.geolocation)throw new Error(L2('المتصفح لا يدعم تحديد الموقع. اختر «إحداثيات أكتبها».','Geolocation unsupported. Choose “Coordinates I type”.'));
  const p=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:15000,maximumAge:60000})).catch(()=>{throw new Error(L2('لم يتم السماح بالموقع. اسمح به أو اختر «إحداثيات أكتبها».','Location was not allowed. Allow it or choose “Coordinates I type”.'))});
  return{lat:p.coords.latitude,lon:p.coords.longitude}}
+function askSat(){
+ if(SATB)return;if(!pro){satLockUI();payOpen(true);return}if(!NET_OK){gateUI();return}
+ const dv=$('satDays')?$('satDays').value:'';
+ $('rT').textContent=L2('تأكيد تحليل القمر الصناعي','Confirm satellite analysis');
+ $('rB').innerHTML=L2('هل تريد تحليل الحقل بصور القمر الصناعي الآن؟','Run the satellite analysis for this field now?')+(dv?'<br>'+L2('الفترة: آخر ','Period: last ')+escH(dv)+L2(' يوم',' days'):'');
+ const b=$('rBal');b.className='badge ok';b.textContent=L2('قد يستغرق حتى 30 ثانية','May take up to 30 seconds');
+ $('rOk').textContent=L2('✅ نعم، حلّل','✅ Yes, analyse');$('rNo').textContent=L2('إلغاء','Cancel');
+ RUN_CB=satRun;RUN_T=Date.now();$('mRun').classList.add('on')}
 async function satRun(){
  if(SATB)return;if(!pro){satLockUI();payOpen(true);return}if(!NET_OK){gateUI();return}
  const btn=$('satGo');SATB=true;btn.disabled=true;SATR=null;SATE=null;SATT.t='';
@@ -3214,9 +3236,22 @@ requestAnimationFrame(frame);
    const types=['all',...Object.keys(TY)];
    body.innerHTML='<div class="lbT" id="lbT">'+types.map(k=>'<button type="button" data-t="'+k+'" class="'+(ST.t===k?'on':'')+'">'+(k==='all'?L2('الكل','All'):TY[k][0]+' '+L2(TY[k][1],TY[k][2]))+'</button>').join('')+'</div>'+(isAdm()?'<div id="lbAdm"><button type="button" class="lbNew">✍️ '+L2('مقال جديد','New article')+'</button></div><div id="lbForm"></div>':'')+'<div id="lbList"></div>';
    $('lbT').querySelectorAll('button').forEach(x=>x.onclick=()=>{ST.t=x.dataset.t;$('lbT').querySelectorAll('button').forEach(y=>y.classList.toggle('on',y===x));draw()});
-   const A=window.NamaaAuth,form=(a)=>{const f=$('lbForm');if(!f)return;f.innerHTML='<div class="card" style="margin:8px 0"><input id="arT" maxlength="150" placeholder="'+L2('عنوان المقال','Title')+'" value="'+escH(a?a.title:'')+'"><input id="arA" maxlength="60" placeholder="'+L2('اسم الكاتب','Author')+'" value="'+escH(a?(a.author||''):'')+'" style="margin-top:8px"><div style="margin-top:8px"><label class="sec" style="display:inline-block;padding:8px 14px;border:1px solid var(--bd);border-radius:12px;cursor:pointer">🖼 '+L2('إضافة صورة','Add image')+'<input id="arF" type="file" accept="image/*" hidden></label> <button type="button" class="sec" id="arR" style="display:none">✖ '+L2('شيل الصورة','Remove image')+'</button></div><img id="arP" class="lbIm" alt="" style="display:none"><textarea id="arB" rows="10" maxlength="20000" placeholder="'+L2('اكتب المقال هنا — سطر فاضي بين كل فقرة','Write the article — blank line between paragraphs')+'" style="margin-top:8px;width:100%">'+escH(a?a.body:'')+'</textarea><div style="display:flex;gap:8px;margin-top:8px"><button type="button" id="arS">'+L2('حفظ ونشر','Save & publish')+'</button><button type="button" class="sec" id="arX">'+L2('إلغاء','Cancel')+'</button>'+(a?'<button type="button" class="sec" id="arD" style="margin-inline-start:auto">🗑 '+L2('حذف المقال','Delete article')+'</button>':'')+'</div></div>';let IMG=a&&a.img?a.img:'';const pv=()=>{const P=$('arP'),R=$('arR');P.style.display=IMG?'':'none';if(IMG)P.src=IMG;R.style.display=IMG?'':'none'};pv();$('arF').onchange=async e=>{const fl=e.target.files[0];if(!fl)return;try{IMG=await shrink(fl);if(!okI(IMG)){IMG='';toast(L2('الصورة كبيرة — جرّب صورة تانية.','Image too large.'))}pv()}catch(er){toast(L2('تعذّر قراءة الصورة.','Could not read image.'))}};$('arR').onclick=()=>{IMG='';$('arF').value='';pv()};const dd=$('arD');if(dd)dd.onclick=async()=>{if(!confirm(L2('حذف المقال نهائياً؟','Delete this article permanently?')))return;try{await A.artDel(a.id);toast(L2('اتحذف','Deleted'));await loadArt(true);ST.t='article';libRender()}catch(er){console.error(er);toast(L2('فشل الحذف','Delete failed'))}};f.scrollIntoView({block:'nearest'});$('arX').onclick=()=>{f.innerHTML=''};
+   const A=window.NamaaAuth;
+   const closeEd=()=>{const o=$('arOv');if(o){if(o._vv){window.visualViewport.removeEventListener('resize',o._vv);window.visualViewport.removeEventListener('scroll',o._vv)}o.remove()}document.documentElement.style.overflow=''};
+   const form=(a)=>{closeEd();const o=document.createElement('div');o.id='arOv';
+    o.innerHTML='<div class="arHd"><button type="button" id="arX" class="sec">✖ '+L2('إلغاء','Cancel')+'</button><b>'+(a?L2('تعديل المقال','Edit article'):L2('مقال جديد','New article'))+'</b><button type="button" id="arS">'+L2('حفظ ونشر','Publish')+'</button></div>'
+     +'<div class="arBd"><input id="arT" maxlength="150" placeholder="'+L2('عنوان المقال','Title')+'" value="'+escH(a?a.title:'')+'"><input id="arA" maxlength="60" placeholder="'+L2('اسم الكاتب','Author')+'" value="'+escH(a?(a.author||''):'')+'"><img id="arP" class="lbIm" alt="" style="display:none"><textarea id="arB" maxlength="20000" placeholder="'+L2('اكتب المقال هنا — سطر فاضي بين كل فقرة','Write the article — blank line between paragraphs')+'">'+escH(a?a.body:'')+'</textarea></div>'
+     +'<div class="arFt"><label class="sec arImg">🖼 '+L2('إضافة صورة','Add image')+'<input id="arF" type="file" accept="image/*" hidden></label><button type="button" class="sec" id="arR" style="display:none">✖ '+L2('شيل الصورة','Remove image')+'</button>'+(a?'<button type="button" class="sec" id="arD">🗑 '+L2('حذف المقال','Delete article')+'</button>':'')+'</div>';
+    document.body.appendChild(o);document.documentElement.style.overflow='hidden';
+    const vv=window.visualViewport,fit=()=>{o.style.height=(vv?vv.height:innerHeight)+'px';o.style.top=(vv?vv.offsetTop:0)+'px'};fit();if(vv){o._vv=fit;vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit)}
+    let IMG=a&&a.img?a.img:'';const pv=()=>{const P=$('arP'),R=$('arR');P.style.display=IMG?'':'none';if(IMG)P.src=IMG;R.style.display=IMG?'':'none'};pv();
+    $('arX').onclick=closeEd;
+    $('arF').onchange=async e=>{const fl=e.target.files[0];if(!fl)return;try{IMG=await shrink(fl);if(!okI(IMG)){IMG='';toast(L2('الصورة كبيرة — جرّب صورة تانية.','Image too large.'))}pv()}catch(er){toast(L2('تعذّر قراءة الصورة.','Could not read image.'))}};
+    $('arR').onclick=()=>{IMG='';$('arF').value='';pv()};
+    const dd=$('arD');if(dd)dd.onclick=async()=>{if(!confirm(L2('حذف المقال نهائياً؟','Delete this article permanently?')))return;try{await A.artDel(a.id);closeEd();toast(L2('اتحذف','Deleted'));await loadArt(true);ST.t='article';libRender()}catch(er){console.error(er);toast(L2('فشل الحذف','Delete failed'))}};
     $('arS').onclick=async()=>{const t=$('arT').value.trim(),bd=$('arB').value.trim();if(!t||!bd){toast(L2('اكتب العنوان والنص.','Enter title and text.'));return}
-     $('arS').disabled=true;try{await A.artSave(a?a.id:Date.now().toString(36),{title:t,author:$('arA').value.trim().slice(0,60),body:bd,t:Date.now(),lang:'ar',...(IMG?{img:IMG}:{})});toast(L2('اتنشر ✓','Published ✓'));ST.t='article';await loadArt(true);libRender()}catch(er){console.error(er);$('arS').disabled=false;toast(L2('فشل الحفظ — اتأكد من نشر القواعد وتسجيل الدخول بإيميل المشرف.','Save failed — check rules & admin login.'))}}};
+     $('arS').disabled=true;try{await A.artSave(a?a.id:Date.now().toString(36),{title:t,author:$('arA').value.trim().slice(0,60),body:bd,t:Date.now(),lang:'ar',...(IMG?{img:IMG}:{})});closeEd();toast(L2('اتنشر ✓','Published ✓'));ST.t='article';await loadArt(true);libRender()}catch(er){console.error(er);$('arS').disabled=false;toast(L2('فشل الحفظ — اتأكد من نشر القواعد وتسجيل الدخول بإيميل المشرف.','Save failed — check rules & admin login.'))}};
+    setTimeout(()=>{const t=$('arT');if(t&&!a)t.focus()},50)};
    const nb=b.querySelector('.lbNew');if(nb)nb.onclick=()=>form(null);
    $('lbList').addEventListener('click',async e=>{const ed=e.target.closest('.lbEd'),dl=e.target.closest('.lbDl');
     if(ed){const a=ART.find(z=>z.id===ed.dataset.id);if(a)form(a)}
