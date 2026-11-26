@@ -1762,7 +1762,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.26-4';
+const APP_VER='2026.11.26-5';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -3138,6 +3138,7 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     articles:async()=>(await getDocs(query(collection(db,'articles'),orderBy('t','desc'),limit(30)))).docs.map(x=>({id:x.id,...x.data()})),
     artSave:(id,d)=>setDoc(doc(db,'articles',id),d),
     artDel:id=>deleteDoc(doc(db,'articles',id)),
+    artLock:(id,f)=>updateDoc(doc(db,'articles',String(id)),{cmOff:!!f}),
     comments:async aid=>(await getDocs(query(collection(db,'articles',String(aid),'comments'),orderBy('t','asc'),limit(100)))).docs.map(x=>({id:x.id,...x.data()})),
     commentAdd:async(aid,text)=>{const u=auth.currentUser;if(!u)throw new Error('no user');return addDoc(collection(db,'articles',String(aid),'comments'),{uid:u.uid,name:String(u.displayName||'').slice(0,60),text:String(text).slice(0,500),t:serverTimestamp()})},
     commentDel:(aid,cid)=>deleteDoc(doc(db,'articles',String(aid),'comments',String(cid))),
@@ -3266,19 +3267,20 @@ requestAnimationFrame(frame);
  const okI=u=>typeof u==='string'&&/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(u)&&u.length<420000;
  async function shrink(file){const url=URL.createObjectURL(file);try{const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});let w=Math.min(1000,im.naturalWidth),q=.78,out='';for(let k=0;k<6;k++){const h=Math.round(im.naturalHeight*w/im.naturalWidth),c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,w,h);g.drawImage(im,0,0,w,h);out=c.toDataURL('image/jpeg',q);if(out.length<300000)break;w=Math.round(w*.8);q=Math.max(.5,q-.08)}return out}finally{URL.revokeObjectURL(url)}}
  let ART=null;
- async function loadArt(force){if(ART&&!force)return ART;const A=window.NamaaAuth;if(!A||!A.articles||typeof USER==='undefined'||!USER)return [];try{ART=(await A.articles()).map(x=>({id:x.id,title:String(x.title||''),author:x.author,body:String(x.body||''),img:okI(x.img)?x.img:'',lang:x.lang||'ar',type:'article',_fs:1}))}catch(e){console.error(e);return []}return ART}
+ async function loadArt(force){if(ART&&!force)return ART;const A=window.NamaaAuth;if(!A||!A.articles||typeof USER==='undefined'||!USER)return [];try{ART=(await A.articles()).map(x=>({id:x.id,title:String(x.title||''),author:x.author,body:String(x.body||''),img:okI(x.img)?x.img:'',lang:x.lang||'ar',cmOff:x.cmOff===true,type:'article',_fs:1}))}catch(e){console.error(e);return []}return ART}
  const okF=f=>typeof f==='string'&&/^library\/[^?#]+$/.test(f)&&!/\.\./.test(f);
  const okU=u=>typeof u==='string'&&/^https:\/\//.test(u);
 
  async function cmLoad(el){const A=window.NamaaAuth,id=el.dataset.id;if(!A||!A.comments)return;
   el.innerHTML='<small>'+L2('جارٍ تحميل التعليقات…','Loading comments…')+'</small>';
   let list=[];try{list=await A.comments(id)}catch(e){console.error(e);el.innerHTML='<small>'+L2('تعذّر تحميل التعليقات.','Could not load comments.')+'</small>';return}
-  const me=A.uid?A.uid():null,adm=isAdm();
+  const me=A.uid?A.uid():null,adm=isAdm(),ar=(ART||[]).find(z=>z.id===id),off=!!(ar&&ar.cmOff);
   el.innerHTML='<h5>💬 '+L2('التعليقات','Comments')+' ('+list.length+')</h5>'
    +list.map(x=>{const t=x.t&&x.t.toMillis?x.t.toMillis():0,own=me&&x.uid===me;
      return '<div class="cmI"><b>'+escH(x.name||L2('مستخدم','User'))+'</b> <small>'+(t?new Date(t).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB'):'')+'</small>'+((adm||own)?' <button type="button" class="cmD" data-c="'+escH(x.id)+'" aria-label="del">🗑</button>':'')+'<p>'+escH(String(x.text||''))+'</p></div>'}).join('')
-   +'<textarea class="cmT" maxlength="500" rows="2" placeholder="'+L2('اكتب تعليقك…','Write a comment…')+'"></textarea><div class="cmB"><button type="button" class="cmS">'+L2('إرسال','Send')+'</button>'+(adm&&list.length?'<button type="button" class="cmA sec">🗑 '+L2('مسح كل التعليقات','Delete all comments')+'</button>':'')+'</div>';
-  el.onclick=async e=>{const d=e.target.closest('.cmD'),s=e.target.closest('.cmS'),al=e.target.closest('.cmA');
+   +(off?'<small class="cmOff">🔒 '+L2('التعليقات مقفولة على هذا المقال.','Comments are closed on this article.')+'</small>':'<textarea class="cmT" maxlength="500" rows="2" placeholder="'+L2('اكتب تعليقك…','Write a comment…')+'"></textarea>')+'<div class="cmB">'+(off?'':'<button type="button" class="cmS">'+L2('إرسال','Send')+'</button>')+(adm?'<button type="button" class="cmL sec">'+(off?'🔓 '+L2('فتح التعليقات','Open comments'):'🔒 '+L2('قفل التعليقات','Close comments'))+'</button>':'')+(adm&&list.length?'<button type="button" class="cmA sec">🗑 '+L2('مسح كل التعليقات','Delete all comments')+'</button>':'')+'</div>';
+  el.onclick=async e=>{const d=e.target.closest('.cmD'),s=e.target.closest('.cmS'),al=e.target.closest('.cmA'),lk=e.target.closest('.cmL');
+   if(lk){lk.disabled=true;try{await A.artLock(id,!off);if(ar)ar.cmOff=!off;toast(off?L2('اتفتحت التعليقات','Comments opened'):L2('اتقفلت التعليقات','Comments closed'));cmLoad(el)}catch(er){console.error(er);lk.disabled=false;toast(L2('فشل التغيير (اتأكد من نشر القواعد)','Failed (check rules)'))}return}
    if(d){if(!confirm(L2('مسح التعليق؟','Delete this comment?')))return;try{await A.commentDel(id,d.dataset.c);toast(L2('اتمسح','Deleted'));cmLoad(el)}catch(er){console.error(er);toast(L2('فشل المسح','Delete failed'))}}
    if(al){if(!confirm(L2('مسح كل تعليقات المقال ده نهائياً؟','Delete ALL comments on this article?')))return;try{await Promise.all(list.map(x=>A.commentDel(id,x.id)));toast(L2('اتمسحوا كلهم','All deleted'));cmLoad(el)}catch(er){console.error(er);toast(L2('فشل المسح','Delete failed'))}}
    if(s){const ta=el.querySelector('.cmT'),v=ta.value.trim();if(!v){toast(L2('اكتب التعليق الأول.','Write a comment first.'));return}
@@ -3310,7 +3312,7 @@ requestAnimationFrame(frame);
     $('arR').onclick=()=>{IMG='';$('arF').value='';pv()};
     const dd=$('arD');if(dd)dd.onclick=async()=>{if(!confirm(L2('حذف المقال نهائياً؟','Delete this article permanently?')))return;try{await A.artDel(a.id);closeEd();toast(L2('اتحذف','Deleted'));await loadArt(true);ST.t='article';libRender()}catch(er){console.error(er);toast(L2('فشل الحذف','Delete failed'))}};
     $('arS').onclick=async()=>{const t=$('arT').value.trim(),bd=$('arB').value.trim();if(!t||!bd){toast(L2('اكتب العنوان والنص.','Enter title and text.'));return}
-     $('arS').disabled=true;try{await A.artSave(a?a.id:Date.now().toString(36),{title:t,author:$('arA').value.trim().slice(0,60),body:bd,t:Date.now(),lang:'ar',...(IMG?{img:IMG}:{})});closeEd();toast(L2('اتنشر ✓','Published ✓'));ST.t='article';await loadArt(true);libRender()}catch(er){console.error(er);$('arS').disabled=false;toast(L2('فشل الحفظ — اتأكد من نشر القواعد وتسجيل الدخول بإيميل المشرف.','Save failed — check rules & admin login.'))}};
+     $('arS').disabled=true;try{await A.artSave(a?a.id:Date.now().toString(36),{title:t,author:$('arA').value.trim().slice(0,60),body:bd,t:Date.now(),lang:'ar',...(a&&a.cmOff?{cmOff:true}:{}),...(IMG?{img:IMG}:{})});closeEd();toast(L2('اتنشر ✓','Published ✓'));ST.t='article';await loadArt(true);libRender()}catch(er){console.error(er);$('arS').disabled=false;toast(L2('فشل الحفظ — اتأكد من نشر القواعد وتسجيل الدخول بإيميل المشرف.','Save failed — check rules & admin login.'))}};
     setTimeout(()=>{const t=$('arT');if(t&&!a)t.focus()},50)};
    const nb=b.querySelector('.lbNew');if(nb)nb.onclick=()=>form(null);
    $('lbList').addEventListener('click',async e=>{const ed=e.target.closest('.lbEd'),dl=e.target.closest('.lbDl');
