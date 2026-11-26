@@ -1002,7 +1002,15 @@ $('hl').onclick=e=>{if(LPF){LPF=false;return}const a=e.target.closest('a');if(!a
   if(a.dataset.l!==undefined){const x=h[+a.dataset.l];if(x&&!ACT.includes(x.v.crop)){toast(L2('هذا المحصول غير متاح حالياً في المنصة','This crop is not available right now'));return}
   if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=String(x.v[f]).slice(0,200)});fcManual=true;fillVr();if(x.v.vr)$('vr').value=x.v.vr;vrChg();run(false,'load');show('res')}}
   else if(a.dataset.d!==undefined){h.splice(+a.dataset.d,1);store('agriHist',JSON.stringify(h));renderHist()}};
-$('save').onclick=()=>{if(!LAST)return;const v={vr:$('vr').value};FIELDS.forEach(f=>v[f]=$(f).value);const h=hist();h.unshift({d:Date.now(),c:$('crop').value,s:LAST.healthScore,v});store('agriHist',JSON.stringify(h.slice(0,12)));renderHist();toast('تم حفظ التقرير ✅')};
+function doSave(v){const h=hist();h.unshift({d:Date.now(),c:$('crop').value,s:LAST.healthScore,v});store('agriHist',JSON.stringify(h.slice(0,12)));renderHist();toast(L2('تم حفظ التقرير ✅','Report saved ✅'))}
+$('save').onclick=()=>{if(!LAST)return;const v={vr:$('vr').value};FIELDS.forEach(f=>v[f]=$(f).value);const c=$('crop').value,js=JSON.stringify(v);
+  const dup=hist().some(x=>x.c===c&&JSON.stringify(x.v)===js);
+  if(!dup){doSave(v);return}
+  $('rT').textContent=L2('تقرير محفوظ بالفعل','Already saved');
+  $('rB').innerHTML=L2('لقد حفظت هذا التقرير من قبل بنفس البيانات.<br>هل تريد حفظه مرة أخرى؟','You already saved this report with the same data.<br>Save it again?');
+  const b=$('rBal');b.className='badge wn';b.textContent=L2('سيُضاف نسخة جديدة في السجل','A new copy will be added to history');
+  $('rOk').textContent=L2('💾 حفظ مرة أخرى','💾 Save again');$('rNo').textContent=L2('إلغاء','Cancel');
+  RUN_CB=()=>doSave(v);RUN_T=Date.now();$('mRun').classList.add('on')};
 function csvCell(v){v=String(v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'}
 $('csvB').onclick=()=>{if(!LAST)return;const csv='\ufeffParameter,Value\n'+Object.entries(LAST).map(([k,x])=>`${csvCell(k)},${csvCell(tx(String(x)))}`).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='Qout_'+Date.now()+'.csv';a.click()};
 $('share').onclick=()=>{if(!LAST)return;const a=LAST,t=`قوت | Qout — ${a.crop} (${a.variety})\nالصحة ${a.healthScore}/100 · pH ${a.ph} · EC ${a.ec} · SAR ${a.sar}\nالمحصول النسبي ${a.relativeYieldPct}% · غسيل ${a.leachingReqPct}%\nلكل ${a.unit}: N ${a.N_kg} · P₂O₅ ${a.P_kg} · K₂O ${a.K_kg} كجم\nالتكلفة ${a.totalCost_EGP} ج.م`;
@@ -1593,6 +1601,14 @@ function fbForm(){const b=$('fbBox');if(!b)return;b.style.display='';const key=$
  <label style="display:flex;gap:8px;align-items:flex-start;margin-top:8px;font-size:.78rem;line-height:1.7"><input type="checkbox" id="fbSh" checked> <span>${L2('أشارك نتيجتي مع إدارة المنصة باسمي وإيميلي (للمتابعة والتحقق من دقة التوصيات). تظهر للمستخدمين الآخرين مجمّعة بدون أي هوية، ويمكنني حذف نسختي المعرّفة لاحقاً.','I share this result with the platform team under my name and email (for follow-up and accuracy checks). Other users see only anonymous aggregates, and I can delete my identified copy later.')}</span></label>
  <button type="button" id="fbS" class="sec" style="margin-top:8px">${L2('حفظ النتيجة','Save result')}</button><span id="fbM" style="margin-inline-start:10px;font-size:.8rem"></span>`;
  $('fbS').onclick=()=>{const ya=g('fbY');if(!(ya>0)){$('fbM').textContent=L2('أدخل الإنتاج الفعلي','Enter actual yield');return}
+  const dupF=fbGet().some(x=>x.c===key&&+x.ya===+ya&&x.e===$('fbE').value&&(x.n||'')===($('fbN').value||'').slice(0,200));
+  if(dupF){$('rT').textContent=L2('نتيجة محفوظة بالفعل','Already saved');
+   $('rB').innerHTML=L2('لقد سجّلت نفس النتيجة من قبل.<br>هل تريد حفظها مرة أخرى؟','You already logged this same result.<br>Save it again?');
+   const bb=$('rBal');bb.className='badge wn';bb.textContent=L2('ستُضاف نسخة مكررة','A duplicate copy will be added');
+   $('rOk').textContent=L2('💾 حفظ مرة أخرى','💾 Save again');$('rNo').textContent=L2('إلغاء','Cancel');
+   RUN_CB=fbDo;RUN_T=Date.now();$('mRun').classList.add('on');return}
+  fbDo()};
+ function fbDo(){const ya=g('fbY');
   const a=fbGet(),v=LASTCALC&&LASTCALC.v||{};a.unshift({d:Date.now(),c:key,yt:g('yT'),ya,e:$('fbE').value,n:($('fbN').value||'').slice(0,200),s:LAST?LAST.healthScore:null,ph:v.ph,ec:v.ec,pc:$('pcS').value,kN:window.LASTD?LASTD.nN:null,kP:window.LASTD?LASTD.nP:null,kK:window.LASTD?LASTD.nK:null});
   store(FBK,JSON.stringify(a.slice(0,200)));$('fbM').textContent=L2('✅ تم الحفظ على جهازك','✅ Saved on your device');fbRender();
   if($('fbSh').checked)fbShare(a[0])}}
@@ -1745,7 +1761,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='2026.11.26-1';
+const APP_VER='2026.11.26-2';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
