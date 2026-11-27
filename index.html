@@ -747,7 +747,7 @@ window.onUser=(u,d,err)=>{
     return}
   USER=u;phSet(u,d);trials=Math.max(0,(+d.trials)||0);pro=d.pro===true;
   $('payMail').textContent=u.email||'';$('acctMail').textContent=u.email||u.displayName||'';$('acct').style.display='flex';$('mAuth').classList.remove('on');authMsg('');
-  authUI();badge();greet();staleUI();annCheck();if(window.qRestoreRes)window.qRestoreRes()};
+  authUI();badge();greet();staleUI();annCheck();histSync();if(window.qRestoreRes)window.qRestoreRes()};
 
 // ===== قوام التربة (مثلث USDA — 12 قواماً) =====
 const L2=(a,e)=>lang==='ar'?a:e;
@@ -985,17 +985,17 @@ function run(click,mode){
 
 // ===== حفظ / تصدير / مشاركة =====
 const FIELDS=['xCa','xMg','fname','gov','crop','area','unit','sand','silt','clay','caco3','vrC','ph','ec','om','cec','esp','espT','n','p','k','fe','zn','mn','sm','fc','et0','ecw','wCa','wMg','wNa','eff','prW','fNS','fNC','fNR','fPS','fPC','fPR','fKS','fKC','fKR','orS','orN','orP','orK','orT','orR','bioS','bioR','yT','pcS','pcR'];
-const hist=()=>{try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h.filter(x=>x&&typeof x==='object'&&x.v&&typeof x.v==='object').slice(0,12):[]}catch(e){return[]}};
+const hist=()=>{try{const h=JSON.parse(store('agriHist')||'[]');return Array.isArray(h)?h.filter(x=>x&&typeof x==='object'&&x.v&&typeof x.v==='object').slice(0,30):[]}catch(e){return[]}};
 function renderHist(){const h=hist(),sg=x=>x.c+'|'+JSON.stringify(x.v);
- $('hl').innerHTML=h.length?h.map((x,i)=>{const nm=Object.prototype.hasOwnProperty.call(C,x.c)?tx(C[x.c][0]):'',dup=h.slice(i+1).some(y=>sg(y)===sg(x)),sc=+x.s||0;
-  return `<li class="hC" data-i="${i}"><div class="hT"><b>${nm}</b>${dup?'<span class="hDup">'+L2('مكرر','Duplicate')+'</span>':''}</div><div class="hM"><span>📊 ${sc}/100</span><span>📅 ${new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')}</span></div><a class="hOpen" data-l="${i}">${L2('فتح التقرير','Open report')}</a></li>`}).join('')+`<li class="mut" style="font-size:.78rem;list-style:none">${L2('💡 اضغط مطوّلًا على أي تقرير لحذفه','💡 Press and hold a report to delete it')}</li>`:'<li style="list-style:none">'+L2('لا توجد تقارير محفوظة','No saved reports')+'</li>'}
+ $('hl').innerHTML=h.length?h.map((x,i)=>{const nm=Object.prototype.hasOwnProperty.call(C,x.c)?tx(C[x.c][0]):'',dn=h.slice(i+1).filter(y=>sg(y)===sg(x)).length,sc=+x.s||0;
+  return `<li class="hC" data-i="${i}"><div class="hT"><b>${nm}</b>${dn?'<span class="hDup">'+L2('مكرر '+dn,'Duplicate '+dn)+'</span>':''}</div><div class="hM"><span>📊 ${sc}/100</span><span>📅 ${new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB')}</span></div><a class="hOpen" data-l="${i}">${L2('فتح التقرير','Open report')}</a></li>`}).join('')+`<li class="mut" style="font-size:.78rem;list-style:none">${L2('💡 اضغط مطوّلًا على أي تقرير لحذفه','💡 Press and hold a report to delete it')}</li>`:'<li style="list-style:none">'+L2('لا توجد تقارير محفوظة','No saved reports')+'</li>'}
 let LPT=0,LPF=false,LPX=0,LPY=0;
 function askDel(i){const x=hist()[i];if(!x)return;
   $('rT').textContent=L2('حذف التقرير','Delete report');
   $('rB').innerHTML=escH(Object.prototype.hasOwnProperty.call(C,x.c)?tx(C[x.c][0]):'')+' · '+escH(new Date(+x.d||0).toLocaleDateString(lang==='ar'?'ar-EG':'en-GB'))+'<br>'+L2('هل تريد حذف هذا التقرير؟','Delete this report?');
   const b=$('rBal');b.className='badge wn';b.textContent=L2('لا يمكن التراجع بعد الحذف','This cannot be undone');
   $('rOk').textContent=L2('🗑 حذف','🗑 Delete');$('rNo').textContent=L2('إلغاء','Cancel');
-  RUN_CB=()=>{const h=hist();h.splice(i,1);store('agriHist',JSON.stringify(h));renderHist();toast(L2('تم حذف التقرير','Report deleted'))};
+  RUN_CB=()=>{const h=hist(),g=h.splice(i,1)[0];if(g&&+g.d)hsetDel([+g.d,...hdel()]);store('agriHist',JSON.stringify(h));renderHist();histSync();toast(L2('تم حذف التقرير','Report deleted'))};
   RUN_T=Date.now();$('mRun').classList.add('on')}
 {const hl=$('hl'),stop=()=>clearTimeout(LPT);
  hl.addEventListener('pointerdown',e=>{const li=e.target.closest('li[data-i]');if(!li)return;LPF=false;LPX=e.clientX;LPY=e.clientY;stop();LPT=setTimeout(()=>{LPF=true;try{navigator.vibrate&&navigator.vibrate(30)}catch(_){}askDel(+li.dataset.i)},600)});
@@ -1005,8 +1005,22 @@ function askDel(i){const x=hist()[i];if(!x)return;
 $('hl').onclick=e=>{if(LPF){LPF=false;return}const a=e.target.closest('a');if(!a)return;const h=hist();
   if(a.dataset.l!==undefined){const x=h[+a.dataset.l];if(x&&!ACT.includes(x.v.crop)){toast(L2('هذا المحصول غير متاح حالياً في المنصة','This crop is not available right now'));return}
   if(x){FIELDS.forEach(f=>{if(x.v[f]!==undefined)$(f).value=String(x.v[f]).slice(0,200)});fcManual=true;fillVr();if(x.v.vr)$('vr').value=x.v.vr;vrChg();run(false,'load');show('res')}}
-  else if(a.dataset.d!==undefined){h.splice(+a.dataset.d,1);store('agriHist',JSON.stringify(h));renderHist()}};
-function doSave(v){const h=hist();h.unshift({d:Date.now(),c:$('crop').value,s:LAST.healthScore,v});store('agriHist',JSON.stringify(h.slice(0,12)));renderHist();toast(L2('تم حفظ التقرير ✅','Report saved ✅'))}
+  else if(a.dataset.d!==undefined){const g=h.splice(+a.dataset.d,1)[0];if(g&&+g.d)hsetDel([+g.d,...hdel()]);store('agriHist',JSON.stringify(h));renderHist();histSync()}};
+
+const hdel=()=>{try{const a=JSON.parse(store('agriHistDel')||'[]');return Array.isArray(a)?a.filter(n=>typeof n==='number').slice(0,200):[]}catch(e){return[]}};
+const hsetDel=a=>store('agriHistDel',JSON.stringify([...new Set(a)].slice(0,200)));
+let HSYNC=0;
+async function histSync(){const A=window.NamaaAuth;if(!A||!A.repGet||typeof USER==='undefined'||!USER||!navigator.onLine||HSYNC)return;HSYNC=1;
+ try{const cl=await A.repGet();let ci=[],cd=[];
+  if(cl&&typeof cl.d==='string'){try{const o=JSON.parse(cl.d);ci=Array.isArray(o.i)?o.i:[];cd=Array.isArray(o.x)?o.x:[]}catch(e){}}
+  const dels=new Set([...hdel(),...cd.filter(n=>typeof n==='number')]),seen=new Map();
+  [...hist(),...ci].forEach(x=>{if(x&&typeof x==='object'&&x.v&&typeof x.v==='object'&&+x.d>0&&!dels.has(+x.d)&&!seen.has(+x.d))seen.set(+x.d,x)});
+  const m=[...seen.values()].sort((a,b)=>b.d-a.d).slice(0,30);
+  hsetDel([...dels]);store('agriHist',JSON.stringify(m));
+  const pl=JSON.stringify({i:m,x:[...dels].slice(0,200)});
+  if(!cl||cl.d!==pl)await A.repSet(pl);
+  renderHist()}catch(e){console.warn('hist sync',e)}finally{HSYNC=0}}
+function doSave(v){const h=hist();h.unshift({d:Date.now(),c:$('crop').value,s:LAST.healthScore,v});store('agriHist',JSON.stringify(h.slice(0,30)));renderHist();histSync();toast(L2('تم حفظ التقرير ✅','Report saved ✅'))}
 $('save').onclick=()=>{if(!LAST)return;const v={vr:$('vr').value};FIELDS.forEach(f=>v[f]=$(f).value);const c=$('crop').value,js=JSON.stringify(v);
   const dup=hist().some(x=>x.c===c&&JSON.stringify(x.v)===js);
   if(!dup){doSave(v);return}
@@ -1763,9 +1777,10 @@ function admList(){
 }
 {const p=document.createElement('div');p.className='pn';p.id='p-admin';p.innerHTML=`<div class="card"><h3>🛠️ ${L2('لوحة تحكم المشرف','Admin panel')}</h3><div id="admBox"></div></div>`;$('p-about').insertAdjacentElement('afterend',p)}
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='admin')admRender();return r}}
+{const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='hist')histSync();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='33';
+const APP_VER='35';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
@@ -3141,6 +3156,8 @@ if(!firebaseConfig.apiKey.startsWith('PASTE')){
     articles:async()=>(await getDocs(query(collection(db,'articles'),orderBy('t','desc'),limit(30)))).docs.map(x=>({id:x.id,...x.data()})),
     artSave:(id,d)=>setDoc(doc(db,'articles',id),d),
     artDel:id=>deleteDoc(doc(db,'articles',id)),
+    repGet:async()=>{const u=auth.currentUser;if(!u)return null;const s=await getDoc(doc(db,'user_reports',u.uid));return s.exists()?s.data():null},
+    repSet:d=>{const u=auth.currentUser;if(!u)throw new Error('no user');return setDoc(doc(db,'user_reports',u.uid),{d:String(d),t:serverTimestamp()})},
     artLock:(id,f)=>updateDoc(doc(db,'articles',String(id)),{cmOff:!!f}),
     comments:async aid=>(await getDocs(query(collection(db,'articles',String(aid),'comments'),orderBy('t','asc'),limit(100)))).docs.map(x=>({id:x.id,...x.data()})),
     commentAdd:async(aid,text)=>{const u=auth.currentUser;if(!u)throw new Error('no user');return addDoc(collection(db,'articles',String(aid),'comments'),{uid:u.uid,name:String(u.displayName||'').slice(0,60),text:String(text).slice(0,500),t:serverTimestamp()})},
