@@ -541,7 +541,7 @@ body.pm .qpmx{display:block}
 <div class="pn" id="p-hist"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-hist"/></svg>التقارير المحفوظة</h3><ul id="hl"></ul></div></div>
 
 <div class="pn" id="p-ai"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-ai"/></svg>مساعد قوت</h3><div id="msgs"></div>
-  <div class="row" style="margin-bottom:8px"><button class="sec">حلل تربتي</button><button class="sec">اشرح الملوحة</button><button class="sec">جدول الري</button><button class="sec">نصيحة تسميد</button></div>
+  <div class="row qk" style="margin-bottom:8px;flex-wrap:wrap"><button class="sec">حلل تربتي</button><button class="sec">اشرح الملوحة</button><button class="sec">جدول الري</button><button class="sec">نصيحة تسميد</button><button class="sec" data-q="امتى أزرع القمح؟">📅 ميعاد القمح</button><button class="sec" data-q="إزاي أعالج ملوحة التربة؟">🧂 علاج الملوحة</button><button class="sec" data-q="مكافحة المن">🐛 مكافحة المن</button></div>
   <div class="row"><input id="aiIn" placeholder="اكتب سؤالك…" style="flex:1"><button id="aiSend">➤</button></div></div></div>
 
 <div class="pn" id="p-ct"><div class="card"><h3><svg class="ic ic-s" aria-hidden="true"><use href="#i-ct"/></svg>تواصل مع المهندس أحمد</h3><div style="display:grid;gap:10px">
@@ -1037,18 +1037,63 @@ $('prt').onclick=()=>{if(!pro&&trials<=0){$('mPay').classList.add('on');return}s
 $('prt2').onclick=()=>$('prt').onclick();
 
 // ===== المساعد والتواصل =====
-function addMsg(c,t){const m=$('msgs'),d=document.createElement('div');d.className='m '+c;d.textContent=t;m.appendChild(d);m.scrollTop=m.scrollHeight;if(lang!=='ar')tr()}
+function addMsg(c,t,act){const m=$('msgs'),d=document.createElement('div');d.className='m '+c;d.textContent=t;
+ if(act){const b=document.createElement('button');b.className='sec';b.style.cssText='display:block;margin-top:8px;width:100%';b.textContent=act[0];b.onclick=act[1];d.appendChild(b)}
+ m.appendChild(d);m.scrollTop=m.scrollHeight;if(lang!=='ar')tr();return d}
 function fb(q){const a=LAST;if(!a)return 'شغّل التحليل أولاً.';
   if(/قوام|نسيج|رمل|طين|سلت|texture|sand|clay|silt/i.test(q))return L2(`قوام التربة: ${a.texture} (رمل ${a.sand_pct}% / سلت ${a.silt_pct}% / طين ${a.clay_pct}%).`,`Soil texture: ${a.texture} (sand ${a.sand_pct}% / silt ${a.silt_pct}% / clay ${a.clay_pct}%).`);
   if(/ملوح|ec|sar|صودي|salin|sodic/i.test(q))return `ملوحة التربة ${a.ec} dS/m (المحصول النسبي ${a.relativeYieldPct}%)، ملوحة المياه ${a.ECw} dS/m وSAR ${a.sar}. أضف ${a.leachingReqPct}% مياه غسيل مع صرف جيد${a.gypsum_kg_unit?`، وجبس ≈ ${a.gypsum_kg_unit} كجم/${a.unit}`:''}.`;
   if(/ري|مياه|irrig|water/i.test(q))return `الري ${a.gross_mm_day} مم/يوم (${a.m3_day_unit} م³/${a.unit}) كل ${a.intervalDays} يوم تقريباً، والموسم ≈ ${a.seasonal_m3_unit} م³/${a.unit}. عجز الرطوبة ${a.deficit_mm} مم.`;
   if(/سماد|تسميد|npk|fert/i.test(q))return `لكل ${a.unit}: N ${a.N_kg} كجم، P₂O₅ ${a.P_kg} كجم، K₂O ${a.K_kg} كجم (بعد خصم العضوي والحيوي). التكلفة الإجمالية ${a.totalCost_EGP} ج.م.`;
   return `ملخص (${a.crop} — ${a.variety}): الصحة ${a.healthScore}/100، pH ${a.ph}، EC ${a.ec}، SAR ${a.sar}.`}
-function send(q){if(!q)return;addMsg('u',q);addMsg('b',fb(q))}
+// ---- الأسئلة من بيانات المنصة (بدون ذكاء اصطناعي) ----
+const AIH=[];                                   // آخر رسائل المحادثة (للسياق)
+const aiN=x=>pNorm(String(x||'').toLowerCase()).replace(/(^|\s)ال/g,'$1');
+function kbCrop(q){const n=aiN(q);let best=null,bl=0;
+  for(const id of Object.keys(C)){const a=aiN(C[id][0]).trim();if(a.length>=3&&n.includes(a)&&a.length>bl){best=id;bl=a.length}
+    else if(id.length>=4&&String(q).toLowerCase().includes(id)&&id.length>bl){best=id;bl=id.length}}
+  return best}
+function kbCal(q){
+  if(!/ميعاد|موعد|امتي|امتى|متي|متى|ازرع|اززرع|زراع|تزرع|اشتل|شتل|when|plant|sow/i.test(q))return null;
+  const id=kbCrop(q);if(!id||!CW[id])return null;
+  try{const t=new Date(),x=dn(String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')),R=calReg(),r=calEval(id,R,x),w=r.w,nm=tx(C[id][0]);
+   const st={best:L2('✅ النهاردة جوه الفترة المثلى','✅ Today is inside the optimum window'),early:L2('🟡 النهاردة قبل الفترة المثلى (لسه ممكن)','🟡 Today is a bit early (still possible)'),late:L2('🟠 النهاردة بعد الفترة المثلى (قرّب من آخر ميعاد)','🟠 Past the optimum (nearing the last date)'),soon:L2('⏳ الميعاد قرّب ('+r.days+' يوم)','⏳ Window starts in '+r.days+' days'),out:L2('⏸️ مش موسمه دلوقتي (يبدأ بعد '+r.days+' يوم)','⏸️ Out of season (starts in '+r.days+' days)')}[r.st];
+   return{t:L2(`🌱 ${nm} — ميعاد الزراعة في إقليمك:\n• الأمثل: ${calMD(w[3])} – ${calMD(w[4])}\n• الممكن: ${calMD(w[1])} – ${calMD(w[2])}\n${st}${r.xr?'\n⚠️ المحصول غير شائع في إقليمك، والميعاد من إقليم آخر.':''}`,`🌱 ${nm} — planting dates for your region:\n• Optimum: ${calMD(w[3])} – ${calMD(w[4])}\n• Possible: ${calMD(w[1])} – ${calMD(w[2])}\n${st}${r.xr?'\n⚠️ Uncommon in your region; dates are from another region.':''}`),
+     act:[L2('📅 افتح التقويم الزراعي','📅 Open crop calendar'),()=>show('cal')]}}catch(e){return null}}
+function kbPest(q){
+  if(!/آفة|افة|آفات|افات|حشر|مرض|امراض|أمراض|فطر|مبيد|مكافح|دود|بياض|صدأ|صدا|ذبابة|عنكبوت|نيماتود|حشائش|pest|disease|insect|fung|weed|spray|mite/i.test(q))return null;
+  const stop=/(^|\s)(ازاي|إزاي|كيف|اعالج|أعالج|علاج|مكافحة|مكافحه|عندي|في|فى|على|علي|ال|ايه|إيه|ما|هو|هي|pest|control|how|to|treat)(?=\s|$)/gi;
+  const term=q.replace(stop,' ').replace(/[؟?!.,،]/g,' ').replace(/\s+/g,' ').trim().slice(0,60);
+  return{t:L2('🛡️ جداول المكافحة والجرعات الرسمية (المادة الفعّالة، الجرعة، فترة الأمان) موجودة في تبويب "الوقاية والمكافحة". هفتحلك البحث بالكلمة اللي كتبتها.','🛡️ Official control tables (active ingredient, dose, pre-harvest interval) are in the Pest & Disease tab. I will open it with your search.'),
+   act:[L2('🛡️ افتح الوقاية والمكافحة','🛡️ Open pest control'),()=>{PEST.q=term;show('pest')}]}}
+const KBF=/حلل|تحليل|ملخص|قوام|نسيج|رمل|طين|سلت|ملوح|صودي|ري\b|مياه|سماد|تسميد|texture|salin|sodic|irrig|water|fert|summary/i;
+async function aiCall(q){
+  const A=window.NamaaAuth,tk=(A&&A.token)?await A.token().catch(()=>null):null;
+  if(!tk)return{err:L2('سجّل الدخول عشان أقدر أجاوب على الأسئلة المفتوحة. تقدر تسألني دلوقتي عن ميعاد زراعة محصول أو عن نتيجة تحليلك.','Sign in so I can answer open questions. You can still ask about planting dates or your analysis result.')};
+  const a=LAST,cx=a?`المحصول ${a.crop}، pH ${a.ph}، EC ${a.ec} dS/m، SAR ${a.sar}، قوام ${a.texture}، الصحة ${a.healthScore}/100`:'';
+  const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),40000);let r,d=null;
+  try{r=await fetch(SAT_URL+'/ask',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tk},body:JSON.stringify({q,ctx:cx,lang:lang==='en'?'en':'ar',hist:AIH.slice(-5,-1)}),signal:ctl.signal});try{d=await r.json()}catch(e){}}
+  catch(e){return{err:L2('تعذّر الاتصال. اتأكد من الإنترنت وجرّب تاني.','Could not connect. Check your internet and retry.')}}finally{clearTimeout(to)}
+  if(r.status===429)return{err:L2('وصلت للحد اليومي من الأسئلة المفتوحة. هيتجدد بكرة بإذن الله. لسه تقدر تسأل عن مواعيد الزراعة وتحليلك.','You reached today’s limit for open questions. It resets tomorrow. You can still ask about planting dates and your analysis.')};
+  if(r.status===503)return{err:L2('الذكاء الاصطناعي مشغول أو حصته المجانية اليومية خلصت. جرّب بعد شوية، ولسه تقدر تسأل عن مواعيد الزراعة وتحليلك.','The AI is busy or today’s free quota is used up. Try later; planting dates and your analysis still work.')};
+  if(!r.ok||!d||!d.ok)return{err:L2('خدمة الذكاء الاصطناعي لسه مش مفعّلة. هيشتغل أول ما تحدّث الـ Worker.','AI service is not enabled yet.')};
+  return{text:String(d.text||''),left:d.left}}
+let AIBUSY=false;
+async function send(q){if(!q||AIBUSY)return;addMsg('u',q);AIH.push({r:'u',t:q});
+  if(q.length<=40&&/^(\s*)(سلام|السلام|ازيك|إزيك|ازيك|اهلا|أهلا|مرحبا|هلا|صباح|مساء|هاي|هالو|شكرا|شكراً|تسلم|متشكر|مرسي|بحبك|تمام|ماشي|ok|hi\b|hello|hey|thanks|thank)/i.test(q.trim())){
+   const t=/شكر|تسلم|متشكر|مرسي|thank/i.test(q)?L2('العفو! أنا في الخدمة 🌱','You’re welcome! 🌱'):L2('أهلاً بيك! أنا بخير الحمد لله 🌱 تحب أساعدك في إيه؟ اسألني عن ميعاد زراعة أي محصول، أو الملوحة والري والتسميد، أو أي سؤال زراعي.','Hello! 🌱 How can I help? Ask me about planting dates, salinity, irrigation, fertilizing, or any farming question.');
+   addMsg('b',t);AIH.push({r:'a',t:t.slice(0,200)});return}
+  const k=kbCal(q)||kbPest(q);if(k){addMsg('b',k.t,k.act);AIH.push({r:'a',t:k.t.slice(0,200)});return}
+  if(q.length<=18&&KBF.test(q)){const t=fb(q);addMsg('b',t);AIH.push({r:'a',t:t.slice(0,200)});return}
+  AIBUSY=true;const w=addMsg('b',L2('⏳ بفكّر…','⏳ Thinking…'));
+  const r=await aiCall(q);AIBUSY=false;
+  if(r.text){w.textContent=r.text+'\n\n🤖 '+L2('ذكاء اصطناعي — راجع مهندس زراعي قبل التطبيق'+(r.left!=null?' · باقي '+r.left+' سؤال النهاردة':''),'AI answer — verify with an agronomist'+(r.left!=null?' · '+r.left+' left today':''));AIH.push({r:'a',t:r.text.slice(0,200)})}
+  else{w.textContent=r.err;if(LAST&&!/سجّل|Sign in/.test(r.err))w.textContent+='\n\n'+fb('ملخص')}
+  if(lang!=='ar')tr();$('msgs').scrollTop=1e9}
 $('aiSend').onclick=()=>{const q=$('aiIn').value.trim();$('aiIn').value='';send(q)};
 $('aiIn').onkeydown=e=>{if(e.key==='Enter')$('aiSend').click()};
-document.querySelectorAll('#p-ai .row button').forEach(b=>b.onclick=()=>send(b.textContent));
-addMsg('b','أهلاً بك! أنا مساعد قوت 🌱 اسألني عن الملوحة أو الري أو التسميد.');
+document.querySelectorAll('#p-ai .qk button').forEach(b=>b.onclick=()=>send(b.dataset.q||b.textContent));
+addMsg('b','أهلاً بك! أنا مساعد قوت 🌱 اسألني عن ميعاد زراعة أي محصول، أو الملوحة والري والتسميد، أو أي سؤال زراعي (لأسئلتك المفتوحة لك عدد محدود يومياً).');
 function mk(){const ty=$('ctType').value,nm=$('ctName').value.trim(),ms=$('ctMsg').value.trim(),a=LAST;
   const body=`${ty}\n${nm?nm+'\n':''}${ms}\n\n---\nقوت | Qout`+(a?` | ${a.crop} | pH ${a.ph} | EC ${a.ec}`:'');
   $('ctMail').href=`mailto:${MAIL}?subject=${encodeURIComponent('قوت | Qout — '+ty)}&body=${encodeURIComponent(body)}`;$('ctWa').href=`https://wa.me/${WA}?text=${encodeURIComponent(body)}`}
@@ -1780,7 +1825,7 @@ function admList(){
 {const sh=show;show=function(id){const r=sh.apply(this,arguments);if(id==='hist')histSync();return r}}
 {const ar=acctRender;acctRender=function(){ar.apply(this,arguments);const b=$('acctBox');if(!b||!isAdm())return;const first=b.querySelector('.rw2');
   const btn=document.createElement('button');btn.type='button';btn.className='rw2';btn.innerHTML=`<div class="c">${IC('user')}</div><div>${L2('لوحة تحكم المشرف','Admin panel')}<small>${L2('المستخدمون والمحاولات وProوالإعلانات','Users, trials, Pro, announcements')}</small></div><span class="ar">‹</span>`;btn.onclick=()=>show('admin');if(first)first.insertAdjacentElement('beforebegin',btn)}}
-const APP_VER='35';
+const APP_VER='37';
 const sysAdd=(id,build)=>{let e=document.getElementById(id);if(!e){e=document.createElement('div');e.id=id;e.className='sb';$('sysB').appendChild(e)}build(e);return e};
 const sysDel=id=>{const e=document.getElementById(id);if(e)e.remove()};
 // ===== بوابة الإنترنت: التطبيق يعمل فقط مع وجود اتصال فعلي، وإلا يتوقف بالكامل =====
